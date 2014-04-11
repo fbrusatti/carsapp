@@ -25,5 +25,29 @@
         <artifactId>slf4j-simple</artifactId>
         <version>1.7.6</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.javalite</groupId>
+      <artifactId>activejdbc</artifactId>
+      <version>1.4.9</version>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+        <plugin>
+          <groupId>org.javalite</groupId>
+          <artifactId>activejdbc-instrumentation</artifactId>
+          <version>1.4.9</version>
+          <executions>
+              <execution>
+                  <phase>process-classes</phase>
+                  <goals>
+                      <goal>instrument</goal>
+                  </goals>
+              </execution>
+          </executions>
+        </plugin>
+    </plugins>
+  </build>
 </project>
