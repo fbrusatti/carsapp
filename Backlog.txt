@@ -12,17 +12,18 @@ Ptos
  2	* As a User i want to ABD a Other                              //10 Puntos hasta acá
  2	* As a User i want to create a Post
  1 	* As a User i want to destroy a Post	
- 2	** As a User i want to modify my Posts
- 8	** As a User i want to search a Post
+ 2	* As a User i want to modify my Posts
+ 8	* As a User i want to search a Post
  2	* As a User i want to qualify a Post
- 1	** As a User i cannot qualify my owns Post					
- 2	* As a User i want to make a Question
- 1	* As a User i cannot question in my owns Post
- 1 	* As a User i want to Answer only Question to my Posts
+ 1	* As a User i cannot qualify my owns Posts					
+ 2	* As a User i want to ask a Question
+ 1	* As a User i cannot ask question in my owns Posts
+ 1 	* As a User i want to Answer Questions in my Posts
+1	* As a User i cannot Answer Questions in other's Posts
  8	* As a Guest i want to search a Post
- 1	** As a Guest i cannot create a Post	
+ 1	* As a Guest i cannot create a Post	
  1	** As a Guest i cannot qualify a Post
- 2	** As a Guest i want to make a Question         (tambien podria ser: As a Guest i cannot to Question)
+ 2	** As a Guest i want to ask a Question         (tambien podria ser: As a Guest i cannot to Question)
  1	** As a Guest i cannot Answer 
 
 Esto que sigue lo copie del pizarron, supongo que es la estructura que debería tener cada una de las historias del backlog, pero no se si es 
