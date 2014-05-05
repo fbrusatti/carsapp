@@ -3,6 +3,7 @@ package com.unrc.app;
 import org.javalite.activejdbc.Base;
 
 import com.unrc.app.models.User;
+import com.unrc.app.models.Vehicle;
 
 /**
  * Hello world!
@@ -23,6 +24,11 @@ public class App
         user.saveIt();
 
         User.createIt("first_name", "Marcelo", "last_name", "Uva");
+
+        Vehicle vehicle = Vehicle.create("name", "Honda Accord","model","1999","km","32000");
+        vehicle.saveIt();
+
+        user.add(vehicle);
 
         Base.close();
     }
