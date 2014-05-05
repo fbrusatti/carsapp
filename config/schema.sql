@@ -10,6 +10,7 @@ CREATE TABLE users(
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS addresses;
 CREATE TABLE addresses(
 	id INT (11) NOT NULL AUTO_INCREMENT,
 	street VARCHAR(120),
@@ -17,6 +18,7 @@ CREATE TABLE addresses(
   CONSTRAINT addresses_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS vehicles;
 CREATE TABLE vehicles(
 	id INT(11) NOT NULL AUTO_INCREMENT,
 	user_id INT(11),
@@ -26,6 +28,7 @@ CREATE TABLE vehicles(
   CONSTRAINT vehicles_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS cars;
 CREATE TABLE cars(
     vehicle_id INT(11) NOT NULL AUTO_INCREMENT,
     user_id INT(11),
@@ -33,6 +36,8 @@ CREATE TABLE cars(
   CONSTRAINT cars_pk PRIMARY KEY (vehicle_id)
 );
 
+
+DROP TABLE IF EXISTS trucks;
 CREATE TABLE trucks(
     vehicle_id INT(11),
     user_id INT(11),
@@ -40,6 +45,7 @@ CREATE TABLE trucks(
   CONSTRAINT trucks_pk PRIMARY KEY (vehicle_id)
 );
 
+DROP TABLE IF EXISTS motorcycles;
 CREATE TABLE motorcycles(
     vehicle_id INT(11),
     user_id INT(11),
@@ -47,6 +53,7 @@ CREATE TABLE motorcycles(
   CONSTRAINT motorcycles_pk PRIMARY KEY (vehicle_id)
 );
 
+DROP TABLE IF EXISTS posts;
 CREATE TABLE posts(
     id INT(11) NOT NULL AUTO_INCREMENT,
     user_id INT(11),
@@ -56,6 +63,7 @@ CREATE TABLE posts(
   CONSTRAINT posts_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS questions;
 CREATE TABLE questions(
     id INT(11) NOT NULL AUTO_INCREMENT,
 	user_id INT(11),
@@ -64,6 +72,7 @@ CREATE TABLE questions(
   CONSTRAINT questions_pk PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS answers;
 CREATE TABLE answers(
     id INT(11) NOT NULL AUTO_INCREMENT,
     user_id INT(11),
