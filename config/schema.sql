@@ -1,4 +1,4 @@
--- Integrantes: W - X - Y - Z
+-- Integrantes: Cardozo Sergio - Chaves Angelo - Chaves Maximiliano
 
 DROP TABLE IF EXISTS users; -- Usuarios
 CREATE TABLE users(
@@ -20,6 +20,7 @@ CREATE TABLE addresses(
 CREATE TABLE vehicles(
 	id INT(11) NOT NULL AUTO_INCREMENT,
 	user_id INT(11),
+    name VARCHAR(56),
     model INT(4),
     km INT(7),
   CONSTRAINT vehicles_pk PRIMARY KEY (id)
