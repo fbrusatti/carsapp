@@ -1,4 +1,4 @@
--- Integrantes: Arague Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
+-- Integrantes: Arangue Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
 
 DROP TABLE IF EXISTS users; -- Usuarios
 CREATE TABLE users(
