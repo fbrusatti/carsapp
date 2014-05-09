@@ -14,7 +14,7 @@ public class PostTest {
 
 	@Before
     public void before(){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_test", "root", "");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_test", "root", "fibo11235813");
         System.out.println("PostTest setup");
         Base.openTransaction();
     }
