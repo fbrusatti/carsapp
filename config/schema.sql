@@ -1,16 +1,18 @@
--- Integrantes: Arangue Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
-
+-- Integrantes: Arague Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
+drop database carsapp_development;
+create database carsapp_development;
+use carsapp_development;
 DROP TABLE IF EXISTS users; -- Usuarios
 CREATE TABLE users(
     id INT(11) NOT NULL AUTO_INCREMENT,
     email VARCHAR(60) UNIQUE,
     first_name VARCHAR(56),
     last_name VARCHAR(56),
-    points int,  
-    count_operation not null AUTO_INCREMENT,
-  CONSTRAINT users_pk PRIMARY KEY (id)
+    -- points int,  
+    -- count_operation INT NOT NULL,
+	CONSTRAINT users_pk PRIMARY KEY (id)
 );
-
+/*
 
 DROP TABLE IF EXISTS answers; -- Respuesta
 CREATE TABLE answers(
@@ -18,7 +20,7 @@ CREATE TABLE answers(
     description VARCHAR(2000),
      id_users int(11),
   CONSTRAINT answers_pk PRIMARY KEY (id),
-  CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES (id)users
+  CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id)
 );
 
 DROP TABLE IF EXISTS questions; -- Preguntas
@@ -28,7 +30,7 @@ CREATE TABLE questions(
     id_users int(11),
     id_answers int(11),
   CONSTRAINT question_pk PRIMARY KEY (id),
-  CONSTRAINT answers_questions_fk FOREIGN KEY (id_answers) REFERENCES (id)answers,
+  CONSTRAINT answers_questions_fk FOREIGN KEY (id_answers) REFERENCES answers(id)
   on update cascade on delete cascade
 
 );
@@ -41,9 +43,9 @@ CREATE TABLE posts(
     id_users int(11),
     id_question  int(11),
     id_vehicle varchar(6),
-   CONSTRAINT users_posts_fk FOREIGN KEY (id_users) REFERENCES (id)users,  
-   CONSTRAINT vehicle_post_fk FOREIGN KEY (id_vehicle) REFERENCES (patent)vehicles,  
-   CONSTRAINT question_posts_fk FOREIGN KEY (id_question) REFERENCES (id)questions,  
+   CONSTRAINT users_posts_fk FOREIGN KEY (id_users) REFERENCES users(id),
+   CONSTRAINT vehicle_post_fk FOREIGN KEY (id_vehicle) REFERENCES vehicles(patent),  
+   CONSTRAINT question_posts_fk FOREIGN KEY (id_question) REFERENCES questions(id),  
    CONSTRAINT posts_pk PRIMARY KEY (id)
 
 );
@@ -56,7 +58,7 @@ CREATE TABLE rates(
     id_user int not null,
   CONSTRAINT rates_pk PRIMARY KEY (id),
   CONSTRAINT posts_rates_fk foreign key (id_post) REFERENCES posts(id),
-  CONSTRAINT users_rates_fk foreign key (id_user) REFERENCES users(id),
+  CONSTRAINT users_rates_fk foreign key (id_user) REFERENCES users(id)
   on update cascade on delete cascade
 
 );
@@ -75,7 +77,7 @@ CREATE TABLE puntuations_provides(
     id_puntuation int(11),  
     id_user int(11),
     CONSTRAINT users_puntuationprovides_fk foreign key (id_user) REFERENCES users(id),
-    CONSTRAINT puntuation_fk rforeign key (id_puntuation) REFERENCES puntuations(id)
+    CONSTRAINT puntuation_fk foreign key (id_puntuation) REFERENCES puntuations(id)
 );
 
 DROP TABLE IF EXISTS vehicles; -- Vehiculos
@@ -110,8 +112,8 @@ DROP TABLE IF EXISTS motocicles; -- Autos
 CREATE TABLE motocicles(
     id int(11) AUTO_INCREMENT NOT NULL,
     id_vehicle varchar(6),
-    roll int,--rodado
-    cylinder int(3),--cilindrada
+    roll int, -- rodado
+    cylinder int(3), -- cilindrada
     CONSTRAINT vehicle_motocicle_fk foreign key (id_vehicle) REFERENCES vehicles(patent),
     CONSTRAINT motocicle_pk PRIMARY KEY (id)
 );
@@ -131,5 +133,5 @@ CREATE TABLE user_adresss(
     direction_adress varchar(20) NOT NULL,
     id_user int(11),
     CONSTRAINT adress_user_u_fk foreign key (direction_adress) REFERENCES adress(direction),
-    CONSTRAINT adress_user_d_fk foreign key (id_user) REFERENCES users(id),
-);
+    CONSTRAINT adress_user_d_fk foreign key (id_user) REFERENCES users(id)
+);*/

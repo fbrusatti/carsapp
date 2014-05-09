@@ -14,7 +14,7 @@ public class App
     {
         System.out.println( "Hello cruel World!" );
 
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
 
         User user = new User();
         user.set("first_name", "Marilyn");
