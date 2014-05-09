@@ -3,7 +3,8 @@ package com.unrc.app.models;
 import org.javalite.activejdbc.Model;
 
 public class User extends Model {
-  static {     
+  static {
+		//String[] columns = {"first_name", "last_name"};      
 		validatePresenceOf("first_name", "last_name");
   }
 }
