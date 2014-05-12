@@ -7,6 +7,7 @@ CREATE TABLE users(
     first_name VARCHAR(56),
     last_name VARCHAR(56),
 	address_id INT(11),
+    is_admin BOOLEAN,
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
