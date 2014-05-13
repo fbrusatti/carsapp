@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS cars;
 CREATE TABLE cars(
     vehicle_id INT(11) NOT NULL AUTO_INCREMENT,
     user_id INT(11),
-    type ENUM('sedan','compact','coupe','wagon','sports'),
+    type ENUM('sedan','compact','coupe','wagon','sports','other'),
   CONSTRAINT cars_pk PRIMARY KEY (vehicle_id)
 );
 
@@ -42,7 +42,7 @@ DROP TABLE IF EXISTS trucks;
 CREATE TABLE trucks(
     vehicle_id INT(11),
     user_id INT(11),
-    type ENUM('light','medium','heavy'),
+    type ENUM('light','medium','heavy','other'),
   CONSTRAINT trucks_pk PRIMARY KEY (vehicle_id)
 );
 
@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS motorcycles;
 CREATE TABLE motorcycles(
     vehicle_id INT(11),
     user_id INT(11),
-    type ENUM('standart','cruiser','sport','touring','scooter','off-road'),
+    type ENUM('standart','cruiser','sport','touring','scooter','off-road','other'),
   CONSTRAINT motorcycles_pk PRIMARY KEY (vehicle_id)
 );
 
