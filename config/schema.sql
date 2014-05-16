@@ -15,10 +15,10 @@ CREATE TABLE vehicles(
 	model VARCHAR(20),
     color VARCHAR(20),
     km INT(6) NOT NULL,
-    mark VARCHAR(15),
+    mark VARCHAR(20),
 	year INT(4) NOT NULL,
 	version VARCHAR(15),
-	combustible VARCHAR(15)
+	combustible ENUM('Gasoil','Nafta','Gas','Electrico','Biodiesel')
 );
 
 DROP TABLE IF EXISTS car;  -- Autos 
@@ -27,26 +27,26 @@ CREATE TABLE car(
     id_user INT(11) NOT NULL,
 	doors INT(11) NOT NULL,
 	version VARCHAR(15),
-	transmission VARCHAR (15),
-	direction VARCHAR(15)
+	transmission ENUM('Manual','Automatica'),
+	direction ENUM('Hidraulica','Asistida','Mecanica')
 );
 
 DROP TABLE IF EXISTS motorclicle;  -- Motocicletas
 CREATE TABLE motorcicle(
 	id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
-	type VARCHAR(11), 
-	type_motor VARCHAR(11),
-	boot_sistem VARCHAR(11),
-	displacement VARCHAR(11)
+	type ENUM('Street','Chopper','Standard','Sport','Touring','Scooters'), 
+	type_motor VARCHAR(11), -- tiempos
+	boot_sistem ENUM('Pedal','Electrico'),
+	displacement VARCHAR(11) -- cilindrada  
 );
 
 DROP TABLE IF EXISTS truck; -- Camiones
 CREATE TABLE truck(
 	id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
-	brake_system VARCHAR(11),
-	direction VARCHAR(15),
+	brake_system ENUM('Disco Delantero','Cinta','Tambor','Llanta'), 
+	direction ENUM('Hidraulica','Asistida','Mecanica'),
 	capacity INT(11)
 );
 
@@ -56,7 +56,7 @@ CREATE TABLE posts(
 	id_user INT(11) NOT NULL,
 	id_vehicle INT(11) NOT NULL,
     title VARCHAR(30),
-    description VARCHAR(500),
+    description TEXT, 
 	price INT(12)
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE answers(
     id_answer INT(11) NOT NULL auto_increment PRIMARY KEY,
 	id_question INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
-    text VARCHAR(200)
+    text TEXT
 );
 
 DROP TABLE IF EXISTS questions; -- Preguntas
@@ -73,7 +73,7 @@ CREATE TABLE questions(
     id_question INT(11) NOT NULL auto_increment PRIMARY KEY,
 	id_post INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
-    text VARCHAR(200)
+    text TEXT
     
 );
 
