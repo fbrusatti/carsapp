@@ -62,14 +62,14 @@ CREATE TABLE carsapp_development.cars(
     on update cascade on delete cascade
 );
 
-DROP TABLE IF EXISTS carsapp_development.motocicles; -- Motos
-CREATE TABLE carsapp_development.motocicles(
+DROP TABLE IF EXISTS carsapp_development.motorcicles; -- Motos
+CREATE TABLE carsapp_development.motorcicles(
     id int AUTO_INCREMENT NOT NULL,
     id_vehicle varchar(6),
     roll int,
     cylinder int,
-    CONSTRAINT motocicle_pk PRIMARY KEY (id),
-    CONSTRAINT vehicle_motocicle_fk foreign key (id_vehicle) REFERENCES vehicles(patent)
+    CONSTRAINT motorcicle_pk PRIMARY KEY (id),
+    CONSTRAINT vehicle_motorcicle_fk foreign key (id_vehicle) REFERENCES vehicles(patent)
     on update cascade on delete cascade
 );
 
@@ -84,7 +84,7 @@ CREATE TABLE carsapp_development.posts(
     CONSTRAINT users_posts_fk FOREIGN KEY (id_users) REFERENCES users(id),  
     CONSTRAINT vehicle_post_fk FOREIGN KEY (id_vehicle) REFERENCES vehicles(patent),  
     CONSTRAINT question_posts_fk FOREIGN KEY (id_question) REFERENCES questions(id)
-    
+
 );
 
 DROP TABLE IF EXISTS carsapp_development.rates; -- Calificaciones de las publicaciones
@@ -119,7 +119,7 @@ CREATE TABLE carsapp_development.punctuations_provides(
 );
 
 
-DROP TABLE IF EXISTS carsapp_development.adress; -- Direccion
+DROP TABLE IF EXISTS carsapp_development.adresses; -- Direccion
 CREATE TABLE carsapp_development.adresses(
     direction varchar(20) NOT NULL,
     CONSTRAINT adresses_pk PRIMARY KEY (direction)
