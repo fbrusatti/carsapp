@@ -15,63 +15,14 @@ public class User extends Model {
 		return (findFirst("email = ?", email));
 	}
 
-	//return first name the an user
-	public String getFirstName(){
-		
-		return (getString("first_name"));
-	}
-
-	//return last name the an user
-	public String getlastName(){
-		
-		return (getString("last_name"));
-	}
-
-	//return email the an user
-	public String getEmail(){
-		
-		return (getString("email"));
-	}
-
-	//change first name the an user
-	public void setFirstName(String fn){
-		set("first_name", fn);
-		saveIt();
-	}
-
-	//change last name the an user
-	public void setLastName(String ln){
-		set("last_name", ln);
-		saveIt();
-	}
-
-	//change email the an user
-	public void setEmail(String e){
-		set("email", e);
-		saveIt();
-	}
-
-	//return count operation an user
-	public int getCountOperation(){
-		
-		return (getInteger("count_operation"));
-	}
-
-	// set count operation where countOperation=countOPeration+1
-	public void setCountOPeration(){
-        int cant=this.getCountOperation()+1;
-		set("count_operation", cant).saveIt();
-	}
-
-	public static Boolean existUser(String e){
+	public static Boolean existUser(String email){
     	Boolean status=true;
-    	if( User.first("email = ? ", e )==null){
+    	if( User.first("email = ? ", email )==null){
     		return false;
     	}
     	return status;
     }
-
-
+   
     // create an user after verify if exist the email , if not exist save user.
     //after return model
 	public static User createUser(String name, String lastname, String email){
@@ -83,10 +34,14 @@ public class User extends Model {
         return findByEmail(email);
     }
 
-	//||--------------------------------------------------------------------||//
-	//||--------------------------------------------------------------------||//
-	//||  preguntarles a los chicos como calcular el promedio de los puntos ||//
-	//||--------------------------------------------------------------------||//
-	//||--------------------------------------------------------------------||//
+    public static Boolean deleteUser(String email){
+    	if(existUser(email)){
+        	User.delete("email ?", email);
+        	return true;
+        }
+        else{return false;}
+        
+        
+    }
               
 }
