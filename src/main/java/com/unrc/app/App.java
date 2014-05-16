@@ -19,10 +19,14 @@ public class App
         User user = new User();
         user.set("first_name", "Marilyn");
         user.set("last_name", "Monroe");
-        // user.set("dob", "1935-12-06");
+        user.set("email", "gustavomartinez@gmail.com");
         user.saveIt();
 
-        User.createIt("first_name", "Marcelo", "last_name", "Uva");
+        User.createIt("first_name", "Marcelo", "last_name", "Uva", "email", "martinez@gmail.com");
+        String nombre="gustavo";
+        String apellido="martinez";
+        String mail="mfwebdesign@gmail.com";
+        User.createUser(nombre, apellido, mail);
 
         Base.close();
     }
