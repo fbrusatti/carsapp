@@ -41,6 +41,7 @@ public class UserTest{
         
     }
 
+    //creo dos usuarios y verifico si son o no iguales
     @Test
     public void shouldValidatefindByEmail(){
         User a = User.createUser("Jhony","GUzman","gm@gmail.com");
@@ -50,6 +51,8 @@ public class UserTest{
         the(a3.getString("email")).shouldNotBeEqual(a.getString("email"));   
     }
 
+
+    //verifico si un usuario(creado anteriormente) existe y luego busco un usuario inexistente
     @Test
     public void shouldValidateExistUser(){
         User a = User.createUser("cludio","toresani","gmaa@gmail.com");
@@ -57,6 +60,7 @@ public class UserTest{
         the(User.existUser("gustavito")).shouldBeFalse();
     } 
 
+    //creo un nuevo usuario y verifico la consistencia de ese usuario
     @Test
     public void shouldValidateCreateUser(){
         User a = User.createUser("abc","def","ghi@gmail.com");
@@ -66,7 +70,16 @@ public class UserTest{
         the(a).shouldContain("def");
         the(a).shouldContain("ghi@gmail.com");
       
-    }  
+    } 
+
+
+    //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
+    @Test
+    public void shouldValidateDelete(){
+      User c = User.createUser("nombre","apellido","mail");
+      the(User.deleteUser(c.findByEmail(c.getString("email"))).shouldBeTrue();
+      the(User.deleteUser(c.findByEmail("p")).shouldBeFalse();       
+    } 
     
 }    
       
