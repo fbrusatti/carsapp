@@ -1,6 +1,6 @@
 package com.unrc.app;
 
-import com.unrc.app.models.User;
+import com.unrc.app.models.Vehicle;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -10,37 +10,36 @@ import org.junit.Test;
 import static org.javalite.test.jspec.JSpec.the;
 import static org.junit.Assert.assertEquals;
 
-public class UserTest{
+public class VehicleTest{
     @Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        System.out.println("UserTest setup");
+        System.out.println("VehicleTest setup");
         Base.openTransaction();
     }
 
     @After
     public void after(){
-        System.out.println("UserTest tearDown");
+        System.out.println("VehicleTest tearDown");
         Base.rollbackTransaction();
         Base.close();
     }
-     
+   
     //Creo un User invalido y lo corroboro 
     @Test
-    public void shouldValidateMandatoryFields(){
-        User user = new User();
-
-        the(user).shouldNotBe("valid");
-        the(user.errors().get("first_name")).shouldBeEqual("value is missing");
-        the(user.errors().get("last_name")).shouldBeEqual("value is missing");
-        the(user.errors().get("email")).shouldBeEqual("value is missing");
-        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com");
+    public void shouldValidateMandatoryFieldsVehicle(){
+        Vehicle v = new Vehicle();
+        the(v).shouldNotBe("valid");
+        the(v.errors().get("patent")).shouldBeEqual("value is missing");
+        the(v.errors().get("model")).shouldBeEqual("value is missing");
+        the(v.errors().get("mark")).shouldBeEqual("value is missing");
+        v.set("patent", "gkg237","model","corsa","mark","chevrolet");
 
         // Everything is good:
-        the(user).shouldBe("valid");
+        the(v).shouldBe("valid");
         
     }
-
+/*
     //creo dos usuarios y verifico si son o no iguales
     @Test
     public void shouldValidatefindByEmail(){
@@ -72,7 +71,7 @@ public class UserTest{
       
     } 
 
-
+/*
     //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
       @Test
     public void shouldValidateDelete(){
@@ -81,8 +80,5 @@ public class UserTest{
       the(User.deleteUser("algo")).shouldBeFalse();
       
     } 
-    
+*/    
 }    
-      
-    
-    
