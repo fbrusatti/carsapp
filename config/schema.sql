@@ -16,14 +16,6 @@ CREATE TABLE cities (
 	
 );
 
-
-CREATE TABLE users(
-    id_user INT(11) NOT NULL auto_increment PRIMARY KEY,
-    email VARCHAR(60) UNIQUE,
-    first_name VARCHAR(56),
-    last_name VARCHAR(56)
-);	
-
 DROP TABLE IF EXISTS vehicles;  -- Vehiculos
 CREATE TABLE vehicles(
     id_vehicle INT(11) NOT NULL auto_increment PRIMARY KEY,
@@ -37,8 +29,8 @@ CREATE TABLE vehicles(
 	combustible ENUM('Gasoil','Nafta','Gas','Electrico','Biodiesel')
 );
 
-DROP TABLE IF EXISTS car;  -- Autos 
-CREATE TABLE car(
+DROP TABLE IF EXISTS cars;  -- Autos 
+CREATE TABLE cars(
     id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
 	doors INT(11) NOT NULL,
@@ -47,8 +39,8 @@ CREATE TABLE car(
 	direction ENUM('Hidraulica','Asistida','Mecanica')
 );
 
-DROP TABLE IF EXISTS motorclicle;  -- Motocicletas
-CREATE TABLE motorcicle(
+DROP TABLE IF EXISTS motorclicles;  -- Motocicletas
+CREATE TABLE motorcicles(
 	id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
 	type ENUM('Street','Chopper','Standard','Sport','Touring','Scooters'), 
@@ -57,8 +49,8 @@ CREATE TABLE motorcicle(
 	displacement VARCHAR(11) -- cilindrada  
 );
 
-DROP TABLE IF EXISTS truck; -- Camiones
-CREATE TABLE truck(
+DROP TABLE IF EXISTS trucks; -- Camiones
+CREATE TABLE trucks(
 	id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL,
 	brake_system ENUM('Disco Delantero','Cinta','Tambor','Llanta'), 
