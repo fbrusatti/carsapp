@@ -3,6 +3,22 @@
 DROP TABLE IF EXISTS users; -- Usuarios
 CREATE TABLE users(
     id_user INT(11) NOT NULL auto_increment PRIMARY KEY,
+	id_city INT(11),
+    email VARCHAR(60) UNIQUE,
+    first_name VARCHAR(56),
+    last_name VARCHAR(56)
+);
+
+DROP TABLE IF EXISTS cities; -- Ciudad
+CREATE TABLE cities (
+	id_city INT(11) NOT NULL auto_increment PRIMARY KEY,
+	name VARCHAR(56)
+	
+);
+
+
+CREATE TABLE users(
+    id_user INT(11) NOT NULL auto_increment PRIMARY KEY,
     email VARCHAR(60) UNIQUE,
     first_name VARCHAR(56),
     last_name VARCHAR(56)
