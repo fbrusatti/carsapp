@@ -8,18 +8,18 @@ public class Car extends Model {
   }
   
   //Id get vehicle owner
-  public int getIdVehicle (){
-	  return (this.getInt("id_vehicle")); 
+  public String getIdVehicle (){
+	  return (this.getString("id_vehicle")); 
   }
   
   //get user
-  public int getIdUser(){
-	  return (this.getInt("id_user"));
+  public String getIdUser(){
+	  return (this.getString("id_user"));
   }
   
   //get doors
-  public int getDoors(){
-	  return (this.getInt("doors"));
+  public String getDoors(){
+	  return (this.getString("doors"));
   }
   
   //get version
