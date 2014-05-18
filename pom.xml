@@ -50,31 +50,35 @@
         </plugin>
     </plugins>
   </build>
-	<repositories> 
-      <repository> 
-          <id> Sonatype-nexus-snapshots</ id> 
-          <nombre> Sonatype Nexus Plugin Snapshots </name> 
-          <url> https://oss.sonatype.org/content/repositories/snapshots </url> 
-          <releases> 
-              <enabled> false </enabled> 
-          </releases> 
-          <snapshots> 
-              <enabled> true </enabled> 
-          </snapshots> 
-      </repository> 
+	<repositories>
+      <repository>
+          <id>sonatype-nexus-snapshots</id>
+          <name>Sonatype Nexus Plugin Snapshots</name>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+              <enabled>false</enabled>
+          </releases>
+          <snapshots>
+              <enabled>true</enabled>
+          </snapshots>
+      </repository>
+<repository>
+          <id>Spark repository</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
     </repositories>
 
-	 <pluginRepositories> 
-        <pluginRepository> 
-            <id> Sonatype-nexus-plugin-snapshots</ id> 
-            <nombre> Sonatype Nexus Programas Snapshots </name> 
-            <url> https://oss.sonatype.org/content/repositories/snapshots </url> 
-            <releases> 
-                <enabled> false </enabled> 
-            </releases> 
-            <snapshots> 
-                <enabled> true </enabled> 
-            </snapshots> 
-        </pluginRepository> 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-nexus-plugin-snapshots</id>
+            <name>Sonatype Nexus Plugin Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
     </pluginRepositories>
 </project>
