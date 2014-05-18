@@ -34,7 +34,9 @@ public class VehicleTest {
         the(vehicle.errors().get("brand")).shouldBeEqual("value is missing");
         the(vehicle.errors().get("model")).shouldBeEqual("value is missing");
         the(vehicle.errors().get("year")).shouldBeEqual("value is missing");
-        vehicle.set("brand", "F", "model", "X","year" ,"2014");
+        the(vehicle.errors().get("color")).shouldBeEqual("value is missing");
+        the(vehicle.errors().get("type")).shouldBeEqual("value is missing");
+        vehicle.set("brand", "F", "model", "X","year" ,"2014", "color", "negro", "type", "car");
 
         // Everything is good:
         the(vehicle).shouldBe("valid");
