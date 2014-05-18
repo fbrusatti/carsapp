@@ -9,17 +9,17 @@ public class Truck extends Model {
  
 	
   //Id get vehicle owner
-  public int getIdVehicle (){
-	  return (this.getInt("id_vehicle")); 
+  public String getIdVehicle (){
+	  return (this.getString("id_vehicle")); 
   }
   
   //get id_user
-  public int getIdUser(){
-	  return (this.getInt("id_user"));
+  public String getIdUser(){
+	  return (this.getString("id_user"));
   }
   
   //get brake_system
-  public string getbrakeSystem(){
+  public String getbrakeSystem(){
 	  return (this.getString("brake_system"));
   }
   
@@ -28,7 +28,7 @@ public class Truck extends Model {
 	  return (this.getString("direction"));
   }
   //get capacity
-  public int getBootSitem(){
+  public String getBootSitem(){
 	  return (this.getString("capacity"));
   } 
 }
