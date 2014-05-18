@@ -52,7 +52,7 @@
   </build>
 	<repositories> 
       <repository> 
-          <id> Sonatype-nexus-instantáneas </ id> 
+          <id> Sonatype-nexus-snapshots</ id> 
           <nombre> Sonatype Nexus Plugin Snapshots </name> 
           <url> https://oss.sonatype.org/content/repositories/snapshots </url> 
           <releases> 
@@ -66,7 +66,7 @@
 
 	 <pluginRepositories> 
         <pluginRepository> 
-            <id> Sonatype-nexus-plugin-instantáneas </ id> 
+            <id> Sonatype-nexus-plugin-snapshots</ id> 
             <nombre> Sonatype Nexus Programas Snapshots </name> 
             <url> https://oss.sonatype.org/content/repositories/snapshots </url> 
             <releases> 
