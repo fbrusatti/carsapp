@@ -9,17 +9,17 @@ public class Motorclicle extends Model {
   
 	
   //Id get vehicle owner
-  public int getIdVehicle (){
-	  return (this.getInt("id_vehicle")); 
+  public String getIdVehicle (){
+	  return (this.getString("id_vehicle")); 
   }
   
   //get user
-  public int getIdUser(){
-	  return (this.getInt("id_user"));
+  public String getIdUser(){
+	  return (this.getString("id_user"));
   }
   
   //get type
-  public string getType(){
+  public String getType(){
 	  return (this.getString("type"));
   }
   
