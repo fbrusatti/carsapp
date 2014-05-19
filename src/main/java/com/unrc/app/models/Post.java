@@ -3,7 +3,7 @@ package com.unrc.app.models;
 import org.javalite.activejdbc.Model;
 public class Post extends Model {
 	  static {
-	      validatePresenceOf("id_user","id_vehicle","title","description","price");
+	      validatePresenceOf("title","description","price");
 	  }
 	  
 	  //get title
@@ -17,8 +17,8 @@ public class Post extends Model {
 	  }
 	  
 	  //get price
-	  public int getPrice(){
-		  return (this.getInt("price"));
+	  public Integer getPrice(){
+		  return (this.getInteger("price"));
 	  }
 	  
 }
