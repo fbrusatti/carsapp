@@ -4,18 +4,7 @@ import org.javalite.activejdbc.Model;
 
 public class Motorclicle extends Model {
   static {
-	  validatePresenceOf("id_vehicle","id_user","type","type_motor","boot_sistem","displacement");	  
-  }
-  
-	
-  //Id get vehicle owner
-  public String getIdVehicle (){
-	  return (this.getString("id_vehicle")); 
-  }
-  
-  //get user
-  public String getIdUser(){
-	  return (this.getString("id_user"));
+	  validatePresenceOf("type","type_motor","boot_sistem","displacement");	  
   }
   
   //get type
