@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Base;
 
 import com.unrc.app.models.User;
 
+import static spark.Spark.*;
 /**
  * Hello world!
  *
@@ -21,8 +22,17 @@ public class App
         String apellido="martinez";
         String mail="mfwebdesign@gmail.com";
         User.createUser(nombre, apellido, mail);
-
-
         Base.close();
+
+        get("/hello", (request, response) -> {
+            return "Hello World!";
+        });
+
+        /*get(new Route("/hello") {
+            @Override
+            public Object handle(Request request, Response response) {
+                return "Hello World!";
+            }
+        });*/
     }
 }

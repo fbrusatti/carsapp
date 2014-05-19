@@ -119,10 +119,10 @@ CREATE TABLE carsapp_development.punctuations_provides(
 );
 
 
-DROP TABLE IF EXISTS carsapp_development.adresses; -- Direccion
-CREATE TABLE carsapp_development.adresses(
+DROP TABLE IF EXISTS carsapp_development.addresses; -- Direccion
+CREATE TABLE carsapp_development.addresses(
     direction varchar(20) NOT NULL,
-    CONSTRAINT adresses_pk PRIMARY KEY (direction)
+    CONSTRAINT addresses_pk PRIMARY KEY (direction)
 );
 
 DROP TABLE IF EXISTS carsapp_development.city;
@@ -131,15 +131,15 @@ CREATE TABLE carsapp_development.city(
     province varchar(20),
     postal_code varchar(5),
     city_direction varchar(20),
-    CONSTRAINT adress_city_fk FOREIGN KEY (city_direction) REFERENCES adresses(direction),
+    CONSTRAINT address_city_fk FOREIGN KEY (city_direction) REFERENCES addresses(direction),
     CONSTRAINT city_pk PRIMARY KEY (postal_code) 
 );
 
-DROP TABLE IF EXISTS carsapp_development.userAdress; -- tabla que contiene la informacion para referenciar a usuario y direccion
-CREATE TABLE carsapp_development.user_adress(
-    direction_adress varchar(20) NOT NULL,
+DROP TABLE IF EXISTS carsapp_development.userAddress; -- tabla que contiene la informacion para referenciar a usuario y direccion
+CREATE TABLE carsapp_development.user_address(
+    direction_address varchar(20) NOT NULL,
     id_user int,
-    CONSTRAINT adress_user_u_fk foreign key (direction_adress) REFERENCES adresses(direction),
-    CONSTRAINT adress_fk foreign key (id_user) REFERENCES users(id)
+    CONSTRAINT address_user_u_fk foreign key (direction_address) REFERENCES addresses(direction),
+    CONSTRAINT address_fk foreign key (id_user) REFERENCES users(id)
 );
 
