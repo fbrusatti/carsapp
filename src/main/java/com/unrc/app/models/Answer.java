@@ -10,3 +10,4 @@ public class Answer extends Model {
   public String getText(){
 	  return (this.getString("text"));
   }
+}
