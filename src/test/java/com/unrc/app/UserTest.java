@@ -69,6 +69,7 @@ public class UserTest{
         the(a).shouldContain("abc");
         the(a).shouldContain("def");
         the(a).shouldContain("ghi@gmail.com");
+        the(a).shouldNotContain("crsmartinez@gmail.com");
       
     } 
 

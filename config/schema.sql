@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS carsapp_development.answers;
 CREATE TABLE carsapp_development.answers(
     id INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(2000),
-    id_users int,
+    id_users int UNIQUE,
   CONSTRAINT answers_pk PRIMARY KEY (id),
   CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id));
 
@@ -34,11 +34,11 @@ CREATE TABLE carsapp_development.questions(
 
 DROP TABLE IF EXISTS carsapp_development.vehicles; -- Vehiculos
 CREATE TABLE carsapp_development.vehicles(
-    patent varchar(6) NOT NULL,
+    patent varchar(6) not null,
     model VARCHAR(25),
     mark VARCHAR(30),
-    id_user int,
-    CONSTRAINT user_vehicle_fk foreign key (id_user) REFERENCES users(id),
+    id_user int ,
+    CONSTRAINT vehicle_usr_fk foreign key (id_user) REFERENCES users(id),
     CONSTRAINT vehicles_pk PRIMARY KEY (patent)
 );
 
@@ -63,7 +63,7 @@ CREATE TABLE carsapp_development.cars(
 );
 
 DROP TABLE IF EXISTS carsapp_development.motorcicles; -- Motos
-CREATE TABLE carsapp_development.motorcicles(
+CREATE TABLE carsapp_development.motocicles(
     id int AUTO_INCREMENT NOT NULL,
     id_vehicle varchar(6),
     roll int,
