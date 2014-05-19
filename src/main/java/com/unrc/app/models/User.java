@@ -9,17 +9,17 @@ public class User extends Model {
   	}
 	
 	//get First Name
-	public string getFirstName(){
+	public String getFirstName(){
 		return (this.getString("first_name"));
 	}
 	
 	//get LastName
-	public string getLastName (){
+	public String getLastName (){
 		return (this.getString("last_name"));
 	}
 	
 	//get email
-	public string getEmail(){
+	public String getEmail(){
 		return (this.getString("email"));
 	}
 	
@@ -34,8 +34,5 @@ public class User extends Model {
 	}
 	
 	
-	}
-	
-	
-	
 }
+	
