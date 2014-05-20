@@ -25,7 +25,7 @@ public class VehicleTest{
         Base.close();
     }
    
-    //Creo un User invalido y lo corroboro 
+    //Creo un vehiculo invalido y lo corroboro 
     @Test
     public void shouldValidateMandatoryFieldsVehicle(){
         Vehicle v = new Vehicle();
@@ -40,7 +40,7 @@ public class VehicleTest{
         
     }
 
-    //creo dos usuarios y verifico si son o no iguales
+    //creo dos vehiculo y verifico si son o no iguales
     @Test
     public void shouldValidatefindByPatent(){
         User m = User.createUser("Jhony","GUzman","gm@gmail.com");
@@ -53,7 +53,7 @@ public class VehicleTest{
     }
 
 
-    //verifico si un usuario(creado anteriormente) existe y luego busco un usuario inexistente
+    //verifico si un vehiculo(creado anteriormente) existe y luego busco un vehiculo inexistente
     @Test
     public void shouldValidateExistVehicle(){
         User u = User.createUser("Jhony","GUzman","gm@gmail.com");
@@ -62,7 +62,7 @@ public class VehicleTest{
         the(Vehicle.existVehicle("abd123")).shouldBeFalse();
     } 
 
-   //creo un nuevo usuario y verifico la consistencia de ese usuario
+   //creo un nuevo vehiculo y verifico la consistencia de ese vehiculo
     @Test
     public void shouldValidateCreateVehicle(){
         User u = User.createUser("Jhony","GUzman","gm@gmail.com");
@@ -79,7 +79,7 @@ public class VehicleTest{
     } 
 
 
-    //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
+    //creo un vehiculo y luego intento eliminar un vehiculo existente,luego intento eliminar un vehiculo inexistente
       @Test
     public void shouldValidateDeleteVehicle(){
      User u = User.createUser("Jhony","GUzman","gm@gmail.com");

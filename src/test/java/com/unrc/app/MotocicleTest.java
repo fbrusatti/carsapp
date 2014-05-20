@@ -27,7 +27,7 @@ public class MotocicleTest{
         Base.close();
     }
    
-    //Creo un User invalido y lo corroboro 
+    //Creo una moto invalida y lo corroboro 
     @Test
     public void shouldValidateMandatoryFieldsMotocicle(){
         Motocicle v = new Motocicle();
@@ -42,7 +42,7 @@ public class MotocicleTest{
         
     }
 
-   //creo dos usuarios y verifico si son o no iguales
+   //creo dos motos y verifico si son o no iguales
     @Test
     public void shouldValidatefindByMotocicle(){
         User m = User.createUser("Jhony","GUzman","gm@gmail.com");
@@ -57,9 +57,9 @@ public class MotocicleTest{
     }
 
 
-    //verifico si un usuario(creado anteriormente) existe y luego busco un usuario inexistente
+    //verifico si una moto(creado anteriormente) existe y luego busco una moto inexistente
     @Test
-    public void shouldValidateExistCar(){
+    public void shouldValidateExistMotocicle(){
         User u = User.createUser("Jhony","GUzman","gm@gmail.com");
         Vehicle a = Vehicle.createVehicle("gkg357","polo","volkswagen",u);
         Motocicle t1= Motocicle.createMotocicle(125, 125 , a);
@@ -67,9 +67,9 @@ public class MotocicleTest{
         the(Motocicle.existMotocicle("abd123")).shouldBeFalse();
     } 
 
-   //creo un nuevo usuario y verifico la consistencia de ese usuario
+   //creo una nueva moto y verifico la consistencia de esa moto
     @Test
-    public void shouldValidateCreateCar(){
+    public void shouldValidateCreateMotocicle(){
         User u = User.createUser("Jhony","GUzman","gm@gmail.com");
         Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
         Motocicle t = Motocicle.createMotocicle(24, 125 , a);
@@ -89,9 +89,9 @@ public class MotocicleTest{
     } 
 
 
-    //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
+    //creo una moto y luego intento eliminar una moto existente,luego intento eliminar una moto inexistente
       @Test
-    public void shouldValidateDeleteCar(){
+    public void shouldValidateDeleteMotocicle(){
      User u = User.createUser("Jhony","GUzman","gm@gmail.com");
      Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
      Motocicle t = Motocicle.createMotocicle(24, 125 , a);
