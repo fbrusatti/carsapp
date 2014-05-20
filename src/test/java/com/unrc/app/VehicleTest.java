@@ -32,8 +32,8 @@ public class VehicleTest{
         the(v).shouldNotBe("valid");
         the(v.errors().get("patent")).shouldBeEqual("value is missing");
         the(v.errors().get("model")).shouldBeEqual("value is missing");
-        the(v.errors().get("mark")).shouldBeEqual("value is missing");
-        v.set("patent", "gkg237","model","corsa","mark","chevrolet");
+        the(v.errors().get("brand")).shouldBeEqual("value is missing");
+        v.set("patent", "gkg237","model","corsa","brand","chevrolet");
 
         // Everything is good:
         the(v).shouldBe("valid");

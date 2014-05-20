@@ -5,7 +5,7 @@ import org.javalite.activejdbc.Model;
 public class Vehicle extends Model {
   static {
 
-      validatePresenceOf("patent","model","mark");
+      validatePresenceOf("patent","model","brand");
   }
 
   //retorna el modelo Vehicle a partir de la busqueda en la bd a partir de la patente de un vehiculo
@@ -25,7 +25,7 @@ public class Vehicle extends Model {
    
     //a partir de la patente,modelo y marca crea un vehiculo nuevo siempre y cuando este no exista en la bd
 	public static Vehicle createVehicle(String patente, String modelo, String marca,User usuario){
-    	Vehicle vehiculo=create("patent", patente, "model", modelo, "mark", marca,"id_user",usuario.getInteger("id"));
+    	Vehicle vehiculo=create("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
 
         if(!existVehicle(patente)){
         	vehiculo.saveIt();
