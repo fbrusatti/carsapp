@@ -8,13 +8,13 @@ public class Vehicle extends Model {
       validatePresenceOf("patent","model","mark");
   }
 
-  //retorna el modelo User a partir de la en la bd a partir del email de un usuario
+  //retorna el modelo Vehicle a partir de la busqueda en la bd a partir de la patente de un vehiculo
 	public static Vehicle findByPatent(String patente){
 		return (findFirst("patent = ?", patente));
 	}
 
 
-	//retorna un booleano verificando a partir del email si un usuario existe
+	//retorna un booleano verificando a partir de la patente si un vehiculo existe con esa patente
 	public static Boolean existVehicle(String patente){
     	Boolean status=true;
     	if( Vehicle.first("patent = ? ", patente )==null){
@@ -23,7 +23,7 @@ public class Vehicle extends Model {
     	return status;
     }
    
-    //a partir del nombre-apellido-email crea un usuario nuevo siempre y cuando este no exista en la bd
+    //a partir de la patente,modelo y marca crea un vehiculo nuevo siempre y cuando este no exista en la bd
 	public static Vehicle createVehicle(String patente, String modelo, String marca,User usuario){
     	Vehicle vehiculo=create("patent", patente, "model", modelo, "mark", marca,"id_user",usuario.getInteger("id"));
 
@@ -33,7 +33,9 @@ public class Vehicle extends Model {
         return findByPatent(patente);
     }
 
-    //elimina un usuario de la bd indicando con un valor booleano el estado de finalizacion de la operacion
+    //elimina un vehiculo de la bd indicando con un valor booleano el estado de finalizacion de la operacion
+    //true=operacion exitosa
+    //false=operacion fallida
     public static Boolean deleteVehicle(String patente){
         if(existVehicle(patente)){
             Vehicle u=Vehicle.findByPatent(patente);
