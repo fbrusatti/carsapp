@@ -32,8 +32,7 @@ public class Address extends Model {
   }
 
   public static Boolean deleteAddress(String dir, int num){
-    long dirCount = Address.count("street = ? and num = ?", dir,num);
-    if(dirCount==0){
+    if(existAddress(dir,num)){
       Address a=Address.findByAddress(dir,num);
       a.delete();
       return true;

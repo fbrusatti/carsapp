@@ -16,20 +16,20 @@ public class MotorcycleTest{
     @Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        System.out.println("MotocicleTest setup");
+        System.out.println("MotorcycleTest setup");
         Base.openTransaction();
     }
 
     @After
     public void after(){
-        System.out.println("MotocicleTest tearDown");
+        System.out.println("MotorcycleTest tearDown");
         Base.rollbackTransaction();
         Base.close();
     }
    
     //Creo un User invalido y lo corroboro 
     @Test
-    public void shouldValidateMandatoryFieldsMotocicle(){
+    public void shouldValidateMandatoryFieldsMotorcycle(){
         Motorcycle v = new Motorcycle();
         the(v).shouldNotBe("valid");
         the(v.errors().get("wheel_size")).shouldBeEqual("value is missing");
@@ -44,7 +44,7 @@ public class MotorcycleTest{
 
    //creo dos usuarios y verifico si son o no iguales
     @Test
-    public void shouldValidatefindByMotocicle(){
+    public void shouldValidatefindByMotorcycle(){
         User m = User.createUser("Jhony","GUzman","gm@gmail.com");
         Vehicle a1 = Vehicle.createVehicle("ghg345","corsa","chevrolet",m);
         Vehicle a2 = Vehicle.createVehicle("ghg344","escort","ford",m);
