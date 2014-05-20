@@ -1,4 +1,4 @@
--- Integrantes: Arangue Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
+    -- Integrantes: Arangue Ezequiel - Furlan Javier - Martinez Gustavo - Tissera Adrian
 drop database if exists carsapp_development;
 create database if not exists carsapp_development;
 DROP TABLE IF EXISTS carsapp_development.users; 
@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS carsapp_development.vehicles; -- Vehiculos
 CREATE TABLE carsapp_development.vehicles(
     patent varchar(6) not null,
     model VARCHAR(25),
-    mark VARCHAR(30),
+    brand VARCHAR(30),
     id_user int ,
     CONSTRAINT vehicle_usr_fk foreign key (id_user) REFERENCES users(id),
     CONSTRAINT vehicles_pk PRIMARY KEY (patent)
@@ -62,14 +62,14 @@ CREATE TABLE carsapp_development.cars(
     on update cascade on delete cascade
 );
 
-DROP TABLE IF EXISTS carsapp_development.motorcicles; -- Motos
-CREATE TABLE carsapp_development.motocicles(
+DROP TABLE IF EXISTS carsapp_development.motorcycles; -- Motos
+CREATE TABLE carsapp_development.motorcycles(
     id int AUTO_INCREMENT NOT NULL,
     id_vehicle varchar(6),
-    roll int,
-    cylinder int,
-    CONSTRAINT motorcicle_pk PRIMARY KEY (id),
-    CONSTRAINT vehicle_motorcicle_fk foreign key (id_vehicle) REFERENCES vehicles(patent)
+    wheel_size int,
+    engine_size int,
+    CONSTRAINT motorcycles_pk PRIMARY KEY (id),
+    CONSTRAINT vehicle_motorcycle_fk foreign key (id_vehicle) REFERENCES vehicles(patent)
     on update cascade on delete cascade
 );
 
@@ -100,7 +100,7 @@ CREATE TABLE carsapp_development.rates(
 
 );
 
-DROP TABLE IF EXISTS carsapp_development.punctutations; -- Puntuaciones a los usuarios
+DROP TABLE IF EXISTS carsapp_development.punctuations; -- Puntuaciones a los usuarios
 CREATE TABLE carsapp_development.punctuations(
     id INT NOT NULL AUTO_INCREMENT,
     point_u int,  
@@ -110,7 +110,7 @@ CREATE TABLE carsapp_development.punctuations(
 );
 
 
-DROP TABLE IF EXISTS carsapp_development.punctutationsprovides; -- Puntuaciones brindada a los usuarios por otros usuarios
+DROP TABLE IF EXISTS carsapp_development.punctuations_provides; -- Puntuaciones brindada a los usuarios por otros usuarios
 CREATE TABLE carsapp_development.punctuations_provides(
     id_punctuation int,  
     id_user int,
@@ -121,25 +121,27 @@ CREATE TABLE carsapp_development.punctuations_provides(
 
 DROP TABLE IF EXISTS carsapp_development.addresses; -- Direccion
 CREATE TABLE carsapp_development.addresses(
-    direction varchar(20) NOT NULL,
-    CONSTRAINT addresses_pk PRIMARY KEY (direction)
+    id int AUTO_INCREMENT,
+    street varchar(40) NOT NULL,
+    num int,
+    apartment varchar(20),
+    CONSTRAINT addresses_pk PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS carsapp_development.city;
-CREATE TABLE carsapp_development.city(
+DROP TABLE IF EXISTS carsapp_development.cities; 
+CREATE TABLE carsapp_development.cities(
     name varchar(20),
     province varchar(20),
     postal_code varchar(5),
-    city_direction varchar(20),
-    CONSTRAINT address_city_fk FOREIGN KEY (city_direction) REFERENCES addresses(direction),
-    CONSTRAINT city_pk PRIMARY KEY (postal_code) 
+    city_address int,
+    CONSTRAINT address_city_fk FOREIGN KEY (city_address) REFERENCES addresses(id),
+    CONSTRAINT cities_pk PRIMARY KEY (postal_code) 
 );
 
-DROP TABLE IF EXISTS carsapp_development.userAddress; -- tabla que contiene la informacion para referenciar a usuario y direccion
+DROP TABLE IF EXISTS carsapp_development.user_address; -- tabla que contiene la informacion para referenciar a usuario y direccion
 CREATE TABLE carsapp_development.user_address(
-    direction_address varchar(20) NOT NULL,
+    id_address int,
     id_user int,
-    CONSTRAINT address_user_u_fk foreign key (direction_address) REFERENCES addresses(direction),
+    CONSTRAINT address_user_u_fk foreign key (id_address) REFERENCES addresses(id),
     CONSTRAINT address_fk foreign key (id_user) REFERENCES users(id)
 );
-
