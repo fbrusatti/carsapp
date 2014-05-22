@@ -1,0 +1,16 @@
+As an admin I want to create an user				Point: 1/order: 1
+As an user I want to add an addres					Point: 1/order: 2
+As an user I want to crud a car  					Point: 2/order: 3
+As an user I want to crud a truck  					Point: 2/order: 4
+As an user I want to crud a motorcycle				Point: 2/order: 5
+As an user I want to crud a other 					Point: 2/order: 6
+As an user I want to create a post  				Point: 2/order: 7
+As an user I want to delete my post  				Point: 1/order: 8
+As an user I want to qualify a post  				Point: 2/order: 9
+As an user I want to make a question 				Point: 2/order: 10
+As an user I want to answer only on my post			Point: 1/order: 11
+As an user I cannot quiestion on my post 			Point: 1/order: 12
+As a guest or user I want to search for posts  		Point: 8/order: 13
+As an user I want to see another user posts 		Point: 2/order: 14
+As an user I want to see the most qualified posts	Point: 4/order: 15
+As an user I want my qualifications saved 			Point: 8/order: 16
