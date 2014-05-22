@@ -12,25 +12,28 @@ CREATE TABLE carsapp_development.users(
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS carsapp_development.answers; 
-CREATE TABLE carsapp_development.answers(
-    id INT NOT NULL AUTO_INCREMENT,
-    description VARCHAR(2000),
-    id_users int UNIQUE,
-  CONSTRAINT answers_pk PRIMARY KEY (id),
-  CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id));
-
-
 DROP TABLE IF EXISTS carsapp_development.questions; -- Preguntas
 CREATE TABLE carsapp_development.questions(
     id INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(2000),
     id_users int,
-    id_answers int,
-  CONSTRAINT question_pk PRIMARY KEY (id),
-  CONSTRAINT answers_questions_fk FOREIGN KEY (id_answers) REFERENCES answers(id)
-  on update cascade on delete cascade
+    CONSTRAINT question_pk PRIMARY KEY (id)  
 );
+
+
+DROP TABLE IF EXISTS carsapp_development.answers; 
+CREATE TABLE carsapp_development.answers(
+    id INT NOT NULL AUTO_INCREMENT,
+    description VARCHAR(2000),
+    id_users int,
+    id_question int,
+  CONSTRAINT answers_pk PRIMARY KEY (id),
+  CONSTRAINT answers_questions_fk FOREIGN KEY (id_question) REFERENCES questions(id),
+  CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id)
+  on update cascade on delete cascade);
+
+
+
 
 DROP TABLE IF EXISTS carsapp_development.vehicles; -- Vehiculos
 CREATE TABLE carsapp_development.vehicles(
