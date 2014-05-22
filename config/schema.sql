@@ -77,9 +77,10 @@ CREATE TABLE carsapp_development.motorcycles(
 DROP TABLE IF EXISTS carsapp_development.posts; -- Publicaciones
 CREATE TABLE carsapp_development.posts(
     id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR (50),
     description VARCHAR(2000),
     id_users int,
-    id_question  int,
+    id_question int,
     id_vehicle varchar(6),
     CONSTRAINT posts_pk PRIMARY KEY (id),
     CONSTRAINT users_posts_fk FOREIGN KEY (id_users) REFERENCES users(id),  
@@ -108,7 +109,7 @@ CREATE TABLE carsapp_development.punctuations(
     id_user int,
     id_user_receiver int,
     CONSTRAINT users_punctuations_fk foreign key (id_user) REFERENCES users(id),
-    CONSTRAINT users_punctuations_fk foreign key (id_user_receiver) REFERENCES users(id),
+    CONSTRAINT users_punctuations_receiver_fk foreign key (id_user_receiver) REFERENCES users(id),
     CONSTRAINT punctuations_pk PRIMARY KEY (id)
 );
 
