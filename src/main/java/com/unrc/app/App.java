@@ -1,6 +1,7 @@
 package com.unrc.app;
 
 import org.javalite.activejdbc.Base;
+import static spark.Spark.*;
 
 import com.unrc.app.models.User;
 import com.unrc.app.models.Vehicle;
@@ -16,7 +17,10 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello cruel world!" );
+        //System.out.println( "Hello cruel world!" );
+        get("/hello",(request, response) -> {
+            return "Hello World!";
+        });
 
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
 
@@ -27,6 +31,9 @@ public class App
         user.set("is_admin","0");  //True 
         // user.set("dob", "1935-12-06");
         user.saveIt();
+        // get("/users",(request, response) -> {
+        //     return user;
+        // });
 
         user.createUser("Marcelo","Uva","uva@dc.exa.unrc.edu.ar");
 
