@@ -4,7 +4,7 @@ import org.javalite.activejdbc.Model;
 
 public class Truck extends Model {
   static {
-	  validatePresenceOf("brake_System","direction","capacity");	  
+	  validatePresenceOf("brake_system","direction","capacity");	  
   }
  
   //get brake_system
