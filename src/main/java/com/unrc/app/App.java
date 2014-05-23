@@ -60,25 +60,34 @@ public class App
         user.add(question); //this user is asking
         post.add(question); //on this post
 
-        // List<User> list = User.findAll();
-        //     for(User u: list){   
-        //         System.out.println(u.);
-        //     }
-        //</User>;
 
-        // get ("/hello/:name", (request,response) -> {
-        //     return "Hello " + request.params(":name");
-        // });
+        //Spark section----------
 
-        get("/hello/:id", (request, response) -> {
-            int i = Integer.parseInt(request.params(":id"));
-            User u = User.findById(1);
-            return "Hello: " + u.toString();
+        before((request, response) -> {
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
         });
-        // int i = Integer.parseInt("1");
-        // User u = User.findById(i);
-        // System.out.println(u.toString());
+        after((request, response) -> {
+            Base.close();    
+        });
 
-        // Base.close();
+        //Users url
+        get("/user/:id", (request, response) -> {
+            User u = User.findById(Integer.parseInt(request.params(":id")));
+            return "User: " + u.toString();
+        });
+
+        //Vehicles url
+        get("/vehicle/:id", (request, response) -> {
+            Vehicle v = Vehicle.findById(Integer.parseInt(request.params(":id")));
+            return "Vehicle: " + v.toString();
+        });
+
+        //Posts url
+        get("/post/:id", (request, response) -> {
+            Post p = Post.findById(Integer.parseInt(request.params(":id")));
+            return "Post: " + p.toString();
+        });
+
+        Base.close();
     }
 }
