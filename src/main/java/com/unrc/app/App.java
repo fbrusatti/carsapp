@@ -20,21 +20,27 @@ public class App
     {
         System.out.println( "Hello cruel World!" );
 
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
         
         City city = new City();
+        city.set("country", "Argentina");
+        city.set("state","Cordoba");
         city.set("name","La Carlota");
+        city.saveIt();
         
         
         User user = new User();
         user.set("first_name", "Marilyn");
         user.set("last_name", "Mollea");
         user.set("email","mmollea@gmail.com");
+        user.set("pass","123hola");
         user.add(city);
         // user.set("dob", "1935-12-06");
         user.saveIt();
 
-        User user2 = User.createIt("first_name", "Marcelo", "last_name", "Uva","email","marcelitouva@gmail.com");
+        User user2 = User.createIt("first_name", "Marcelo", "last_name", "Uva","email","marcelitouva@gmail.com","pass","chau123");
+        user2.add(city);
+        user2.saveIt();
         
         Car car = new Car(); 
         Vehicle vehicle = new Vehicle();
