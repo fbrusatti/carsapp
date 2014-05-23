@@ -4,7 +4,7 @@ import org.javalite.activejdbc.Model;
 
 public class Motorclicle extends Model {
   static {
-	  validatePresenceOf("type","type_motor","boot_sistem","displacement");	  
+	  validatePresenceOf("type","type_motor","boot_system","displacement");	  
   }
   
   //get type
@@ -18,7 +18,7 @@ public class Motorclicle extends Model {
   }
   //get boot_sistem
   public String getBootSitem(){
-	  return (this.getString("boot_sistem"));
+	  return (this.getString("boot_system"));
   } 
   
   //get displacement
