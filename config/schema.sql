@@ -3,16 +3,19 @@
 DROP TABLE IF EXISTS users; -- Usuarios
 CREATE TABLE users(
     id_user INT(11) NOT NULL auto_increment PRIMARY KEY,
-    email VARCHAR(60) UNIQUE,
-    first_name VARCHAR(56),
-    last_name VARCHAR(56),
+    first_name VARCHAR(40),
+    last_name VARCHAR(40),
+	email VARCHAR(40) UNIQUE,
+	pass VARCHAR(20),
 	id_city INT(11)
 );
 
 DROP TABLE IF EXISTS cities; -- Ciudad
 CREATE TABLE cities (
 	id_city INT(11) NOT NULL auto_increment PRIMARY KEY,
-	name VARCHAR(56)
+	country VARCHAR(20),
+	state VARCHAR(20),
+	name VARCHAR(20)
 );
 
 DROP TABLE IF EXISTS vehicles;  -- Vehiculos
@@ -42,7 +45,7 @@ DROP TABLE IF EXISTS motorclicles;  -- Motocicletas
 CREATE TABLE motorcicles(
 	type ENUM('Street','Chopper','Standard','Sport','Touring','Scooters'), 
 	type_motor VARCHAR(11), -- tiempos
-	boot_sistem ENUM('Pedal','Electrico'),
+	boot_system ENUM('Pedal','Electrico','Pedal y Electrico'),
 	displacement VARCHAR(11), -- cilindrada 
 	id_vehicle INT(11) NOT NULL,
     id_user INT(11) NOT NULL
@@ -50,9 +53,7 @@ CREATE TABLE motorcicles(
 
 DROP TABLE IF EXISTS trucks; -- Camiones
 CREATE TABLE trucks(
-	id_vehicle INT(11) NOT NULL,
-    id_user INT(11) NOT NULL,
-	brake_system ENUM('Disco Delantero','Cinta','Tambor','Llanta'), 
+	brake_system VARCHAR(20), 
 	direction ENUM('Hidraulica','Asistida','Mecanica'),
 	capacity INT(11),
 	id_vehicle INT(11) NOT NULL,
