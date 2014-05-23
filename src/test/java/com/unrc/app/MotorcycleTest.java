@@ -1,6 +1,6 @@
 package com.unrc.app;
 
-import com.unrc.app.models.Motorclicle;
+import com.unrc.app.models.Motorcycle;
 
 import org.javalite.activejdbc.Base;
 import static org.javalite.test.jspec.JSpec.the;
@@ -9,24 +9,24 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-public class MotorclicleTest {
+public class MotorcycleTest {
      @Before
     public void before(){
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_test", "root", "root");
-        System.out.println("MotorclicleTest setup");
+        System.out.println("MotorcycleTest setup");
         Base.openTransaction();
     }
 
     @After
     public void after(){
-        System.out.println("MotorclicleTest tearDown");
+        System.out.println("MotorcycleTest tearDown");
         Base.rollbackTransaction();
         Base.close();
     }
 
     @Test
     public void shouldValidateMandatoryFields(){
-        Motorclicle moto = new Motorclicle();
+        Motorcycle moto = new Motorcycle();
 
         the(moto).shouldNotBe("valid");
         the(moto.errors().get("type")).shouldBeEqual("value is missing");
