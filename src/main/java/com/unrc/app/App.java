@@ -1,7 +1,8 @@
 package com.unrc.app;
 
-import org.javalite.activejdbc.Base;
+import org.javalite.activejdbc.*;
 import static spark.Spark.*;
+import java.util.List;
 
 import com.unrc.app.models.User;
 import com.unrc.app.models.Vehicle;
@@ -18,9 +19,9 @@ public class App
     public static void main( String[] args )
     {
         //System.out.println( "Hello cruel world!" );
-        get("/hello",(request, response) -> {
-            return "Hello World!";
-        });
+        // get("/hello",(request, response) -> {
+        //     return "Hello World!";
+        // });
 
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
 
@@ -28,7 +29,7 @@ public class App
         user.set("first_name", "Marilyn");
         user.set("last_name", "Monroe");
         user.set("email","monroe@example.com");
-        user.set("is_admin","0");  //True 
+        user.set("is_admin","1");  //True 
         // user.set("dob", "1935-12-06");
         user.saveIt();
         // get("/users",(request, response) -> {
@@ -59,6 +60,25 @@ public class App
         user.add(question); //this user is asking
         post.add(question); //on this post
 
-        Base.close();
+        // List<User> list = User.findAll();
+        //     for(User u: list){   
+        //         System.out.println(u.);
+        //     }
+        //</User>;
+
+        // get ("/hello/:name", (request,response) -> {
+        //     return "Hello " + request.params(":name");
+        // });
+
+        get("/hello/:id", (request, response) -> {
+            int i = Integer.parseInt(request.params(":id"));
+            User u = User.findById(1);
+            return "Hello: " + u.toString();
+        });
+        // int i = Integer.parseInt("1");
+        // User u = User.findById(i);
+        // System.out.println(u.toString());
+
+        // Base.close();
     }
 }
