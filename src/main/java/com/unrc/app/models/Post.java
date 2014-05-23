@@ -22,10 +22,10 @@ public class Post extends Model {
     }
 
     //crea un nuevo post con el titulo title y cuerpo description
-	public static Post createPost(String title, String description){
-    	Post post = create("title", title, "description", description);
+	public static Post createPost(String title, String description, User user, Vehicle vehicle){
+    	Post post = create("title", title, "description", description, "id_users", user.getInteger("id"), "id_vehicle", vehicle.getString("patent"));
         post.saveIt();
-        return findById(post.getId());
+        return findById(post.getInteger("id"));
     }
 
     //elimina un post dado el nombre

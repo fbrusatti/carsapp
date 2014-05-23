@@ -2,6 +2,7 @@ package com.unrc.app;
 import com.unrc.app.models.User;
 import com.unrc.app.models.Post;
 import com.unrc.app.models.Punctuation;
+import com.unrc.app.models.Vehicle;
 import org.javalite.activejdbc.Base;
 import org.junit.After;
 import org.junit.Before;
@@ -43,7 +44,9 @@ public class PunctuationTest{
     @Test
     public void shouldValidatefindByPunctuation(){
         User m = User.createUser("Jhony", "GUzman", "gm@gmail.com");
-        Post p = Post.createPost("titulo", "descripcion", m); 
+        Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", m);
+
+        Post p = Post.createPost("titulo", "descripcion", m, v); 
         Punctuation c1 = Punctuation.createPunctuation(1, p, m);
         Punctuation c2 = Punctuation.createPunctuation(-1,p,m);
         Punctuation c3 = Punctuation.findByPunctuation(c1.getInteger("id"));
@@ -56,7 +59,8 @@ public class PunctuationTest{
     public void shouldValidateExistPunctuation(){
         User u1 = User.createUser("Jhony","GUzman","gm@gmail.com");
         User u2 = User.createUser("ariel","GUzman","jf@gmail.com");
-        Post p = Post.createPost("t","d", u1); 
+        Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", u1);
+        Post p = Post.createPost("t","d", u1, v); 
         Punctuation c1 = Punctuation.createPunctuation(1, p, u2);
         the(Punctuation.existPunctuation(p, u1)).shouldBeTrue();
         the(Punctuation.existPunctuation(p,u2)).shouldBeFalse();
@@ -67,7 +71,8 @@ public class PunctuationTest{
     public void shouldValidateCreatePunctuation(){
         User u1 = User.createUser("Jhony","GUzman","gm@gmail.com");
         User u2 = User.createUser("ariel","GUzman","jf@gmail.com");
-        Post p = Post.createPost("t","d", u1); 
+        Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", u1);
+        Post p = Post.createPost("t","d", u1, v); 
         Punctuation c1 = Punctuation.createPunctuation(1, p, u2);
         the(c1).shouldBe("valid");
         the(c1).shouldNotBeNull();
@@ -76,7 +81,7 @@ public class PunctuationTest{
         the(c1).shouldContain(u1.getInteger("id"));
         User u3 = User.createUser("Jhony","GUzman","gmd@gmail.com");
         User u4 = User.createUser("ariel","GUzman","jfd@gmail.com");
-        Post p2 = Post.createPost("t","d", u3); 
+        Post p2 = Post.createPost("t","d", u3, v); 
         the(c1).shouldNotContain(-1);
         the(c1).shouldNotContain(u3.getInteger("id")); 
         the(c1).shouldNotContain(u4.getInteger("id")); 

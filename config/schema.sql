@@ -92,7 +92,7 @@ CREATE TABLE carsapp_development.posts(
 DROP TABLE IF EXISTS carsapp_development.rates; -- Calificaciones de las publicaciones
 CREATE TABLE carsapp_development.rates(
     id INT NOT NULL AUTO_INCREMENT,
-    points_p int,
+    stars int,
     id_post int not null,
     id_user int not null,
     CONSTRAINT rates_pk PRIMARY KEY (id),

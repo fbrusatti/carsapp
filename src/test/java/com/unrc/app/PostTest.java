@@ -1,6 +1,8 @@
 package com.unrc.app;
 
 import com.unrc.app.models.Post;
+import com.unrc.app.models.User;
+import com.unrc.app.models.Vehicle;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -29,11 +31,12 @@ public class PostTest{
     @Test
     public void shouldValidateMandatoryFields(){
         Post post = new Post();
-
+        User user = new User();
+        Vehicle vehicle = new Vehicle();
         the(post).shouldNotBe("valid");
         the(post.errors().get("description")).shouldBeEqual("value is missing");
         the(post.errors().get("title")).shouldBeEqual("value is missing");
-        post.set("title", "Nuevo post", "description", "Nueva descripcion de un vehiculo");
+        post.set("title", "Nuevo post", "description", "Nueva descripcion de un vehiculo", "id_users", user , "id_vehicle", vehicle);
 
         // Everything is good:
         the(post).shouldBe("valid");
@@ -43,8 +46,10 @@ public class PostTest{
     //creo dos usuarios y verifico si son o no iguales
     @Test
     public void shouldValidatefindById(){
-        Post post1 = Post.createPost("nuevopost1", "nuevadescripcion");
-        Post post2 = Post.createPost("nuevopost2", "nuevadescripcion");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
+        Post post1 = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Post post2 = Post.createPost("nuevopost2", "nuevadescripcion", user, vehicle);
 
         Post post3 = Post.findById(post1.getId());
         the(post1.getString("description")).shouldBeEqual(post3.getString("description"));  
@@ -55,7 +60,9 @@ public class PostTest{
     //verifico si un usuario(creado anteriormente) existe y luego busco un usuario inexistente
     @Test
     public void shouldValidateExistPost(){
-        Post post = Post.createPost("nuevopost", "nuevadescripcion");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
+        Post post = Post.createPost("nuevopost", "nuevadescripcion", user, vehicle);
         the(Post.existPost(post.getInteger("id"))).shouldBeTrue();
         the(Post.existPost(post.getInteger("id") + 1)).shouldBeFalse();
     } 
@@ -63,7 +70,9 @@ public class PostTest{
     //creo un nuevo usuario y verifico la consistencia de ese usuario
     @Test
     public void shouldValidateCreatePost(){
-        Post post = Post.createPost("nuevo post","nueva descripcion");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
+        Post post = Post.createPost("nuevo post","nueva descripcion", user, vehicle);
         the(post).shouldBe("valid");
         the(post).shouldNotBeNull();
         the(post).shouldContain("nuevo post");
@@ -74,7 +83,11 @@ public class PostTest{
     //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
     @Test
     public void shouldValidateDelete(){
-        Post post = Post.createPost("postNuevo", "descripcionNueva");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+
+        Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
+
+        Post post = Post.createPost("postNuevo", "descripcionNueva", user, vehicle);
         the(Post.deletePost(post.getInteger("id"))).shouldBeTrue();
         the(Post.deletePost(post.getInteger("id") + 1)).shouldBeFalse();
     }   
