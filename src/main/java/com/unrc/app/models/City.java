@@ -12,12 +12,20 @@ import org.javalite.activejdbc.Model;
  */
 public class City extends Model {
     static {
-      validatePresenceOf("name");
+      validatePresenceOf("country","state","name");
   	}
 	
 	//get Name
 	public String getName(){
 		return (this.getString("name"));
+	}
+        
+        public String getState(){
+		return (this.getString("state"));
+	}
+        
+        public String getCountry(){
+		return (this.getString("country"));
 	}
     
 }
