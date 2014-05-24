@@ -80,6 +80,6 @@ public class RateTest{
         the(rate).shouldBe("valid");
         the(rate).shouldNotBeNull();
         the(rate).shouldContain(rate.getInteger("id"));
-        the(rate).shouldNotContain(rate.getInteger("id")-1);
+        the(rate.getInteger("id")).shouldNotBeEqual(3);
     } 
 }

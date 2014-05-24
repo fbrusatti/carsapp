@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Base;
 
 import com.unrc.app.models.User;
 
+
 import static spark.Spark.*;
 /**
  * Hello world!
@@ -25,7 +26,7 @@ public class App
         Base.close();
 
         get("/hello", (request, response) -> {
-            return "Hello World!";
+            return "Hello world";
         });
 
         /*get(new Route("/hello") {

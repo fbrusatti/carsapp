@@ -25,7 +25,7 @@ public class Rate extends Model {
     //crea un rate a partir de un usuario y un post
     public static Rate createRate(int stars, Post post, User user){
         Rate rate = create("stars", stars, "id_post", post.getInteger("id"), "id_user", user.getInteger("id"));
-        if( Rate.first("id_post = ? and id_user = ?",post.getInteger("id"), user.getInteger("id"))==null){
+        if (Rate.first("id_post = ? and id_user = ?",post.getInteger("id"), user.getInteger("id"))==null){
             rate.saveIt();
         }
         return findById(rate.getInteger("id"));
