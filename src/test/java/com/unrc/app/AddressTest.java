@@ -29,7 +29,6 @@ public class AddressTest{
     @Test
     public void shouldValidateMandatoryFields(){
         Address address = new Address();
-
         the(address).shouldNotBe("valid");
         the(address.errors().get("street")).shouldBeEqual("value is missing");
         address.set("street", "Lincoln");
@@ -85,5 +84,6 @@ public class AddressTest{
       User.deleteUserAddress("San Martin",1654,"tito_drogba@hotmail.com"); //elimino la relacion San Martin 1654 -> Didier Drogba
       the(Address.deleteAddress("Lincoln", 874)).shouldBeFalse(); //no la puedo eliminar porque tiene un usuario asociado
       the(Address.deleteAddress("San Martin", 1654)).shouldBeTrue(); //se deberia poder eliminar(nada asociado a ella)
-    } 
+    }
+
 }

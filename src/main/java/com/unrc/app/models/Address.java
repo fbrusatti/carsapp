@@ -16,12 +16,12 @@ public class Address extends Model {
     if(!existAddress(dir,num)){
           address.saveIt();
         }
-  	return findByAddress(dir,num);
+    return findByAddress(dir,num);
   }
 
   //Retorna el modelo Address en la bd a partir de la dirección de un usuario
   public static Address findByAddress(String dir, int num){
-  return (Address.findFirst("street = ? and num = ?", dir, num));
+  return (Address.findFirst("street = ? and num = ? ", dir, num));
   }
 
   //Retorna True si encuentra la dirección en la bd

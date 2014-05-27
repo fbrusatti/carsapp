@@ -28,7 +28,6 @@ public class User extends Model {
     //a partir del nombre-apellido-email crea un usuario nuevo siempre y cuando este no exista en la bd
 	public static User createUser(String name, String lastname, String email){
     	User user=create("first_name", name, "last_name", lastname, "email", email);
-
         if(!existUser(email)){
         	user.saveIt();
         }
@@ -52,5 +51,5 @@ public class User extends Model {
         user.remove(address);
         return true;
     }
-              
+  
 }
