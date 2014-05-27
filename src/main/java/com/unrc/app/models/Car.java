@@ -35,10 +35,8 @@ public class Car extends Model {
 
 	@Override
 	public boolean saveIt() {
-		//boolean addCar = super.saveIt();
 		Vehicle v = Vehicle.findById(id_v);
         this.set("vehicle_id",v.getId());
-        //System.out.println(addCar);
 		return super.saveIt();
 	}
 	

@@ -20,46 +20,4 @@ public class User extends Model {
 	  }
   }
   
-  /**
-   *Returns a list of Posts that was posted by Users that live in the city "location". If the city 
-   *don't exists return the empty list.
-   * @param location is the name of the city where the posts were posted.
-   * @return Returns a list of Posts that was posted by Users that live in the city "location".
-   */
-  public List<Post> searchPostByLocation(String location) {
-	  City c = City.findFirst("name = ?", location);
-	  List<Post> postFromLocate=new LinkedList<Post>();
-	  if (c!=null) {
-	  
-		  //List<User> usersFromLocate = (User.where("city_id = ?",c.getId()));
-		  List<User> usersFromLocate = (List<User>)(c.get("users"));
-		  for (User u : usersFromLocate) {
-			  List<Post> postOfUser = u.getAll(Post.class);
-			  for (Post p : postOfUser) {
-				  postFromLocate.add(p);
-			  }
-		  }
-	  }
-	  return postFromLocate;
-  }
-  
-  /**
-   * Returns a list of all Posts related with a Vehicle of type "vehicleType"
-   * @param vehicleType is the type of the vehicle to search the posts.
-   * @return a list of vehicleType 
-   */
-  public List<Post> searchPostByVehicleType(String vehicleType) {
-	  List<Post> postOfVehicleType=new LinkedList<Post>();
-	  if (vehicleType=="Car") {
-		  
-	  }
-	  if (vehicleType=="Truck") {
-		  
-	  }
-	  if (vehicleType=="Motorcycle") {
-		  
-	  }
-	  return postOfVehicleType;
-	  // TODO implements this. 
-  }
 }
