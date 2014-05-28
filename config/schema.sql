@@ -12,27 +12,6 @@ CREATE TABLE carsapp_development.users(
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS carsapp_development.questions; -- Preguntas
-CREATE TABLE carsapp_development.questions(
-    id INT NOT NULL AUTO_INCREMENT,
-    description VARCHAR(2000),
-    id_users int,
-    CONSTRAINT question_pk PRIMARY KEY (id)  
-);
-
-
-DROP TABLE IF EXISTS carsapp_development.answers; 
-CREATE TABLE carsapp_development.answers(
-    id INT NOT NULL AUTO_INCREMENT,
-    description VARCHAR(2000),
-    id_users int,
-    id_question int,
-  CONSTRAINT answers_pk PRIMARY KEY (id),
-  CONSTRAINT answers_questions_fk FOREIGN KEY (id_question) REFERENCES questions(id),
-  CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id)
-  on update cascade on delete cascade
-);
-
 DROP TABLE IF EXISTS carsapp_development.vehicles; -- Vehiculos
 CREATE TABLE carsapp_development.vehicles(
     patent varchar(6) not null,
@@ -80,13 +59,33 @@ CREATE TABLE carsapp_development.posts(
     title VARCHAR (50),
     description VARCHAR(2000),
     id_users int,
-    id_question int,
     id_vehicle varchar(6),
     CONSTRAINT posts_pk PRIMARY KEY (id),
     CONSTRAINT users_posts_fk FOREIGN KEY (id_users) REFERENCES users(id),  
-    CONSTRAINT vehicle_post_fk FOREIGN KEY (id_vehicle) REFERENCES vehicles(patent),  
-    CONSTRAINT question_posts_fk FOREIGN KEY (id_question) REFERENCES questions(id)
+    CONSTRAINT vehicle_post_fk FOREIGN KEY (id_vehicle) REFERENCES vehicles(patent)
+);
 
+DROP TABLE IF EXISTS carsapp_development.questions; -- Preguntas
+CREATE TABLE carsapp_development.questions(
+    id INT NOT NULL AUTO_INCREMENT,
+    description VARCHAR(2000),
+    id_users int,
+    id_posts int,
+    CONSTRAINT question_pk PRIMARY KEY (id),
+    CONSTRAINT posts_questions_fk foreign key (id_posts) REFERENCES posts(id),
+    CONSTRAINT users_questionsfk foreign key (id_users) REFERENCES users(id)
+);
+
+DROP TABLE IF EXISTS carsapp_development.answers; 
+CREATE TABLE carsapp_development.answers(
+    id INT NOT NULL AUTO_INCREMENT,
+    description VARCHAR(2000),
+    id_users int,
+    id_question int,
+    CONSTRAINT answers_pk PRIMARY KEY (id),
+    CONSTRAINT answers_questions_fk FOREIGN KEY (id_question) REFERENCES questions(id),
+    CONSTRAINT user_answers_fk FOREIGN KEY (id_users) REFERENCES users(id)
+    on update cascade on delete cascade
 );
 
 DROP TABLE IF EXISTS carsapp_development.rates; -- Calificaciones de las publicaciones

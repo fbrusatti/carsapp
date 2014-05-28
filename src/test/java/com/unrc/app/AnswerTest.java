@@ -2,7 +2,7 @@ package com.unrc.app;
 
 import com.unrc.app.models.Answer;
 import com.unrc.app.models.Question;
-import com.unrc.app.models.User;
+import com.unrc.app.models.*;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -39,10 +39,12 @@ public class AnswerTest {
     //creo dos respuestas y verifico si son o no iguales
     @Test
     public void shouldValidatefindByAnswer(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question p= Question.createQuestion("a cuanto vende el auto?" , m);
-        Answer a1= Answer.createAnswer("respuesta1" , m, p);
-        Answer a2= Answer.createAnswer("respuesta2" , m, p);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p = Question.createQuestion("pregunta1" , user, post);
+        Answer a1= Answer.createAnswer("respuesta1" , user, p);
+        Answer a2= Answer.createAnswer("respuesta2" , user, p);
         Answer a3 = Answer.findByAnswer(a1.getInteger("id"));
         the(a1.getInteger("id")).shouldNotBeEqual(a2.getInteger("id"));  
         the(a1.getInteger("id")).shouldBeEqual(a3.getInteger("id")); 
@@ -51,9 +53,11 @@ public class AnswerTest {
     //verifico si una respuesta(creada anteriormente) existe y luego busco una respuesta inexistente
     @Test
     public void shouldValidateExistAnswer(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question p= Question.createQuestion("a cuanto vende el auto?" , m);
-        Answer a1= Answer.createAnswer("respuesta1" , m, p);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p = Question.createQuestion("pregunta1" , user, post);
+        Answer a1= Answer.createAnswer("respuesta1", user, p);
         the(Answer.existAnswer(a1.getInteger("id"))).shouldBeTrue();
         the(Answer.existAnswer(120)).shouldBeFalse();
     } 
@@ -61,13 +65,15 @@ public class AnswerTest {
     //creo una nueva respuesta y verifico la consistencia de esa respuesta
     @Test
     public void shouldValidateCreateAnswer(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question p= Question.createQuestion("a cuanto vende el auto?" , m);
-        Answer a1= Answer.createAnswer("respuesta1" , m, p);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p = Question.createQuestion("pregunta1" , user, post);
+        Answer a1= Answer.createAnswer("respuesta1", user, p);
         the(a1).shouldBe("valid");
         the(a1).shouldNotBeNull();
         the(a1).shouldContain("respuesta1");
-        the(a1).shouldContain(m.getInteger("id"));
+        the(a1).shouldContain(user.getInteger("id"));
         the(a1).shouldContain(p.getInteger("id"));
         the(a1).shouldNotContain("respuesta2");
        
@@ -76,11 +82,13 @@ public class AnswerTest {
     //creo una respuesta y luego intento eliminarla ,luego intento eliminar una respuesta inexistente
       @Test
     public void shouldValidateDeleteAnswer(){
-     User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-     Question p= Question.createQuestion("a cuanto vende el auto?" , m);
-     Answer a1= Answer.createAnswer("respuesta1" , m, p);
-     the(Answer.deleteAnswer(a1.getInteger("id"))).shouldBeTrue();
-     the(Answer.deleteAnswer(120)).shouldBeFalse();
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p = Question.createQuestion("pregunta1" , user, post);
+        Answer a1= Answer.createAnswer("respuesta1" , user, p);
+        the(Answer.deleteAnswer(a1.getInteger("id"))).shouldBeTrue();
+        the(Answer.deleteAnswer(120)).shouldBeFalse();
       
     } 
 

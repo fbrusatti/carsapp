@@ -1,6 +1,6 @@
 package com.unrc.app;
 import com.unrc.app.models.Question;
-import com.unrc.app.models.User;
+import com.unrc.app.models.*;
 import org.javalite.activejdbc.Base;
 import org.junit.After;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class QuestionTest{
         Question p = new Question();
         the(p).shouldNotBe("valid");
         the(p.errors().get("description")).shouldBeEqual("value is missing");
-        p.set("description", "a cuanto vende el auto?","id_users", 1);
+        p.set("description", "a cuanto vende el auto?","id_users", 1, "id_posts", 1);
 
         // Everything is good:
         the(p).shouldBe("valid");
@@ -40,9 +40,11 @@ public class QuestionTest{
     //creo dos preguntas y verifico si son o no iguales
     @Test
     public void shouldValidatefindByQuestion(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question c1= Question.createQuestion("a cuanto vende el auto?" , m);
-        Question c2= Question.createQuestion("cuanto sale la moto?" , m);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question c1= Question.createQuestion("a cuanto vende el auto?" , user, post);
+        Question c2= Question.createQuestion("cuanto sale la moto?" , user, post);
         Question c3 = Question.findByQuestion(c1.getInteger("id"));
         the(c1.getInteger("id")).shouldNotBeEqual(c2.getInteger("id"));  
         the(c1.getInteger("id")).shouldBeEqual(c3.getInteger("id")); 
@@ -52,8 +54,10 @@ public class QuestionTest{
     //verifico si una pergunta(creado anteriormente) existe y luego busco una pregunta inexistente
     @Test
     public void shouldValidateExistQuestion(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question p= Question.createQuestion("pregunta1" , u);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p= Question.createQuestion("pregunta1" , user, post);
         the(Question.existQuestion(p.getInteger("id"))).shouldBeTrue();
         the(Question.existQuestion(654)).shouldBeFalse();
     } 
@@ -61,12 +65,14 @@ public class QuestionTest{
    //creo una nueva pregunta y verifico la consistencia de esa pregunta
     @Test
     public void shouldValidateCreateQuestion(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
-        Question p = Question.createQuestion("pregunta1" , u);
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question p = Question.createQuestion("pregunta1" , user, post);
         the(p).shouldBe("valid");
         the(p).shouldNotBeNull();
         the(p).shouldContain("pregunta1");
-        the(p).shouldContain(u.getInteger("id"));
+        the(p).shouldContain(user.getInteger("id"));
         the(p).shouldNotContain("pregunta2");
     } 
 
@@ -74,10 +80,12 @@ public class QuestionTest{
     //creo una pregunta y luego intento eliminarla ,luego intento eliminar una pregunta inexistente
       @Test
     public void shouldValidateDeleteQuestion(){
-     User u = User.createUser("Jhony","GUzman","gm@gmail.com");
-     Question t = Question.createQuestion("pregunta1" , u);
-     the(Question.deleteQuestion(t.getInteger("id"))).shouldBeTrue();
-     the(Question.deleteQuestion(69)).shouldBeFalse();
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
+        Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
+        Question t = Question.createQuestion("pregunta1", user, post);
+        the(Question.deleteQuestion(t.getInteger("id"))).shouldBeTrue();
+        the(Question.deleteQuestion(69)).shouldBeFalse();
       
     } 
 /*    */

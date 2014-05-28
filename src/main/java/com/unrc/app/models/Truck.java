@@ -14,9 +14,12 @@ public class Truck extends Model{
 	}
 
     //a partir de la cantidad de cinturones y la patente  crea una camioneta nueva siempre y cuando esta no exista en la bd
-    public static Truck createTruck(int cantCinturon,Vehicle v){
-        String p = v.getString("patent");
-        Truck truck=create("id_vehicle",p,"count_belt", cantCinturon);
+    public static Truck createTruck(int cantCinturon,Vehicle vehicle){
+        String p = vehicle.getString("patent");
+        //Truck truck=create("id_vehicle",p,"count_belt", cantCinturon);
+        Truck truck = new Truck();
+        //vehicle.add(truck);
+        truck.set("id_vehicle",p,"count_belt", cantCinturon);
         if(!existTruck(p)){
             truck.saveIt();
         }

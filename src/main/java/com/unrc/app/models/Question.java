@@ -26,8 +26,8 @@ public class Question extends Model {
     }
    
     //a partir del descripcion y del usuario que realiza la pregunta crea una pegunta nueva siempre y cuando ésta no exista en la bd
-	public static Question createQuestion(String descripcion, User usuario){
-    	Question pregunta=create("description", descripcion, "id_users", usuario.getInteger("id"));
+	public static Question createQuestion(String descripcion, User usuario, Post post){
+    	Question pregunta=create("description", descripcion, "id_users", usuario.getInteger("id"), "id_posts", post.getInteger("id"));
         pregunta.saveIt();
         return findByQuestion(pregunta.getInteger("id"));
     }

@@ -14,11 +14,14 @@ public class Motorcycle extends Model{
 	}
 
     //a partir del nombre-apellido-email crea un usuario nuevo siempre y cuando este no exista en la bd
-    public static Motorcycle createMotorcycle(int rodado,int cilindrada,Vehicle v){
-        String p = v.getString("patent");
-        Motorcycle moto=create("id_vehicle",p,"wheel_size", rodado,"engine_size",cilindrada);
+    public static Motorcycle createMotorcycle(int rodado,int cilindrada,Vehicle vehicle){
+        String p = vehicle.getString("patent");
+        //Motorcycle motorcycle=create("id_vehicle",p,"wheel_size", rodado,"engine_size",cilindrada);
+        Motorcycle motorcycle = new Motorcycle();
+        //vehicle.add(motorcycle);
+        motorcycle.set("id_vehicle",p,"wheel_size", rodado,"engine_size",cilindrada);
         if(!existMotorcycle(p)){
-            moto.saveIt();
+            motorcycle.saveIt();
         }
         return findByMotorcycle(p);
     }

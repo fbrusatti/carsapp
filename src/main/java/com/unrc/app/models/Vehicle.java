@@ -25,8 +25,9 @@ public class Vehicle extends Model {
    
     //a partir de la patente,modelo y marca crea un vehiculo nuevo siempre y cuando este no exista en la bd
 	public static Vehicle createVehicle(String patente, String modelo, String marca,User usuario){
-    	Vehicle vehiculo=create("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
-
+    	//Vehicle vehiculo=create("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
+        Vehicle vehiculo = new Vehicle();
+        vehiculo.set("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
         if(!existVehicle(patente)){
         	vehiculo.saveIt();
         }
