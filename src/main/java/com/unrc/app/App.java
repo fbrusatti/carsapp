@@ -24,9 +24,8 @@ public class App
 {
     public static void main( String[] args )
     {
-        //System.out.println( "Hello cruel world!" );
         try {                           //code to open browser in hello url. problem, it loads without the content of spark
-            URI uri = new URI("http://localhost:4567/users/new");
+            URI uri = new URI("http://localhost:4567/hello");
             Desktop desktop = null;
             if (Desktop.isDesktopSupported()) {
                 desktop = Desktop.getDesktop();
@@ -40,27 +39,30 @@ public class App
                 use.printStackTrace();
             }
 
-        get("/hello",(request, response) -> {
-            return "Hello World!";
-        });
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
-        }); //could redirect to a "home"
-
+        }); 
         
+        get("/hello",(request, response) -> {
+            response.type("text/html");
+            return WebStuff.link("Menu","http://localhost:4567/users/new","Alta usuario");
+        });
 
         get("/users/new" , (request, response) ->{
             response.type("text/html");
-            return "<html> \n <head> \n <title> \n Create user \n </title> \n </head> \n <body> \n <form action=\"/users\" method=\"post\"> \n name \n <input type= \"text\" name=\"name\"> \n email \n <input type=\"text\" name= \"email\"> \n <input type=\"submit\" value= \"Guardar\"> \n </form> \n </body>\n </html>";
+            String[] a={"name","lastname","email"};
+            String form = WebStuff.form("Create User",a,"/users","post");
+            return form;
         });
 
         post ("/users",(request, response) ->{ 
             String name = request.queryParams("name");
+            String lastname = request.queryParams("lastname");
             String email = request.queryParams("email");
-            User.createIt("first_name", name, "last_name", "lastname","email",email,"is_admin","0"); //acá iria nuestro metodo de creacion
+            User.createIt("first_name", name, "last_name", lastname,"email",email,"is_admin","0"); //acá iria nuestro metodo de creacion
             response.redirect("/users");
-            return "success"; //
+            return "success"; 
         });
 
 
