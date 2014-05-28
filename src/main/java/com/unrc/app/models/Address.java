@@ -12,9 +12,9 @@ public class Address extends Model {
   //A partir de la direccion crea un usuario nuevo si y solo si este no existe en la bd
   public static Address createAddress(String dir, int num, User usuario){
     Address address = create("street", dir,"num", num);
-    usuario.add(address);
     if(!existAddress(dir,num)){
           address.saveIt();
+          usuario.add(address);
         }
     return findByAddress(dir,num);
   }
