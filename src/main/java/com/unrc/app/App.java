@@ -79,6 +79,10 @@ public class App
         Rate rate1 = Rate.createRate(5, post1, user2);
         Base.close();
 
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+        Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
+        Base.close();
+
 
         get("/hello", (request, response) -> {
             return "Hello world";
@@ -111,7 +115,7 @@ public class App
             }            
         });
 
-        get("/vehicle",(request,response)->{
+        get("/vehicles",(request,response)->{
             List<Vehicle> vehiclesList = Vehicle.findAll();
             String list = new String();
             for(Vehicle v: vehiclesList){
@@ -121,7 +125,7 @@ public class App
         });
 
         //Lista un vehiculo particular
-        get("/vehicle/:patent",(request,response)->{
+        get("/vehicles/:patent",(request,response)->{
             Vehicle vehicleRequested = Vehicle.findByPatent(request.params(":patent"));
             if(vehicleRequested!=null){
                 String patente = vehicleRequested.getString("patent");
@@ -134,7 +138,7 @@ public class App
             }            
         });
 
-        get("/post",(request,response)->{
+        get("/posts",(request,response)->{
             List<Post> postsList = Post.findAll();
             String list = new String();
             for(Post p: postsList){
@@ -144,7 +148,7 @@ public class App
         });        
 
         //Lista un post particular
-        get("/post/:id",(request,response)->{
+        get("/posts/:id",(request,response)->{
             Post postRequested = Post.findById(request.params(":id"));
             if(postRequested!=null){
                 String titulo = postRequested.getString("title");
@@ -156,7 +160,7 @@ public class App
             }            
         });    
 
-        get("/question",(request,response)->{
+        get("/questions",(request,response)->{
             List<Question> questionsList = Question.findAll();
             String list = new String();
             for(Question q: questionsList){
@@ -166,7 +170,7 @@ public class App
         });    
 
         //Lista una pregunta particular
-        get("/question/:id",(request,response)->{
+        get("/questions/:id",(request,response)->{
             Question questionRequested = Question.findById(request.params(":id"));
             if(questionRequested!=null){
                 String pregunta = questionRequested.getString("description");
@@ -175,40 +179,11 @@ public class App
             else{
                 return "Pregunta no encontrado!";
             }            
-        });  
-       
-        //List all answers
-        get("/answer", (request,response) ->{
-						List<Answer> answerList = Answer.findAll();
-						String list = new String();
-						for(Answer a : answerList){
-								list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
-						}
-						return list;
-        });  
-				
-				//List a specific answer
-				get("/answer/:id", (request,responser)->{
-						Answer answerRequested = Answer.findById(request.params(":id"));
-						if(answerRequested!=null){
-								String respuesta = answerRequested.getString("description");
-								return "Descripcion: "+respuesta+".";
-						}
-						else{
-								return "Respuesta no encontrada!";
-						}
-				});
-			
+        });    
+
 
         after((request, response) -> {
             Base.close();    
         });
-
-        /*get(new Route("/hello") {
-            @Override
-            public Object handle(Request request, Response response) {
-                return "Hello World!";
-            }
-        });*/
     }
 }
