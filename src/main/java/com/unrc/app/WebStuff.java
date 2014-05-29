@@ -11,7 +11,7 @@ public class WebStuff {//no se me ocurria otro fucking nombre, busquemos de camb
 		for (int i=0;i<a.length ;i++ ) {
 			f=f+"\n "+a[i]+"\n <input type= \"text\" name=\""+a[i]+"\"><br> ";
 		};
-		f=f+"\n <input type=\"submit\" value= \"Guardar\"> </form> </body> </html>";
+		f=f+"\n <input type=\"submit\" value= \"Save\"> </form> </body> </html>";
 		return f;
 	}
 }
