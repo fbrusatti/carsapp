@@ -56,6 +56,26 @@ public class App
             return form;
         });
 
+        get("/users/add/vehicles" , (request, response) ->{
+            response.type("text/html");
+            String[] data = {"Name","Model (YYYY)","KM (in numbers)","User name"};
+            String form = WebStuff.form("Add Vehicle",data,"/vehicles","post");
+            return form;
+        });
+
+        post ("/vehicles",(request, response) ->{ 
+            String name = request.queryParams("Name");
+            String model = request.queryParams("Model (YYYY)");
+            String km = request.queryParams("KM (in numbers)"); //should take integers in the form
+            String user = request.queryParams("User name"); //later we should use the id of the user logged
+            Vehicle v = Vehicle.create("name", name, "model", model,"km",km);
+            User u = User.findFirst("first_name = ?",user);
+            u.add(v);
+            u.saveIt();//writes to te DB
+            response.redirect("/vehicles");
+            return "success"; 
+        });
+
         post ("/users",(request, response) ->{ 
             String name = request.queryParams("name");
             String lastname = request.queryParams("lastname");
@@ -72,6 +92,17 @@ public class App
             String list = new String();
             for (User u: userList) {
                 list = list+u.getString("id")+" "+u.getString("first_name")+" "+u.getString("last_name")+"\n";
+            }
+            return list;
+        });
+
+        //List of vehicles
+        get("/vehicles", (request,response) -> {
+            List<Vehicle> vehicleList = Vehicle.findAll();
+            String list = new String();
+            for (Vehicle v: vehicleList) {
+                User u = User.findById(v.getInteger("user_id"));
+                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+"Model: "+v.getString("model")+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
             }
             return list;
         });
