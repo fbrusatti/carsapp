@@ -167,7 +167,7 @@ public class App
 
         //Lista una pregunta particular
         get("/question/:id",(request,response)->{
-            Question questionRequested = Question.findByQuestion(request.params(":id"));
+            Question questionRequested = Question.findById(request.params(":id"));
             if(questionRequested!=null){
                 String pregunta = questionRequested.getString("description");
                 return "Descripcion: "+pregunta+".";
@@ -175,8 +175,30 @@ public class App
             else{
                 return "Pregunta no encontrado!";
             }            
-        });    
-
+        });  
+       
+        //List all answers
+        get("/answer", (request,response) ->{
+						List<Answer> answerList = Answer.findAll();
+						String list = new String();
+						for(Answer a : answerList){
+								list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
+						}
+						return list;
+        });  
+				
+				//List a specific answer
+				get("/answer/:id", (request,responser)->{
+						Answer answerRequested = Answer.findById(request.params(":id"));
+						if(answerRequested!=null){
+								String respuesta = answerRequested.getString("description");
+								return "Descripcion: "+respuesta+".";
+						}
+						else{
+								return "Respuesta no encontrada!";
+						}
+				});
+			
 
         after((request, response) -> {
             Base.close();    
