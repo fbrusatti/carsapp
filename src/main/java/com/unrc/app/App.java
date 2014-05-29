@@ -62,7 +62,18 @@ public class App {
          */
 		get("/users", (request, response) -> {
         	List<User> users = User.findAll();
-        	return users.toString();
+        	String body = "<table border=\"1\">";
+        	body += "<caption><b><h1>Usuarios</h1></b></caption>";
+        	body += "<tr><th>Nombre</th><th>Apellido</th><th>Teléfono</th><th>Ciudad</th></tr>";
+        	for (User u : users) {
+        		//body += "<font color =\"blue\">" + u.toString() + "</font><br>";
+        		body += "<tr><td>"+ u.getString("first_name") +"</td>";
+        		body +="<td>"+ u.getString("last_name") +"</td>";
+        		body +="<td>"+ u.getString("mobile") +"</td>";
+        		body +="<td>"+ u.parent(City.class).getString("name") +"</td></tr>";
+        	}
+        	body+="</table>";
+        	return body;
         });
         
         /**
@@ -96,9 +107,49 @@ public class App {
         });
         
         /**
+		 *Adding a new User 
+		 */
+		
+		get("/insertUser", (request, response) -> {
+        	String body = "<form action=\"/users\" method=\"post\">";
+			body += "<b>Nombre: </b><input type=\"text\" name=\"firstName\" size=\"20\"><br>";
+        	body += "<b>Apellido: </b><input type=\"text\" name=\"lastName\" size=\"20\"><br>";
+        	body += "<b>Email: </b><input type=\"text\" name=\"email\" size=\"20\"><br>";
+        	body += "<b>Teléfono movil: </b><input type=\"text\" name=\"movil\" size=\"20\"><br>";
+        	body += "<b>Teléfono fijo: </b><input type=\"text\" name=\"fijo\" size=\"20\"><br>";
+        	body += "<b>Dirección: </b><input type=\"text\" name=\"direccion\" size=\"50\"><br>";
+        	body += "";
+        	body += "<b>Seleccione su ciudad: </b><select name=\"ciudad\">";
+        	List<City> cities = City.findAll();
+        	for (City c : cities) {
+        		body += "<option value=\""+c.getId()+"\">"+c.getString("name")+"</option>"; 
+        	}
+        	body += "</select><br><input type=\"submit\" value=\"Enviar\"><input type=\"reset\" value=\"Borrar\">";
+        	body += "</form>";
+        	return body;
+        });
+		
+        /**
+         * Posting a new user
+         */
+        post("/users", (request, response) -> {
+        	User u = new User();
+        	u.set("email", request.params("email"));
+        	u.set("first_name",request.params("firstName"));
+        	u.set("last_name", request.params("lastName"));
+        	u.set("mobile",request.params("movil"));
+        	u.set("telephone",request.params("fijo"));
+        	u.set("address",request.params("direccion"));
+        	u.saveIt();
+        	City c = City.findFirst("name = ?",request.params("ciudad"));
+        	c.add(u);
+        	return "Agregado existosamente";
+        });
+        
+        /**
          * Getting posts
          */
-        get("/posts", (request, response) -> {
+        get("/posts/", (request, response) -> {
         	List<Post> posts = Post.findAll();
         	return posts.toString();
         });
