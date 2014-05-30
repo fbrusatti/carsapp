@@ -102,11 +102,47 @@ public class App
             String list = new String();
             for (Vehicle v: vehicleList) {
                 User u = User.findById(v.getInteger("user_id"));
-                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+"Model: "+v.getString("model")+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
+                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
             }
             return list;
         });
         
+        //List of Posts
+        get("/posts", (request,response) -> {
+            List<Post> postList = Post.findAll();
+            String list = new String();
+            for (Post p: postList) {
+                User u = User.findById(p.getInteger("user_id"));
+                Vehicle v = Vehicle.findById(p.getInteger("vehicle_id"));
+                list = list+p.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+" "+"Price: "+p.getString("price")+" "+"Description: "+p.getString("description")+" "+"Belongs to:"+u.getString("first_name")+"\n";
+            }
+            return list;
+        });
+
+        //List of Questions
+        get("/questions", (request,response) -> {
+            List<Question> questionList = Question.findAll();
+            String list = new String();
+            for (Question q: questionList) {
+                User u = User.findById(q.getInteger("user_id"));
+                Post p = Post.findById(q.getInteger("post_id"));
+                list = list+q.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Question: "+q.getString("description")+"\n";
+            }
+            return list;
+        });
+
+        //List of Answers
+        get("/answers", (request,response) -> {
+            List<Answer> answerList = Answer.findAll();
+            String list = new String();
+            for (Answer a: answerList) {
+                User u = User.findById(a.getInteger("user_id"));
+                Post p = Post.findById(a.getInteger("post_id"));
+                list = list+a.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Answer: "+a.getString("description")+"\n";
+            }
+            return list;
+        });
+
         //Show Users 
         get("/users/:id", (request, response) -> {
             User u = User.findById(Integer.parseInt(request.params(":id")));
