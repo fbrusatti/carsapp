@@ -15,6 +15,7 @@ import com.unrc.app.models.Post;
 import com.unrc.app.models.Car;
 import com.unrc.app.models.Question;
 import com.unrc.app.models.Answer;
+import com.unrc.app.models.Address;
 
 /**
  * Hello world!
@@ -85,7 +86,6 @@ public class App
             return "success"; 
         });
 
-
         //List of users
         get("/users", (request,response) -> {
             List<User> userList = User.findAll();
@@ -143,6 +143,17 @@ public class App
             return list;
         });
 
+        //List of Addresses
+        get("/addresses", (request,response) -> {
+            List<Address> addressList = Address.findAll();
+            String list = new String();
+            for (Address a: addressList) {
+                User u = User.findById(a.getInteger("user_id"));
+                list = list+"User Name: "+u.getString("first_name")+" "+"Street: "+a.getString("street")+" "+"Address Number: "+a.getString("address_number")+"\n";
+            }
+            return list;
+        });
+
         //Show Users 
         get("/users/:id", (request, response) -> {
             User u = User.findById(Integer.parseInt(request.params(":id")));
@@ -177,6 +188,14 @@ public class App
         get("/answers/:id", (request, response) -> {
             Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
             return "Answer: " + a.toString();
+        });
+
+        //Show Address
+        get("/addresses/:id", (request, response) -> {
+            Address a = Address.findById(Integer.parseInt(request.params(":id")));
+            User u = User.findById(a.getInteger("user_id"));
+            String address = a.getString("street")+" "+a.getString("address_number");
+            return "Address: "+ u.getString("first_name")+" "+address;
         });
 
         after((request, response) -> {
