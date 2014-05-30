@@ -86,4 +86,5 @@ INSERT INTO users (first_name,last_name,email,is_admin) VALUES("Marcelo","Uva","
 INSERT INTO vehicles (user_id,name,model,km) VALUES(1,"Honda Accord","1999","32000");
 INSERT INTO cars (vehicle_id,type) VALUES(1,"sedan");
 INSERT INTO posts (user_id,vehicle_id,price,description) VALUES(1,1,"15000","hello world");
-INSERT INTO questions (user_id,post_id,description) VALUES (1,1,"hello question?");
+INSERT INTO questions (user_id,post_id,description) VALUES (2,1,"hello question?");
+INSERT INTO answers (user_id,post_id,description) VALUES (1,1,"bye answer");
