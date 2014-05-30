@@ -79,12 +79,8 @@ public class App
         Rate rate1 = Rate.createRate(5, post1, user2);
         Base.close();
 
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
-        Base.close();
 
-
-        get("/hello", (request, response) -> {
+        get("/index.html", (request, response) -> {
             return "Hello world";
         });
 
@@ -114,7 +110,7 @@ public class App
                 return "Usuario no encontrado!";
             }            
         });
-
+        //List all vehicles
         get("/vehicles",(request,response)->{
             List<Vehicle> vehiclesList = Vehicle.findAll();
             String list = new String();
@@ -138,6 +134,7 @@ public class App
             }            
         });
 
+        //List all posts
         get("/posts",(request,response)->{
             List<Post> postsList = Post.findAll();
             String list = new String();
@@ -160,6 +157,7 @@ public class App
             }            
         });    
 
+        //List all questions
         get("/questions",(request,response)->{
             List<Question> questionsList = Question.findAll();
             String list = new String();
@@ -169,7 +167,7 @@ public class App
             return list;
         });    
 
-        //Lista una pregunta particular
+        //List a specific question
         get("/questions/:id",(request,response)->{
             Question questionRequested = Question.findById(request.params(":id"));
             if(questionRequested!=null){
@@ -179,11 +177,102 @@ public class App
             else{
                 return "Pregunta no encontrado!";
             }            
+        });  
+       
+        //List all answers
+        get("/answers", (request,response) ->{
+			List<Answer> answerList = Answer.findAll();
+			String list = new String();
+			for(Answer a : answerList){
+				list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
+			}
+			return list;
+        });  
+				
+		//List a specific answer
+		get("/answers/:id", (request,responser)->{
+			Answer answerRequested = Answer.findById(request.params(":id"));
+			if(answerRequested!=null){
+				String respuesta = answerRequested.getString("description");
+				return "Descripcion: "+respuesta+".";
+			}
+			else{
+				return "Respuesta no encontrada!";
+			}
+		});
+
+        //List all rates
+        get("/rates", (request,response) ->{
+            List<Rate> rateList = Rate.findAll();
+            String list = new String();
+            for(Rate a : rateList){
+                list = list+"N° de puntuacion: "+a.getInteger("id")+". "+"puntos: "+a.getInteger("stars")+". "+"N° post: "+a.getInteger("id_post")+"."+"N° usuario: "+a.getInteger("id_user")+"."+"<br>";
+            }
+            return list;
+        });   
+
+        //Lista una puntuacion particular
+        get("/rates/:id",(request,response)->{
+            Rate rateRequested = Rate.findById(request.params(":id"));
+            if(rateRequested!=null){
+                int points = rateRequested.getInteger("stars");
+                return "Cantidad de puntos: "+points+".";
+            }
+            else{
+                return "Puntuacion no encontrada!";
+            }            
+        });                 
+		
+        get("/punctuations",(request,response)->{
+            List<Punctuation> punctuationsList = Punctuation.findAll();
+            String list = new String();
+            for(Punctuation p: punctuationsList){
+                list = list+"Puntuación: "+p.getInteger("point_u")+" "+"Entregada por "+(User.findById(p.getInteger("id_user"))).getString      ("first_name")+" a "+(User.findById(p.getInteger("id_user_receiver"))).getString("first_name")+"<br>";
+            }
+            return list;
+        });        
+
+        //Lista una puntuacion particular
+        get("/punctuations/:id",(request,response)->{
+            Punctuation punctuationRequested = Punctuation.findById(request.params(":id"));
+            if(punctuationRequested!=null){
+                String puntuacion = punctuationRequested.getString("point_u");
+                int usuarioPuntuado = punctuationRequested.getInteger("id_user_receiver");
+                int usuarioPuntuador = punctuationRequested.getInteger("id_user");
+                return "Puntaje: "+puntuacion+". "+"Entregado por "+(User.findById(punctuationRequested.getInteger("id_user"))).getString("first_name")+" a "+(User.findById(punctuationRequested.getInteger("id_user_receiver"))).getString("first_name");
+            }
+            else{
+                return "Pregunta no encontrada!";
+            }            
+        });     
+        //inserta un usuario
+        post ("/users",(request, response) ->{ 
+            String name = request.queryParams("first_name");
+            String lastname = request.queryParams("last_name");
+            String email = request.queryParams("email");
+            User nuevoUser=new User();
+            nuevoUser.createUser(name,lastname,email);
+            response.redirect("/users");
+            return "success"; 
         });    
 
-
+/*
+        //inserta una direccion
+        post ("/addresses",(request, response) ->{ 
+            String calle = request.queryParams("street");
+            String numero = request.queryParams("num");
+            String departamento = request.queryParams("apartment");
+            String ciudad = request.queryParams("city");
+            //User newUser = request.queryParams("usuario");
+            Address nuevoAddress=new Address();
+            nuevoAddress.createAddress(calle, numero, ciudad, departamento, usuario);
+            response.redirect("/users");
+            return "success"; 
+        }); 
+*/
         after((request, response) -> {
             Base.close();    
         });
+
     }
 }

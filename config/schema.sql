@@ -118,17 +118,8 @@ CREATE TABLE carsapp_development.addresses(
     street varchar(40) NOT NULL,
     num int,
     apartment varchar(20),
+    city varchar(20),
     CONSTRAINT addresses_pk PRIMARY KEY (id)
-);
-
-DROP TABLE IF EXISTS carsapp_development.cities; 
-CREATE TABLE carsapp_development.cities(
-    name varchar(20),
-    province varchar(20),
-    postal_code varchar(5),
-    city_address int,
-    CONSTRAINT address_city_fk FOREIGN KEY (city_address) REFERENCES addresses(id),
-    CONSTRAINT cities_pk PRIMARY KEY (postal_code) 
 );
 
 DROP TABLE IF EXISTS carsapp_development.users_addresses; -- tabla que contiene la informacion para referenciar a usuario y direccion
