@@ -64,15 +64,21 @@ public class App {
         	List<User> users = User.findAll();
         	String body = "<table border=\"1\">";
         	body += "<caption><b><h1>Usuarios</h1></b></caption>";
-        	body += "<tr><th>Nombre</th><th>Apellido</th><th>Teléfono</th><th>Ciudad</th></tr>";
+        	body += "<tr><th>        Nombre        </th><th>  Ciudad  </th></tr>";
         	for (User u : users) {
         		//body += "<font color =\"blue\">" + u.toString() + "</font><br>";
-        		body += "<tr><td>"+ u.getString("first_name") +"</td>";
-        		body +="<td>"+ u.getString("last_name") +"</td>";
-        		body +="<td>"+ u.getString("mobile") +"</td>";
+        		body += "<tr><td><a href=\"users/"+(Integer)u.get("id")+"\">"+u.getString("first_name")+" "+u.getString("last_name")+"</a></td>";
         		body +="<td>"+ u.parent(City.class).getString("name") +"</td></tr>";
+        		
         	}
         	body+="</table>";
+        	/*String body = "<b><h1>Usuarios</h1></b><br>";
+        	for (User u : users) {
+        		//body += "<font color =\"blue\">" + u.toString() + "</font><br>";
+        		body += "<a href=\"users/"+(Integer)u.get("id")+"\">"+u.getString("first_name")+" "+u.getString("last_name")+"</a>";
+        		body +=" "+ u.getString("mobile");
+        		body +=" "+ u.parent(City.class).getString("name")+"<br>";
+        	}*/
         	return body;
         });
         
@@ -82,7 +88,13 @@ public class App {
         get("/users/:id", (request, response) -> {
         	User u = User.findById(request.params("id"));
         	if (u!=null) {
-        		return u;
+        		String body = "<h2>"+u.getString("first_name")+" "+u.getString("last_name")+"</h2><br>";
+        		body += "Email: "+ u.getString("email")+"<br>";
+        		body += "Teléfono móvil: "+u.getString("mobile")+"<br>";
+        		body += "Teléfono fijo: "+u.getString("telephone")+"<br>";
+        		body += "Dirección: "+u.getString("address")+" "+u.parent(City.class).getString("name")+"<br>";
+        		body += "<a href=\""+(Integer)u.get("id")+"/posts\">Ver posts</a>";
+        		return body;
         	} else {
         		return "El usuario ingresado no es válido.";
         	}
@@ -106,11 +118,11 @@ public class App {
         	
         });
         
+        
         /**
 		 *Adding a new User 
 		 */
-		
-		get("/insertUser", (request, response) -> {
+		get("/users/new", (request, response) -> {
         	String body = "<form action=\"/users\" method=\"post\">";
 			body += "<b>Nombre: </b><input type=\"text\" name=\"firstName\" size=\"20\"><br>";
         	body += "<b>Apellido: </b><input type=\"text\" name=\"lastName\" size=\"20\"><br>";
@@ -134,14 +146,16 @@ public class App {
          */
         post("/users", (request, response) -> {
         	User u = new User();
-        	u.set("email", request.params("email"));
-        	u.set("first_name",request.params("firstName"));
-        	u.set("last_name", request.params("lastName"));
-        	u.set("mobile",request.params("movil"));
-        	u.set("telephone",request.params("fijo"));
-        	u.set("address",request.params("direccion"));
+        	//System.out.println(request.params(":email"));
+        	u.set("email", request.queryParams("email"));
+        	u.set("first_name",request.queryParams("firstName"));
+        	u.set("last_name", request.queryParams("lastName"));
+        	u.set("mobile",request.queryParams("movil"));
+        	u.set("telephone",request.queryParams("fijo"));
+        	u.set("address",request.queryParams("direccion"));
         	u.saveIt();
-        	City c = City.findFirst("name = ?",request.params("ciudad"));
+        	City c = City.findById(request.queryParams("ciudad"));
+        	//u.setParent(c);
         	c.add(u);
         	return "Agregado existosamente";
         });
