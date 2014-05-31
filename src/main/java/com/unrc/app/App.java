@@ -244,17 +244,35 @@ public class App
             else{
                 return "Pregunta no encontrada!";
             }            
-        });     
-        //inserta un usuario
-        post ("/users",(request, response) ->{ 
+        }); 
+
+
+
+        /**INSERCION**/
+     
+        get("/newUser",(request,response)->{
+            String form = "<form action= \"/users \" method= \"post\">";
+            form+="First name : ";
+            form+="<input type = \"text\" name=\"first_name\">";
+            form+="Last Name: ";
+            form+="<input type = \"text\" name=\"last_name\">";
+            form+="Email: ";
+            form+="<input type = \"text\" name=\"email\">";            
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        });      
+     
+     
+            //inserta un usuario
+        post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
             String lastname = request.queryParams("last_name");
             String email = request.queryParams("email");
-            User nuevoUser=new User();
-            nuevoUser.createUser(name,lastname,email);
+            User nuevoUser= new User();nuevoUser.createUser(name,lastname,email);
             response.redirect("/users");
-            return "success"; 
-        });    
+            return "success";
+        });
 
 /*
         //inserta una direccion
