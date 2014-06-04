@@ -83,6 +83,7 @@ public class App
         get("/index.html", (request, response) -> {
             return "Hello world";
         });
+      
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
@@ -223,16 +224,17 @@ public class App
             }            
         });                 
 		
+        //List all Punctuations
         get("/punctuations",(request,response)->{
             List<Punctuation> punctuationsList = Punctuation.findAll();
             String list = new String();
             for(Punctuation p: punctuationsList){
-                list = list+"Puntuación: "+p.getInteger("point_u")+" "+"Entregada por "+(User.findById(p.getInteger("id_user"))).getString      ("first_name")+" a "+(User.findById(p.getInteger("id_user_receiver"))).getString("first_name")+"<br>";
+                list = list+"Puntuación: "+p.getInteger("point_u")+" "+"Entregada por "+(User.findById(p.getInteger("id_user"))).getString("first_name")+" a "+(User.findById(p.getInteger("id_user_receiver"))).getString("first_name")+"<br>";
             }
             return list;
         });        
 
-        //Lista una puntuacion particular
+        //List a specific Punctuation
         get("/punctuations/:id",(request,response)->{
             Punctuation punctuationRequested = Punctuation.findById(request.params(":id"));
             if(punctuationRequested!=null){
@@ -246,9 +248,17 @@ public class App
             }            
         }); 
 
+        //List all addresses
+        get("/addresses", (request, response)->{
+            List<Address> addressesList = Address.findAll();
+            String list = new String();
+            for(Address a : addressesList){
+                list = list+" || "+" Calle: "+a.getString("street")+" "+" Numero "+a.getInteger("num")+" "+" Departamento "+a.getString("apartment")+" "+"Ciudad "+a.getString("city");
+            }
+            return list;
+        });
 
-
-        /**INSERCION**/
+        /**INSERCIONES**/
      
         get("/newUser",(request,response)->{
             String form = "<form action= \"/users \" method= \"post\">";
@@ -264,7 +274,7 @@ public class App
         });      
      
      
-            //inserta un usuario
+        //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
             String lastname = request.queryParams("last_name");
@@ -274,23 +284,49 @@ public class App
             return "success";
         });
 
-/*
-        //inserta una direccion
+
+        get("/newAddress",(request,response)->{
+            String form = "<form action= \"/addresses \" method= \"post\">";
+            form+="Calle : ";
+            form+="<input type = \"text\" name=\"street\">";
+            form+="Numero: ";
+            form+="<input type = \"number\" name=\"num\">";
+            form+="Departamento: ";
+            form+="<input type = \"text\" name=\"apartment\">";  
+            form+="Ciudad: ";
+            form+="<input type \"text\" name=\"city\">";          
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        });      
+        /*
+        //Insert an Address
         post ("/addresses",(request, response) ->{ 
             String calle = request.queryParams("street");
             String numero = request.queryParams("num");
             String departamento = request.queryParams("apartment");
             String ciudad = request.queryParams("city");
-            //User newUser = request.queryParams("usuario");
+            //User newUser = request.queryParams(":id");
             Address nuevoAddress=new Address();
-            nuevoAddress.createAddress(calle, numero, ciudad, departamento, usuario);
-            response.redirect("/users");
+            //nuevoAddress.createAddress(calle, numero, ciudad, departamento, newUser);
+            response.redirect("/addresses");
             return "success"; 
         }); 
-*/
+        */
+        post ("/addresses",(request, response) ->{
+            String email = request.queryParams("email");
+            String calle = request.queryParams("street");
+            String numero = request.queryParams("num");
+            Address nuevoAddress = new Address();
+            User u = User.findFirst("email = ?",email);
+            int num = Integer.parseInt(numero); 
+            nuevoAddress.createAddress(calle, num, u);
+            response.redirect("/addresses");
+            return "success";
+        });
+
         after((request, response) -> {
             Base.close();    
         });
-
     }
 }
