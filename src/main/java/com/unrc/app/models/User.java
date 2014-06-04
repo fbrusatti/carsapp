@@ -13,4 +13,8 @@ public class User extends Model {
   		User.createIt("first_name", fn, "last_name", ln,"email",email,"is_admin","0");
   	}
   }
+
+  public String name() {
+    return this.getString("first_name") +" "+ this.getString("last_name");
+  }
 }
