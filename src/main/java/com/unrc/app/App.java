@@ -2,7 +2,17 @@ package com.unrc.app;
 
 import org.javalite.activejdbc.*;
 import static spark.Spark.*;
+import spark.ModelAndView;
+import spark.TemplateEngine;
+
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+import com.unrc.app.MustacheTemplateEngine;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -86,6 +96,7 @@ public class App
             return "success"; 
         });
 
+
         // Form Add Address
         get("/users/add/addresses" , (request, response) ->{
             response.type("text/html");
@@ -108,14 +119,15 @@ public class App
         });
 
         //List of users
-        get("/users", (request,response) -> {
-            List<User> userList = User.findAll();
-            String list = new String();
-            for (User u: userList) {
-                list = list+u.getString("id")+" "+u.getString("first_name")+" "+u.getString("last_name")+"\n";
-            }
-            return list;
-        });
+        get("/users",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<User> users = User.findAll();
+            attributes.put("users_count", users.size());
+            attributes.put("users", users);
+            return new ModelAndView(attributes, "users.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         //List of vehicles
         get("/vehicles", (request,response) -> {
