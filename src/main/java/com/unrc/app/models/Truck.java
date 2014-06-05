@@ -23,7 +23,7 @@ public class Truck extends Model {
 		return super.saveIt();
 	}
 	*/
-	public void setVehicleAttributes (String brand, String model, String year, String color) {
+	/*public void setVehicleAttributes (String brand, String model, String year, String color) {
 		Vehicle v = new Vehicle();
 		v.set("brand", brand);
 		v.set("model", model);
@@ -54,5 +54,14 @@ public class Truck extends Model {
 	
 	public long getVehicleId() {
 		return id_v;
+	}*/
+	
+	public String length() {
+		return this.getString("length");
 	}
+	
+	public String height() {
+		return this.getString("height");
+	}
+
 }

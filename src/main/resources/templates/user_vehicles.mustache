@@ -1,0 +1,10 @@
+<h2> Vehículos de {{userName}}</h2><br>
+
+<table border="1">
+	<tr><th>    Tipo    </th><th>        Marca        </th></tr>
+	{{#userVehicles}}
+		<tr>
+			<td>{{type}}</td><td>{{generalBrand}}</td>
+		</tr>
+	{{/userVehicles}}
+ </table>

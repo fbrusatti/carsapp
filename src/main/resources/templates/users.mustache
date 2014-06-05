@@ -1,0 +1,11 @@
+<table border="1">
+	
+	<caption><b><h1>Usuarios</h1></b></caption>
+
+	<tr><th>        Nombre        </th><th>  Ciudad  </th></tr>
+	{{#users}}
+		<tr>
+			<td><a href="users/{{id}}">{{name}}</a></td><td>{{city}}</td>
+		</tr>
+	{{/users}}
+ </table>

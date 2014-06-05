@@ -2,52 +2,27 @@ package com.unrc.app;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.unrc.app.models.*;
 import org.javalite.activejdbc.Base;
 
 import spark.Spark.*;
-
+import spark.ModelAndView;
 import static spark.Spark.*;
 
-import com.unrc.app.models.*;
-	
-/**
- * Hello world!
- *
- */
+import org.elasticsearch.client.*;
+import org.elasticsearch.node.*;
+import org.elasticsearch.action.index.IndexResponse;
+
+import static org.elasticsearch.node.NodeBuilder.*;
+
+
+
 public class App {
     
 	public static void main( String[] args) {
-		
-
-		
-		
-		System.out.println( "Hello cruel World!" );
-
-        //Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
-
-        
-        //User.createIt("first_name", "Marcelo", "last_name", "Uva");
-        /*User user = new User();
-        user.set("first_name", "Marcelo");
-        user.set("last_name", "Uva");
-        user.set("mobile","3584256359");
-        user.saveIt();
-        
-        Car car = new Car();
-        car.setVehicleAttributes("Renault","Megane","2011","Negro");
-        car.set("capacity","4");
-        car.saveIt();
-        user.add(car);
-        
-        Post post = new Post();
-        post.set("title", "Vendo Renault Megane");
-        post.set("description", "Excelente estado");
-        post.saveIt();
-        */
-        //String m = post.getString("title");
-       // List<User> users = User.findAll();
-        
 		
 		before((request, response) -> {
         	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
@@ -61,92 +36,76 @@ public class App {
          * Getting users
          */
 		get("/users", (request, response) -> {
-        	List<User> users = User.findAll();
-        	String body = "<table border=\"1\">";
-        	body += "<caption><b><h1>Usuarios</h1></b></caption>";
-        	body += "<tr><th>        Nombre        </th><th>  Ciudad  </th></tr>";
-        	for (User u : users) {
-        		//body += "<font color =\"blue\">" + u.toString() + "</font><br>";
-        		body += "<tr><td><a href=\"users/"+(Integer)u.get("id")+"\">"+u.getString("first_name")+" "+u.getString("last_name")+"</a></td>";
-        		body +="<td>"+ u.parent(City.class).getString("name") +"</td></tr>";
-        		
-        	}
-        	body+="</table>";
-        	/*String body = "<b><h1>Usuarios</h1></b><br>";
-        	for (User u : users) {
-        		//body += "<font color =\"blue\">" + u.toString() + "</font><br>";
-        		body += "<a href=\"users/"+(Integer)u.get("id")+"\">"+u.getString("first_name")+" "+u.getString("last_name")+"</a>";
-        		body +=" "+ u.getString("mobile");
-        		body +=" "+ u.parent(City.class).getString("name")+"<br>";
-        	}*/
-        	return body;
-        });
+			Map<String,Object> attributes = new HashMap<String,Object>();
+			List<User> users = User.findAll();
+			attributes.put("users",users);
+			return new ModelAndView(attributes,"users.mustache");
+			},
+			new MustacheTemplateEngine()
+        );
+        
         
         /**
          * Getting user by id
          */
         get("/users/:id", (request, response) -> {
         	User u = User.findById(request.params("id"));
-        	if (u!=null) {
-        		String body = "<h2>"+u.getString("first_name")+" "+u.getString("last_name")+"</h2><br>";
-        		body += "Email: "+ u.getString("email")+"<br>";
-        		body += "Teléfono móvil: "+u.getString("mobile")+"<br>";
-        		body += "Teléfono fijo: "+u.getString("telephone")+"<br>";
-        		body += "Dirección: "+u.getString("address")+" "+u.parent(City.class).getString("name")+"<br>";
-        		body += "<a href=\""+(Integer)u.get("id")+"/posts\">Ver posts</a>";
-        		return body;
-        	} else {
-        		return "El usuario ingresado no es válido.";
-        	}
-        });
+        	Map<String,Object> attributes = new HashMap<String,Object>();
+        	attributes.put("user",u);
+        	return new ModelAndView(attributes,"user_id.mustache");
+			},
+			new MustacheTemplateEngine()
+        );
         
         /**
          * Getting the posts of a user
          */
         get("/users/:id/posts", (request, response) -> {
-        	//User u = User.findById(request.params("id"));
+        	User u = User.findById(request.params("id"));
         	List<Post> posts = Post.where("user_id = ?", request.params("id"));
-        	if (posts!=null) {
-        		if (posts.isEmpty()) {
-        			return "El usuario no posee posts.";
-        		} else {
-        			return posts.toString();
-        		}
-        	} else {
-        		return "El usuario ingresado no es válido.";
-        	}
-        	
-        });
+        	//if (!posts.isEmpty()) {
+				Map<String,Object> attributes = new HashMap<String,Object>();
+				attributes.put("userName",u.name());
+				attributes.put("userPosts",posts);
+				return new ModelAndView(attributes,"user_posts.mustache");
+        	//else {
+			//	return "El usuario no posee posts";
+			//}
+        	},
+        	new MustacheTemplateEngine()
+        );
         
+        /**
+         * Getting vehicles of a User
+         */ 
+         get("/users/:id/vehicles", (request, response) -> {
+        	User u = User.findById(request.params("id"));
+        	List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
+        	Map<String,Object> attributes = new HashMap<String,Object>();
+        	attributes.put("userName",u.name());
+        	attributes.put("userVehicles",vehicles);
+        	return new ModelAndView(attributes,"user_vehicles.mustache");
+        	},
+        	new MustacheTemplateEngine()
+        );
         
         /**
 		 *Adding a new User 
 		 */
-		get("/users/new", (request, response) -> {
-        	String body = "<form action=\"/users\" method=\"post\">";
-			body += "<b>Nombre: </b><input type=\"text\" name=\"firstName\" size=\"20\"><br>";
-        	body += "<b>Apellido: </b><input type=\"text\" name=\"lastName\" size=\"20\"><br>";
-        	body += "<b>Email: </b><input type=\"text\" name=\"email\" size=\"20\"><br>";
-        	body += "<b>Teléfono movil: </b><input type=\"text\" name=\"movil\" size=\"20\"><br>";
-        	body += "<b>Teléfono fijo: </b><input type=\"text\" name=\"fijo\" size=\"20\"><br>";
-        	body += "<b>Dirección: </b><input type=\"text\" name=\"direccion\" size=\"50\"><br>";
-        	body += "";
-        	body += "<b>Seleccione su ciudad: </b><select name=\"ciudad\">";
+		get("newUser", (request, response) -> {
+        	Map<String,Object> attributes = new HashMap<String,Object>();
         	List<City> cities = City.findAll();
-        	for (City c : cities) {
-        		body += "<option value=\""+c.getId()+"\">"+c.getString("name")+"</option>"; 
-        	}
-        	body += "</select><br><input type=\"submit\" value=\"Enviar\"><input type=\"reset\" value=\"Borrar\">";
-        	body += "</form>";
-        	return body;
-        });
+        	attributes.put("cities",cities);
+        	return new ModelAndView(attributes,"new_user.mustache");
+			},
+			new MustacheTemplateEngine()
+        );
 		
         /**
          * Posting a new user
          */
         post("/users", (request, response) -> {
         	User u = new User();
-        	//System.out.println(request.params(":email"));
         	u.set("email", request.queryParams("email"));
         	u.set("first_name",request.queryParams("firstName"));
         	u.set("last_name", request.queryParams("lastName"));
@@ -154,16 +113,109 @@ public class App {
         	u.set("telephone",request.queryParams("fijo"));
         	u.set("address",request.queryParams("direccion"));
         	u.saveIt();
+        	
         	City c = City.findById(request.queryParams("ciudad"));
-        	//u.setParent(c);
         	c.add(u);
-        	return "Agregado existosamente";
+        	
+        	Node node = nodeBuilder().clusterName("elasticsearch").node();
+			Client client = node.client();
+			
+        	
+        	Map<String, Object> json = new HashMap<String, Object>();
+			json.put("user",u.name());
+			json.put("city",c.name());
+			json.put("message","trying out Elasticsearch");
+			
+			IndexResponse indexResponse = client.prepareIndex("users", "user")
+				.setSource(json)
+				.execute()
+				.actionGet();
+			node.close();	
+			
+        	return "Agregado exitosamente";
         });
         
         /**
+         *Adding a new Post 
+        */
+        get("/users/:id/newPost", (request,response) -> {
+			Map<String,Object> attributes = new HashMap<String,Object>();
+			attributes.put("id",request.params("id"));
+        	List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
+        	attributes.put("vehicles",vehicles);
+        	return new ModelAndView(attributes,"user_new_post.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
+		
+		/**
+		 *Posting a new Post  
+         */
+         post("/users/:id/newPost", (request, response) -> {
+        	Post p = new Post();
+        	p.set("title", request.queryParams("title"));
+        	p.set("description",request.queryParams("descrip"));
+        	p.set("user_id", request.params("id"));
+        	Vehicle v = Vehicle.findById(request.queryParams("vehicles"));
+        	p.saveIt();
+        	v.add(p);
+        	return "Post agregado existosamente";
+        });
+         
+         
+         /**
+          *Adding a new Vehicle 
+          */
+         get("/users/:id/newVehicle", (request,response) -> {
+        	Map<String,Object> attributes = new HashMap<String,Object>();
+        	attributes.put("id",request.params("id"));
+        	return new ModelAndView(attributes,"user_new_vehicle.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
+         
+         /**
+         *Posting a new Vehicle 
+		 */
+        post("users/:id/newVehicle", (request, response) -> {
+			Vehicle v = new Vehicle();
+			v.set("brand", request.queryParams("brand"));
+			v.set("model", request.queryParams("model"));
+			v.set("year", request.queryParams("year"));
+			v.set("color", request.queryParams("color"));
+			v.set("user_id",request.params("id"));
+			if (request.queryParams("type").charAt(0)=='1') {
+				v.set("type","Auto");
+				v.saveIt();
+				Car c = new Car();
+				c.set("capacity",request.queryParams("capacity"));
+				c.saveIt();
+				v.add(c);
+			}
+			if (request.queryParams("type").charAt(0)=='2') {
+				v.set("type","Motocicleta");
+				v.saveIt();
+				Motorcycle m = new Motorcycle();
+				m.set("cylinder_capacity",request.queryParams("cylinder_capacity"));
+				m.saveIt();
+				v.add(m);
+			}
+			if (request.queryParams("type").charAt(0)=='3') {
+				v.set("type","Camión");
+				v.saveIt();
+				Truck t = new Truck();
+				t.set("length",request.queryParams("length"));
+				t.set("height",request.queryParams("height"));
+				t.saveIt();
+				v.add(t);
+			}
+			return "Vehículo agregado exitosamente";
+		});   
+        
+        /*
          * Getting posts
          */
-        get("/posts/", (request, response) -> {
+        get("/posts", (request, response) -> {
         	List<Post> posts = Post.findAll();
         	return posts.toString();
         });
