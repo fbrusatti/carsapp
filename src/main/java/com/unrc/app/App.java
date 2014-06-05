@@ -37,35 +37,35 @@ public class App
         user.set("email","7mmollea@gmail.com");
         user.set("pass","123hola");
         user.saveIt();
-        user.add(city);
+        city.add(user);
        
         User user2 = new User();
         user2.set("first_name", "Marcelo");
-        user2.set("last_name", "Uva");
+        user2.set("last_name", "Uva");  
         user2.set("email","marcelitouva@gmail.com");
         user2.set("pass","123chau");
         user2.saveIt();
        
-        user2.add(city);
+        city.add(user2);
         
-        Car car = new Car(); 
+         
         Vehicle vehicle = new Vehicle();
         vehicle.set("model","Corsa");
         vehicle.set("color","negro");
-        vehicle.set("km","1000");
+        vehicle.set("km",1000);
         vehicle.set("mark","Chevrolet");
-        vehicle.set("year","2006");
+        vehicle.set("year",2006);
         vehicle.saveIt();
         user.add(vehicle);
-    
+        
+        Car car = new Car();
         car.set("doors","3");
         car.set("version","1.5");
         car.set("transmission","Manual");
         car.set("direction","Hidraulica");
-        
         car.saveIt();
         vehicle.add(car);
-     
+       
         
         Post post = new Post();
         post.set("title","Vendo Corsa 2006");
@@ -77,8 +77,8 @@ public class App
         Question question = new Question();
         question.set("text","tiene stereo? Gracias");
         question.saveIt();
-        question.add(post);
-        question.add(user2);
+        post.add(question);
+        user2.add(question);
          
         Answer answer = new Answer();
         answer.set("text","No");
