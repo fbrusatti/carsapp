@@ -10,7 +10,7 @@ import org.javalite.activejdbc.Model;
  *
  * @author castagneris
  */
-public class City extends Model {
+public class Address extends Model {
     static {
       validatePresenceOf("country","state","name");
   	}
