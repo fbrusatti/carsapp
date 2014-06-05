@@ -35,7 +35,7 @@ public class CarTest {
         the(car.errors().get("transmission")).shouldBeEqual("value is missing");
         the(car.errors().get("direction")).shouldBeEqual("value is missing");
         
-        car.set("doors","3","transmission","Manual","direction","Hidraulica");
+        car.set("doors","3","version","15","transmission","Manual","direction","Hidraulica");
 
         the(car).shouldBe("valid");
     }
