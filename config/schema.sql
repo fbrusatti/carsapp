@@ -9,6 +9,7 @@ CREATE TABLE carsapp_development.users(
     last_name VARCHAR(40),
 	email VARCHAR(40) UNIQUE,
 	pass VARCHAR(20),
+	address_id INT(11), 
 	CONSTRAINT users_pk PRIMARY KEY (id)
 );
 
@@ -18,7 +19,6 @@ CREATE TABLE carsapp_development.addresses (
 	country VARCHAR(20),
 	state VARCHAR(20),
 	name VARCHAR(20),
-	user_id INT(11),
 	CONSTRAINT city_pk PRIMARY KEY (id)
 );
 
@@ -38,31 +38,34 @@ CREATE TABLE carsapp_development.vehicles(
 
 -- DROP TABLE IF EXISTS cars;  -- Autos 
 CREATE TABLE carsapp_development.cars(
-	vehicle_id INT(11) NOT NULL AUTO_INCREMENT,
+	id INT(11) NOT NULL auto_increment,
+	vehicle_id INT(11),
 	doors INT(11) NOT NULL,
 	version VARCHAR(15),
 	transmission ENUM('Manual','Automatica'),
 	direction ENUM('Hidraulica','Asistida','Mecanica'),
-	CONSTRAINT cars_pk PRIMARY KEY (vehicle_id)
+	CONSTRAINT cars_pk PRIMARY KEY (id)
 );
 
 -- DROP TABLE IF EXISTS motorcycles;  -- Motocicletas
 CREATE TABLE carsapp_development.motorcycles(
+	id INT(11) NOT NULL auto_increment,
 	type ENUM('Street','Chopper','Standard','Sport','Touring','Scooters'), 
 	type_motor VARCHAR(11), -- tiempos
 	boot_system ENUM('Pedal','Electrico','Pedal y Electrico'),
 	displacement VARCHAR(11), -- cilindrada 
-	vehicle_id INT(11) NOT NULL AUTO_INCREMENT,
-    CONSTRAINT motorcycle_pk PRIMARY KEY (vehicle_id)
+	vehicle_id INT(11),
+    CONSTRAINT motorcycle_pk PRIMARY KEY (id)
 );
 
 -- DROP TABLE IF EXISTS trucks; -- Camiones
 CREATE TABLE carsapp_development.trucks(
+	id INT(11) NOT NULL auto_increment,
 	brake_system VARCHAR(20), 
 	direction ENUM('Hidraulica','Asistida','Mecanica'),
 	capacity INT(11),
-	vehicle_id  INT(11) NOT NULL AUTO_INCREMENT,
-    CONSTRAINT trucks_pk PRIMARY KEY (vehicle_id)
+	vehicle_id  INT(11),
+    CONSTRAINT trucks_pk PRIMARY KEY (id)
 );
 
 -- DROP TABLE IF EXISTS posts; -- Posts
@@ -88,7 +91,7 @@ CREATE TABLE carsapp_development.answers(
 -- DROP TABLE IF EXISTS questions; -- Preguntas
 CREATE TABLE carsapp_development.questions(
     id INT(11) NOT NULL auto_increment,
-    text TEXT,
+    text TEXT, 
 	post_id INT(11),
     user_id INT(11),
 	CONSTRAINT question_pk PRIMARY KEY (id)
