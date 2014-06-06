@@ -231,6 +231,14 @@ public class App
             return "Address: "+ u.getString("first_name")+" "+address;
         });
 
+        //Show a search
+        get("/search", (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "search.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
         after((request, response) -> {
             Base.close();    
         });
