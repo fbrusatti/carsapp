@@ -97,4 +97,7 @@ CREATE TABLE carsapp_development.questions(
 	CONSTRAINT question_pk PRIMARY KEY (id)
 );
 
+INSERT INTO carsapp_development.users (first_name,last_name,email,pass,address_id) VALUES 
+("jorge","martin","jorge@gmail.com","123",3);
 
+	
