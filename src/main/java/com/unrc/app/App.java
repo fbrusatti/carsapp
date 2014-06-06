@@ -56,9 +56,11 @@ public class App
         }); 
         
         get("/hello",(request, response) -> {
-            response.type("text/html");
-            return WebStuff.link("Menu","http://localhost:4567/users/new","Alta usuario");
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "hello.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         get("/users/new" , (request, response) ->{
             response.type("text/html");
