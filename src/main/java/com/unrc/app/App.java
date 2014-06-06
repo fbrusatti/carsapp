@@ -33,6 +33,28 @@ public class App {
 		});
 		
 		/**
+		 * Gettin the principal page
+		 */
+		get("/", (request, response) -> {
+			Map<String,Object> attributes = new HashMap<String,Object>();
+			return new ModelAndView(attributes,"carsapp.mustache");
+			},
+			new MustacheTemplateEngine()
+		);
+		
+		get("/search", (request, response) -> {
+			//Map<String,Object> attributes = new HashMap<String,Object>();
+			return new ModelAndView(null,"search.mustache");
+			},
+			new MustacheTemplateEngine()
+		);
+		
+		post("/search", (request, response) -> {
+			return "";
+			}
+		);
+		
+		/**
          * Getting users
          */
 		get("/users", (request, response) -> {
@@ -76,6 +98,22 @@ public class App {
         );
         
         /**
+         * Getting post by of a user
+         */
+        get("users/:id/posts/:postId", (request, response) -> {
+			Post p = Post.findById(request.params("postId"));
+			User u = User.findById(request.params("id"));
+			Vehicle v = Vehicle.findById(p.get("vehicle_id"));
+			Map<String,Object> attributes = new HashMap<String,Object>();
+        	attributes.put("userName",u.name());
+        	attributes.put("post",p);
+        	attributes.put("vehicle",v);
+        	return new ModelAndView(attributes,"post_id.mustache");
+			},
+			new MustacheTemplateEngine()
+		);
+		
+        /**
          * Getting vehicles of a User
          */ 
          get("/users/:id/vehicles", (request, response) -> {
@@ -117,7 +155,7 @@ public class App {
         	City c = City.findById(request.queryParams("ciudad"));
         	c.add(u);
         	
-        	Node node = nodeBuilder().clusterName("elasticsearch").node();
+        	/*Node node = nodeBuilder().clusterName("elasticsearch").node();
 			Client client = node.client();
 			
         	
@@ -130,7 +168,7 @@ public class App {
 				.setSource(json)
 				.execute()
 				.actionGet();
-			node.close();	
+			node.close();	*/
 			
         	return "Agregado exitosamente";
         });
@@ -217,8 +255,12 @@ public class App {
          */
         get("/posts", (request, response) -> {
         	List<Post> posts = Post.findAll();
-        	return posts.toString();
-        });
+        	Map<String,Object> attributes = new HashMap<String,Object>();
+        	attributes.put("posts",posts);
+        	return new ModelAndView(attributes,"posts.mustache");
+			},
+			new MustacheTemplateEngine()
+        );
         
         /**
          * Getting posts by vehicle type.

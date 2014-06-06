@@ -1,0 +1,10 @@
+{{#post}}
+	<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2><br>
+	<b>Post creado el: </b> {{createdAt}}<br>
+	{{description}} 
+	<br>
+	<br>
+	{{#vehicle}}
+		{{type}} {{generalBrand}} {{color}}
+	{{/vehicle}}
+{{/post}}

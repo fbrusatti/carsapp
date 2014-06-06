@@ -1,0 +1,31 @@
+<h2> Búsqueda </h2><br>
+<form action="/search" method="post">
+	<b>Seleccione lo que desea buscar: </b><select name="type" onchange="toggle_selection(this)">
+		<option value="1">Usuario</option>
+		<option value="2">Anuncios</option>
+	</select><br>
+	<span id="span_user" style="display:inline">
+		<input name="name" type="text"/>
+	</span>
+	<span id="span_post" style="display:none">
+		<input name="dates" type="text"  />
+	</span>
+	<input type="submit" value="Buscar">
+</form>
+
+<script>
+<!--
+
+function toggle_selection(elemento) {
+	document.getElementById("span_user").style.display = "none";
+	document.getElementById("span_post").style.display = "none";
+	if(elemento.value==1) {
+		document.getElementById("span_user").style.display = "inline";
+	} 
+	if (elemento.value==2) {
+		document.getElementById("span_post").style.display = "inline";
+	}
+}
+
+-->
+</script>
