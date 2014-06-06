@@ -27,9 +27,9 @@ CREATE TABLE carsapp_development.vehicles(
     id INT(11) NOT NULL auto_increment,
 	model VARCHAR(20),
     color VARCHAR(20),
-    km INT(6) NOT NULL,
+    km VARCHAR(4) NOT NULL,
     mark VARCHAR(20),
-	year INT(4) NOT NULL,
+	year VARCHAR(10) NOT NULL,
 	user_id INT(11),
 	CONSTRAINT vehicles_pk PRIMARY KEY (id)
 );
@@ -40,7 +40,7 @@ CREATE TABLE carsapp_development.vehicles(
 CREATE TABLE carsapp_development.cars(
 	id INT(11) NOT NULL auto_increment,
 	vehicle_id INT(11),
-	doors INT(11) NOT NULL,
+	doors VARCHAR(5) NOT NULL,
 	version VARCHAR(15),
 	transmission ENUM('Manual','Automatica'),
 	direction ENUM('Hidraulica','Asistida','Mecanica'),
@@ -99,5 +99,3 @@ CREATE TABLE carsapp_development.questions(
 
 INSERT INTO carsapp_development.users (first_name,last_name,email,pass,address_id) VALUES 
 ("jorge","martin","jorge@gmail.com","123",3);
-
-	
