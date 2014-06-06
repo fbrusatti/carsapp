@@ -1,0 +1,12 @@
+<title>
+	Hello
+</title>
+
+<h1>
+	Menú
+</h1>
+
+<body>
+	<a href="http://localhost:4567/users/new">Alta usuario</a>
+
+</body>
