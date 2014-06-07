@@ -4,7 +4,15 @@ import org.javalite.activejdbc.Base;
 
 import com.unrc.app.models.*;
 
-import java.util.List;
+import java.util.*;
+
+import com.unrc.app.MustacheTemplateEngine;
+
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
+import spark.ModelAndView;
+import spark.TemplateEngine;
 
 import static spark.Spark.*;
 /**
@@ -23,8 +31,9 @@ public class App
         Base.close();
 
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");      
-        Address address1 = Address.createAddress("Lincoln", 874, User.findByEmail("mfwebdesign@gmail.com"));
-        Address address2 = Address.createAddress("Sobremonte", 547, user2);
+        Address address1 = Address.createAddress("Lincoln", 874,"Venado Tuerto", User.findByEmail("mfwebdesign@gmail.com"));
+        Address address2 = Address.createAddress("Sobremonte", 547,"Rio Cuarto", user2);
+        Address address3 = Address.createAddress("Chiclana", 4686,"Rio Cuarto", user2);
         Base.close();
 
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
@@ -79,16 +88,20 @@ public class App
         Rate rate1 = Rate.createRate(5, post1, user2);
         Base.close();
 
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+        Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
+        Base.close();
 
-        get("/index.html", (request, response) -> {
+
+        get("/hello", (request, response) -> {
             return "Hello world";
         });
-      
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
         }); 
 
+/* 
         //Lista todo los users
         get("/users",(request,response)->{
             List<User> userList = User.findAll();
@@ -98,6 +111,16 @@ public class App
             }
             return list;
         });
+*/
+        get("/users",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<User> users = User.findAll();
+            attributes.put("users_count", users.size());
+            attributes.put("users", users);   
+            return new ModelAndView(attributes, "users.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         //Lista un usuario particular
         get("/users/:id",(request,response)->{
@@ -182,25 +205,25 @@ public class App
        
         //List all answers
         get("/answers", (request,response) ->{
-			List<Answer> answerList = Answer.findAll();
-			String list = new String();
-			for(Answer a : answerList){
-				list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
-			}
-			return list;
+            List<Answer> answerList = Answer.findAll();
+            String list = new String();
+            for(Answer a : answerList){
+                list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
+            }
+            return list;
         });  
-				
-		//List a specific answer
-		get("/answers/:id", (request,responser)->{
-			Answer answerRequested = Answer.findById(request.params(":id"));
-			if(answerRequested!=null){
-				String respuesta = answerRequested.getString("description");
-				return "Descripcion: "+respuesta+".";
-			}
-			else{
-				return "Respuesta no encontrada!";
-			}
-		});
+
+        //List a specific answer
+        get("/answers/:id", (request,responser)->{
+            Answer answerRequested = Answer.findById(request.params(":id"));
+            if(answerRequested!=null){
+                String respuesta = answerRequested.getString("description");
+                return "Descripcion: "+respuesta+".";
+            }
+            else{
+                return "Respuesta no encontrada!";
+            }
+        });
 
         //List all rates
         get("/rates", (request,response) ->{
@@ -223,7 +246,7 @@ public class App
                 return "Puntuacion no encontrada!";
             }            
         });                 
-		
+
         //List all Punctuations
         get("/punctuations",(request,response)->{
             List<Punctuation> punctuationsList = Punctuation.findAll();
@@ -253,21 +276,33 @@ public class App
             List<Address> addressesList = Address.findAll();
             String list = new String();
             for(Address a : addressesList){
-                list = list+" || "+" Calle: "+a.getString("street")+" "+" Numero "+a.getInteger("num")+" "+" Departamento "+a.getString("apartment")+" "+"Ciudad "+a.getString("city");
+                list = list+" <br> "+" Calle: "+a.getString("street")+" "+" Numero "+a.getInteger("num")+"Ciudad "+a.getString("city");
             }
             return list;
         });
 
+        //List a specific address
+        get("/addresses/:id",(request,response)->{
+            Address addressRequested = Address.findById(request.params(":id")) ;
+            if(addressRequested!=null){
+                String direccion = addressRequested.getString("street");
+                int numero = addressRequested.getInteger("num");
+                return "Calle: "+direccion+". "+"Numero: "+numero;
+            }
+            else{
+                return "Direccion no encontrada!";
+            }            
+        }); 
+
         /**INSERCIONES**/
-     
         get("/newUser",(request,response)->{
             String form = "<form action= \"/users \" method= \"post\">";
             form+="First name : ";
-            form+="<input type = \"text\" name=\"first_name\">";
+            form+="<input type = \"text\" name=\"first_name\"> <br>";
             form+="Last Name: ";
-            form+="<input type = \"text\" name=\"last_name\">";
+            form+="<input type = \"text\" name=\"last_name\"> <br>";
             form+="Email: ";
-            form+="<input type = \"text\" name=\"email\">";            
+            form+="<input type = \"text\" name=\"email\"> <br>";            
             form+="<input type= \"submit\" value = \"Submit\">";
             form+="</form>";
             return form;
@@ -287,46 +322,179 @@ public class App
 
         get("/newAddress",(request,response)->{
             String form = "<form action= \"/addresses \" method= \"post\">";
+            form+="Email usuario : ";
+            //combobox para seleccionar el usuario al cual corresponde la direccion a agregar
+            form+="<select name=\"userEmail\">";
+            List<User> userList = User.findAll();
+            for (User u: userList) {
+                String mail = u.getString("email");
+                form+="<option value =\""+mail+"\">";            
+                form+=" "+u.getString("email");
+            };
+            form+="</select><br>";
+            //fin combobox
             form+="Calle : ";
-            form+="<input type = \"text\" name=\"street\">";
+            form+="<input type = \"text\" name=\"street\"><br>";
             form+="Numero: ";
-            form+="<input type = \"number\" name=\"num\">";
-            form+="Departamento: ";
-            form+="<input type = \"text\" name=\"apartment\">";  
+            form+="<input type = \"number\" name=\"num\"><br>";  
             form+="Ciudad: ";
             form+="<input type \"text\" name=\"city\">";          
             form+="<input type= \"submit\" value = \"Submit\">";
             form+="</form>";
             return form;
         });      
-        /*
-        //Insert an Address
-        post ("/addresses",(request, response) ->{ 
-            String calle = request.queryParams("street");
-            String numero = request.queryParams("num");
-            String departamento = request.queryParams("apartment");
-            String ciudad = request.queryParams("city");
-            //User newUser = request.queryParams(":id");
-            Address nuevoAddress=new Address();
-            //nuevoAddress.createAddress(calle, numero, ciudad, departamento, newUser);
-            response.redirect("/addresses");
-            return "success"; 
-        }); 
-        */
+
         post ("/addresses",(request, response) ->{
-            String email = request.queryParams("email");
+            String email = request.queryParams("userEmail");
             String calle = request.queryParams("street");
             String numero = request.queryParams("num");
+            String ciudad = request.queryParams("city");
             Address nuevoAddress = new Address();
             User u = User.findFirst("email = ?",email);
             int num = Integer.parseInt(numero); 
-            nuevoAddress.createAddress(calle, num, u);
+            nuevoAddress.createAddress(calle, num, ciudad, u);
             response.redirect("/addresses");
+            return "success";
+        });
+
+        get("/newVehicle",(request,response)->{
+            String form = "<form action= \"/vehicles \" method= \"post\">";
+            form+="Email usuario : ";
+            //combobox para seleccionar el usuario al cual corresponde el vehiculo a agregar
+            form+="<select name=\"userEmail\">";
+            List<User> userList = User.findAll();
+            for (User u: userList) {
+                String mail = u.getString("email");
+                form+="<option value =\""+mail+"\">";            
+                form+=" "+u.getString("email");
+            };
+            form+="</select><br>";
+            //fin combobox
+            form+="Patente : ";
+            form+="<input type = \"text\" name=\"patent\"><br>";
+            form+="Modelo: ";
+            form+="<input type = \"number\" name=\"model\"><br>";  
+            form+="Marca: ";
+            form+="<input type \"text\" name=\"brand\"><br>";  
+            form+="Tipo Vehiculo : ";  
+            form+="<select name=\"type\">";
+            form+="<option value=\"1\">";
+            form+="Automóvil";
+            form+="<option value=\"2\">";
+            form+="Motocicleta";
+            form+="<option value=\"3\">";
+            form+="Camioneta";            
+            form+="</select><br>";
+            form+="<br>";
+            form+="Rellene solo los campos correspondientes a su tipo de vehiculo: <br>";            
+            form+="<br> Automóviles: <br>";            
+            form+="Es coupe? : ";  
+            form+="<select name=\"iscoupe\">";
+            form+="<option value=\"true\">";
+            form+="Si";
+            form+="<option value=\"false\">";
+            form+="No";
+            form+="</select><br>";
+            form+="<br> Motocicletas: <br>";            
+            form+="Cilindrada : ";
+            form+="<input type = \"text\" name=\"engine_size\"><br>";
+            form+="Rodado : ";
+            form+="<input type = \"text\" name=\"wheel_size\"><br>";
+            form+="<br> Camionetas: <br>";            
+            form+="Cantidad Cinturones : ";
+            form+="<input type = \"text\" name=\"count_belt\"><br>";
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        }); 
+
+        post ("/vehicles",(request, response) ->{
+            String email = request.queryParams("userEmail");
+            String patente = request.queryParams("patent");
+            String modelo = request.queryParams("model");
+            String marca = request.queryParams("brand");
+            String tipo = request.queryParams("type");
+            Vehicle nuevoVehiculo = new Vehicle();
+            User u = User.findFirst("email = ?",email);
+            nuevoVehiculo.createVehicle(patente, modelo, marca, u);
+            if (request.queryParams("type").charAt(0)=='1') {
+                Car c = new Car();
+                Boolean esCoupe = Boolean.parseBoolean(request.queryParams("iscoupe"));
+                String p = nuevoVehiculo.getString("patent");
+                c.set("id_vehicle",patente);
+                c.set("is_coupe",esCoupe);
+                c.saveIt();
+            }
+            if (request.queryParams("type").charAt(0)=='2') {
+                Motorcycle m = new Motorcycle();
+                Integer cilindrada = Integer.parseInt(request.queryParams("engine_size"));
+                Integer rodado = Integer.parseInt(request.queryParams("wheel_size"));
+                m.set("id_vehicle",patente);
+                m.set("engine_size",cilindrada);
+                m.set("wheel_size",rodado);
+                m.saveIt();
+            }
+            if (request.queryParams("type").charAt(0)=='3') {
+                Truck t = new Truck();
+                Integer cinturones = Integer.parseInt(request.queryParams("count_belt"));
+                String p = nuevoVehiculo.getString("patent");
+                t.set("id_vehicle",patente);
+                t.set("count_belt",cinturones);
+                t.saveIt();
+                
+            }            
+            response.redirect("/vehicles");
+            return "success";
+        });
+        
+        get("/newPost",(request,response)->{
+            String form = "<form action= \"/posts \" method= \"post\">";
+            form+="Email usuario : ";
+            //combobox para seleccionar el usuario al cual corresponde el post a publicar
+            form+="<select name=\"userEmail\">";
+            List<User> userList = User.findAll();
+            for (User u: userList) {
+                String mail = u.getString("email");
+                form+="<option value =\""+mail+"\">";            
+                form+=" "+u.getString("email");
+            };
+            form+="</select><br><br>";
+            //fin combobox   
+            form+="Vehiculo a publicar : ";
+            //combobox para seleccionar el vehiculo que se quiere publicar
+            form+="<select name=\"patent\">";
+            List<Vehicle> vehicleList = Vehicle.findAll();
+            for (Vehicle u: vehicleList) {
+                String patente = u.getString("patent");
+                form+="<option value =\""+patente+"\">";            
+                form+=" "+u.getString("patent");
+            };                    
+            form+="</select><br><br>";
+            //fin combobox
+            form+="Titulo : ";
+            form+="<input type= \"text\" name=\"titulo\" placeholder=\"Titulo\"><br><br>";
+            form+="Descripción : <br>";
+            form+="<textarea name=\"descripcion\" placeholder=\"Contenido del post\" rows=\"20\" cols=\"60\">";
+            form+="</textarea><br>";
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        }); 
+
+        post ("/posts",(request, response) ->{
+            String mail = request.queryParams("userEmail");
+            String licensePlate = request.queryParams("patent");
+            String titulo = request.queryParams("titulo");
+            String descripcion = request.queryParams("descripcion");     
+            Post post = Post.createPost(titulo,descripcion,User.findByEmail(mail),Vehicle.findByPatent(licensePlate));
+            response.redirect("/posts");
             return "success";
         });
 
         after((request, response) -> {
             Base.close();    
         });
+
+
     }
 }
