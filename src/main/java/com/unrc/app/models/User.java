@@ -45,9 +45,9 @@ public class User extends Model {
         else{return false;}
     }
 
-    public static Boolean deleteUserAddress(String dir, int num,String email){
+    public static Boolean deleteUserAddress(String dir, int num, String ciudad, String email){
         User user = User.findByEmail(email);
-        Address address = Address.findByAddress(dir,num);
+        Address address = Address.findByAddress(dir,num,ciudad);
         user.remove(address);
         return true;
     }

@@ -117,7 +117,7 @@ CREATE TABLE carsapp_development.addresses(
     id int AUTO_INCREMENT,
     street varchar(40) NOT NULL,
     num int,
-    apartment varchar(20),
+    department varchar(20),
     city varchar(20),
     CONSTRAINT addresses_pk PRIMARY KEY (id)
 );

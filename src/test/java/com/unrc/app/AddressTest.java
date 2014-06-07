@@ -33,6 +33,7 @@ public class AddressTest{
         the(address.errors().get("street")).shouldBeEqual("value is missing");
         address.set("street", "Lincoln");
         address.set("num", 874);
+        address.set("Rio Cuarto");
 
         // Everything is good:
         the(address).shouldBe("valid");
@@ -41,11 +42,12 @@ public class AddressTest{
     @Test
     public void shouldValidateCreateAddress(){
         User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
-        Address address = Address.createAddress("Lincoln", 874,u);
+        Address address = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
         the(address).shouldBe("valid");
         the(address).shouldNotBeNull();
         the(address).shouldContain("Lincoln");
         the(address).shouldContain(874);
+        the(address).shouldContain("Rio Cuarto");
     }
 
     //Creo un Address, luego la busco y me fijo si son el mismo Address
@@ -53,9 +55,9 @@ public class AddressTest{
     @Test
     public void shouldValidateFindByAddress(){
         User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
-        Address a = Address.createAddress("Lincoln", 874,u);
-        Address a3 = Address.createAddress("Rioja", 1023,u);
-        Address a2 = Address.findByAddress("Lincoln", 874);
+        Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
+        Address a3 = Address.createAddress("Rioja", 1023,"Cordoba",u);
+        Address a2 = Address.findByAddress("Lincoln", 874,"Rio Cuarto");
         the(a2.getString("street")).shouldBeEqual(a.getString("street"));  
         the(a2.getInteger("num")).shouldBeEqual(a.getInteger("num"));  
         the(a3.getString("street")).shouldNotBeEqual(a.getString("street"));   
@@ -66,9 +68,9 @@ public class AddressTest{
     @Test
     public void shouldValidateExistsAddress(){
         User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
-        Address a = Address.createAddress("Lincoln", 874,u);
-        the(Address.existAddress(a.getString("street"),a.getInteger("num"))).shouldBeTrue();
-        the(Address.existAddress("Parana", 1024)).shouldBeFalse();
+        Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
+        the(Address.existAddress(a.getString("street"),a.getInteger("num"),a.getString("city"))).shouldBeTrue();
+        the(Address.existAddress("Parana", 1024,"La Quiaca")).shouldBeFalse();
     }
 
     //Creo un usuario y una direccion asociada a este usuario("Didier Drogba -> Lincoln 874").
@@ -79,11 +81,11 @@ public class AddressTest{
     @Test
     public void shouldValidateDeleteAddress(){        
       User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
-      Address a = Address.createAddress("Lincoln", 874,u);
-      Address a2 = Address.createAddress("San Martin", 1654,u);
-      User.deleteUserAddress("San Martin",1654,"tito_drogba@hotmail.com"); //elimino la relacion San Martin 1654 -> Didier Drogba
-      the(Address.deleteAddress("Lincoln", 874)).shouldBeFalse(); //no la puedo eliminar porque tiene un usuario asociado
-      the(Address.deleteAddress("San Martin", 1654)).shouldBeTrue(); //se deberia poder eliminar(nada asociado a ella)
+      Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
+      Address a2 = Address.createAddress("San Martin", 1654,"Cordoba",u);
+      User.deleteUserAddress("San Martin",1654,"Cordoba","tito_drogba@hotmail.com"); //elimino la relacion San Martin 1654 -> Didier Drogba
+      the(Address.deleteAddress("Lincoln", 874,"Rio Cuarto")).shouldBeFalse(); //no la puedo eliminar porque tiene un usuario asociado
+      the(Address.deleteAddress("San Martin", 1654,"Cordoba")).shouldBeTrue(); //se deberia poder eliminar(nada asociado a ella)
     }
 
 }

@@ -10,35 +10,35 @@ public class Address extends Model {
   }
 
   //A partir de la direccion crea un usuario nuevo si y solo si este no existe en la bd
-  public static Address createAddress(String dir, int num, User usuario){
-    Address address = create("street", dir,"num", num);
-    if(!existAddress(dir,num)){
+  public static Address createAddress(String dir, int num, String ciudad, User usuario){
+    Address address = create("street", dir,"num", num,"city",ciudad);
+    if(!existAddress(dir,num,ciudad)){
           address.saveIt();
           usuario.add(address);
         }
-    return findByAddress(dir,num);
+    return findByAddress(dir,num,ciudad);
   }
 
   //Retorna el modelo Address en la bd a partir de la dirección de un usuario
-  public static Address findByAddress(String dir, int num){
-  return (Address.findFirst("street = ? and num = ? ", dir, num));
+  public static Address findByAddress(String dir, int num, String ciudad){
+  return (Address.findFirst("street = ? and num = ? and city = ?", dir, num, ciudad));
   }
 
   //Retorna True si encuentra la dirección en la bd
-  public static Boolean existAddress(String dir, int num){
+  public static Boolean existAddress(String dir, int num, String ciudad){
     Boolean status=true;
-     if( Address.first("street = ? and num = ?",dir, num)==null){
+     if( Address.first("street = ? and num = ? and city = ?",dir, num, ciudad)==null){
         status = false;
      }
     return status;
   }
   
   //Elimina una direccion si y solo si no tiene ningun usuario asociado a la misma
-  public static Boolean deleteAddress(String dir, int num){
+  public static Boolean deleteAddress(String dir, int num, String ciudad){
   List<User> users = new ArrayList<User>(); //creo lista de Users
-  Address address = Address.findByAddress(dir,num);
+  Address address = Address.findByAddress(dir,num, ciudad);
   users = address.getAll(User.class); //contiene todos los users que poseen esa direccion
-    if(existAddress(dir,num) && users.size() == 0){//si la direccion existe y no tiene ningun usuario asociado, la elimino
+    if(existAddress(dir,num, ciudad) && users.size() == 0){//si la direccion existe y no tiene ningun usuario asociado, la elimino
       address.delete();
       return true;
     }
