@@ -134,12 +134,13 @@ public class App
                 return "Usuario no encontrado!";
             }            
         });
-        //List all vehicles
+
+        //Lista todos los vehiculos
         get("/vehicles",(request,response)->{
             List<Vehicle> vehiclesList = Vehicle.findAll();
             String list = new String();
             for(Vehicle v: vehiclesList){
-                list = list+v.getString("patent")+" "+v.getString("model")+" "+v.getString("brand")+"<br>";
+                list = list+"Patente: "+v.getString("patent")+" "+v.getString("model")+" "+v.getString("brand")+"<br>";
             }
             return list;
         });
@@ -156,6 +157,63 @@ public class App
             else{
                 return "Vehiculo no encontrado!";
             }            
+        });
+
+        //Lista todos los autos
+        get("/cars",(request,response)->{
+            List<Car> carsList = Car.findAll();
+            String list = new String();
+            for(Car i: carsList){
+                list = list+"Patente: "+i.getString("id_vehicle")+" "+i.getBoolean("is_coupe")+"<br>";
+            }
+            return list;
+        });    
+
+        //Lista una pregunta particular
+        get("/cars/:patent",(request,response)->{
+            Car carRequested = Car.findByCar(request.params(":patent"));
+            if(carRequested!=null){
+                String patente = carRequested.getString("id_vehicle");
+                Boolean coupe = carRequested.getBoolean("is_coupe");
+                return "Chapa patente: " + patente + ". "+"Coupe? " + coupe;
+            }
+            else{
+                return "Vehiculo no encontrado!";
+            }            
+        });
+
+        //Lista todas las motocicletas
+        get("/motorcycles",(request,response)->{
+            List<Motorcycle> motorcyclesList = Motorcycle.findAll();
+            String list = new String();
+            for(Motorcycle i: motorcyclesList){
+                list = list+"Patente: "+i.getString("id_vehicle")+". Rodado: "+i.getInteger("wheel_size")+". Cilindrada: "+i.getInteger("engine_size")+"<br>";
+            }
+            return list;
+        });    
+
+        //Lista una pregunta particular
+        get("/motorcycles/:patent",(request,response)->{
+            Motorcycle motorcycleRequested = Motorcycle.findByMotorcycle(request.params(":patent"));
+            if(motorcycleRequested!=null){
+                String patente = motorcycleRequested.getString("id_vehicle");
+                Integer rodado = motorcycleRequested.getInteger("wheel_size");
+                Integer cilindrada = motorcycleRequested.getInteger("engine_size");
+                return "Chapa patente: " + patente + ". "+"Rodado: " + rodado + ". "+"Cilindrada " + cilindrada;
+            }
+            else{
+                return "Vehiculo no encontrado!";
+            }            
+        });
+
+        //Lista todos los Trucks
+        get("/trucks",(request,response)->{
+        List<Truck> trucksList = Truck.findAll();
+        String list = new String();
+        for(Truck i: trucksList){
+            list = list+"Patente: "+i.getString("id_vehicle")+". n° cinturones: "+i.getInteger("count_belt")+"<br>";
+        }
+        return list;
         });
 
         //List all posts
