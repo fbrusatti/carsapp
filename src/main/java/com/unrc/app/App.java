@@ -1,20 +1,16 @@
 package com.unrc.app;
-
 import org.javalite.activejdbc.Base;
-
 import com.unrc.app.models.*;
-
 import java.util.*;
-
 import com.unrc.app.MustacheTemplateEngine;
-
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import spark.ModelAndView;
 import spark.TemplateEngine;
-
 import static spark.Spark.*;
+import static org.elasticsearch.node.NodeBuilder.*;
+import static org.elasticsearch.common.xcontent.XContentFactory.*;
 /**
  * Hello world!
  *
@@ -92,14 +88,35 @@ public class App
         Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
         Base.close();
 
+        before((request, response) -> {
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+            
+            // on startup
+            //Node node = nodeBuilder().node();
+            //Client client = node.client();
+        });
+
+        after((request, response) -> {
+            Base.close();
+            //node.close(); 
+        });
 
         get("/hello", (request, response) -> {
             return "Hello world";
-        });
+/*
+            try {
+                String result = org.apache.http.client.fluent.Request.Get("http://localhost:9200/?pretty").execute().returnContent().asString();
 
-        before((request, response) -> {
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        }); 
+                System.out.println(result);
+
+                return result;
+            } catch(Exception e) {
+                System.out.println("grrrr, exception...");
+
+                return "Execption catch";
+            }
+*/
+        });
 
 /* 
         //Lista todo los users
@@ -169,7 +186,7 @@ public class App
             return list;
         });    
 
-        //Lista una pregunta particular
+        //Lista un auto particular
         get("/cars/:patent",(request,response)->{
             Car carRequested = Car.findByCar(request.params(":patent"));
             if(carRequested!=null){
@@ -192,7 +209,7 @@ public class App
             return list;
         });    
 
-        //Lista una pregunta particular
+        //Lista una motocicleta en particular
         get("/motorcycles/:patent",(request,response)->{
             Motorcycle motorcycleRequested = Motorcycle.findByMotorcycle(request.params(":patent"));
             if(motorcycleRequested!=null){
@@ -214,6 +231,19 @@ public class App
             list = list+"Patente: "+i.getString("id_vehicle")+". n° cinturones: "+i.getInteger("count_belt")+"<br>";
         }
         return list;
+        });
+
+        //Lista un truck particular
+        get("/trucks/:patent",(request,response)->{
+            Truck truckRequested = Truck.findByTruck(request.params(":patent"));
+            if(truckRequested!=null){
+                String patente = truckRequested.getString("id_vehicle");
+                Integer cinturones = truckRequested.getInteger("count_belt");
+                return "Chapa patente: " + patente + ". "+"n° cinturones " + cinturones;
+            }
+            else{
+                return "Vehiculo no encontrado!";
+            }            
         });
 
         //List all posts
@@ -365,7 +395,6 @@ public class App
             form+="</form>";
             return form;
         });      
-     
      
         //Insert an User
         post ("/users",(request, response) ->{
@@ -548,11 +577,6 @@ public class App
             response.redirect("/posts");
             return "success";
         });
-
-        after((request, response) -> {
-            Base.close();    
-        });
-
 
     }
 }
