@@ -7,6 +7,8 @@
 </h1>
 
 <body>
-	<a href="http://localhost:4567/users/new">Alta usuario</a>
-
+	<a href="http://localhost:4567/users/new">Alta usuario</a><br>
+	<a href="http://localhost:4567/users/add/vehicles">Agregar Vehiculo</a><br>
+	<a href="http://localhost:4567/users/add/addresses">Agregar Dirección</a><br>
+	<a href="http://localhost:4567/users">Listado de usuarios</a><br>
 </body>
