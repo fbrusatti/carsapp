@@ -8,10 +8,16 @@ public class Post extends Model {
       validatePresenceOf("title", "description");
     }
 
-    //retorna el modelo Post a partir del titulo en la bd
+    //retorna el modelo Post a partir del id en la bd
 	public static Post findById(int id){
 		return (findFirst("id = ?", id));
 	}
+
+    //retorna el modelo Post a partir del titulo en la bd
+    public static Post findByTitle(String title){
+        return (findFirst("title = ?", title));
+    }
+
     //chequea la existencia de un post dado por id
     public static Boolean existPost(int id){
         Boolean status = true;

@@ -88,47 +88,18 @@ public class App
         Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
         Base.close();
 
+
+        get("/hello",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "hello.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
+
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-            
-            // on startup
-            //Node node = nodeBuilder().node();
-            //Client client = node.client();
-        });
+        }); 
 
-        after((request, response) -> {
-            Base.close();
-            //node.close(); 
-        });
-
-        get("/hello", (request, response) -> {
-            return "Hello world";
-/*
-            try {
-                String result = org.apache.http.client.fluent.Request.Get("http://localhost:9200/?pretty").execute().returnContent().asString();
-
-                System.out.println(result);
-
-                return result;
-            } catch(Exception e) {
-                System.out.println("grrrr, exception...");
-
-                return "Execption catch";
-            }
-*/
-        });
-
-/* 
-        //Lista todo los users
-        get("/users",(request,response)->{
-            List<User> userList = User.findAll();
-            String list = new String();
-            for (User u: userList) {
-                list = list+u.getString("id")+" "+u.getString("first_name")+" "+u.getString("last_name")+" "+u.getString("email")+"<br>";
-            }
-            return list;
-        });
-*/
         get("/users",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             List<User> users = User.findAll();
@@ -151,6 +122,7 @@ public class App
                 return "Usuario no encontrado!";
             }            
         });
+
 
         //Lista todos los vehiculos
         get("/vehicles",(request,response)->{
@@ -396,6 +368,7 @@ public class App
             return form;
         });      
      
+     
         //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
@@ -577,6 +550,92 @@ public class App
             response.redirect("/posts");
             return "success";
         });
+
+        get("/newQuestion",(request,response)->{
+            String form = "<form action= \"/questions \" method= \"post\">";
+            form+="Quien pregunta? : ";
+            //combobox para seleccionar el usuario al cual corresponde el post a publicar
+            form+="<select name=\"userEmail\">";
+            List<User> userList = User.findAll();
+            for (User u: userList) {
+                String mail = u.getString("email");
+                form+="<option value =\""+mail+"\">";            
+                form+=" "+u.getString("email");
+            };
+            form+="</select><br><br>";
+            //fin combobox   
+            form+="Post : ";
+            //combobox para seleccionar el post al cual se le quiere realizar la pregunta
+            form+="<select name=\"postTitle\">";
+            List<Post> postList = Post.findAll();
+            for (Post p: postList) {
+                String titulo = p.getString("title");
+                form+="<option value =\""+titulo+"\">";            
+                form+=" "+p.getString("title");
+            };
+            form+="</select><br><br>";
+            //fin combobox   
+            form+="Pregunta : ";
+            form+="<input type= \"text\" name=\"descripcion\" placeholder=\"Titulo\"><br><br>";
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        }); 
+
+        post ("/questions",(request, response) ->{
+            String mail = request.queryParams("userEmail");
+            String post = request.queryParams("postTitle");
+            String descripcion = request.queryParams("descripcion");     
+            Question pregunta = Question.createQuestion(descripcion,User.findByEmail(mail),Post.findByTitle(post));
+            response.redirect("/questions");
+            return "success";
+        });
+
+        get("/newAnswer",(request,response)->{
+            String form = "<form action= \"/answers \" method= \"post\">";
+            form+="Quien responde? : ";
+            //combobox para seleccionar el usuario al cual corresponde el post a publicar
+            form+="<select name=\"userEmail\">";
+            List<User> userList = User.findAll();
+            for (User u: userList) {
+                String mail = u.getString("email");
+                form+="<option value =\""+mail+"\">";            
+                form+=" "+u.getString("email");
+            };
+            form+="</select><br><br>";
+            //fin combobox   
+            form+="Post : ";
+            //combobox para seleccionar la pregunta a la cual se quiere responder
+            form+="<select name=\"questionTitle\">";
+            List<Question> questionList = Question.findAll();
+            for (Question q: questionList) {
+                String descripcion = q.getString("description");
+                form+="<option value =\""+descripcion+"\">";            
+                form+=" "+q.getString("description");
+            };
+            form+="</select><br><br>";
+            //fin combobox   
+            form+="Respuesta : ";
+            form+="<input type= \"text\" name=\"respuesta\" placeholder=\"Titulo\"><br><br>";
+            form+="<input type= \"submit\" value = \"Submit\">";
+            form+="</form>";
+            return form;
+        }); 
+
+        post ("/answers",(request, response) ->{
+            String mail = request.queryParams("userEmail");
+            String question = request.queryParams("questionTitle");
+            String respuesta = request.queryParams("respuesta");     
+            Answer resp = Answer.createAnswer(respuesta,User.findByEmail(mail),Question.findByDescription(question));
+            response.redirect("/answers");
+            return "success";
+        });
+
+
+        after((request, response) -> {
+            Base.close();    
+        });
+
 
     }
 }

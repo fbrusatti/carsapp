@@ -51,5 +51,12 @@ public class User extends Model {
         user.remove(address);
         return true;
     }
+
+    public String name() {
+        return this.getString("first_name")+" "+this.getString("last_name");
+    }
   
+    public String email() {
+        return this.getString("email");
+    }  
 }

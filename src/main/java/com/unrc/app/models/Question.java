@@ -15,6 +15,9 @@ public class Question extends Model {
 		return (findFirst("id = ?", ident));
 	}
 
+    public static Question findByDescription(String preg){
+        return (findFirst("description = ?", preg));
+    }
 
 	//retorna un booleano verificando a partir del identificador de la pregunta si la pregunta existe
 	public static Boolean existQuestion(int ident){
