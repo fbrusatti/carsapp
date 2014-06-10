@@ -575,8 +575,9 @@ public class App
             };
             form+="</select><br><br>";
             //fin combobox   
-            form+="Pregunta : ";
-            form+="<input type= \"text\" name=\"descripcion\" placeholder=\"Titulo\"><br><br>";
+            form+="Pregunta : <br>";
+            form+="<textarea name=\"descripcion\" placeholder=\"Escribe aqui tu pregunta\" rows=\"20\" cols=\"60\">";        
+            form+="</textarea><br>";    
             form+="<input type= \"submit\" value = \"Submit\">";
             form+="</form>";
             return form;
@@ -604,7 +605,7 @@ public class App
             };
             form+="</select><br><br>";
             //fin combobox   
-            form+="Post : ";
+            form+="Pregunta : ";
             //combobox para seleccionar la pregunta a la cual se quiere responder
             form+="<select name=\"questionTitle\">";
             List<Question> questionList = Question.findAll();
@@ -615,8 +616,9 @@ public class App
             };
             form+="</select><br><br>";
             //fin combobox   
-            form+="Respuesta : ";
-            form+="<input type= \"text\" name=\"respuesta\" placeholder=\"Titulo\"><br><br>";
+            form+="Respuesta : <br>";
+            form+="<textarea name=\"descripcion\" placeholder=\"Escribe aqui tu respuesta\" rows=\"20\" cols=\"60\">";    
+            form+="</textarea><br>";            
             form+="<input type= \"submit\" value = \"Submit\">";
             form+="</form>";
             return form;
