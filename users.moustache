@@ -27,4 +27,5 @@
 	        	</tr>
 	    	{{/users}}
 	  	</table>
-	  	</style>
+	</style>
+	</body>
