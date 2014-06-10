@@ -62,8 +62,8 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        /*------------------------USER STUFF----------------------------*/
         get("/users/new" , (request, response) ->{
-            response.type("text/html");
             String[] a={"name","lastname","email"};
             String form = WebStuff.form("Create User",a,"/users","post");
             return form;
@@ -76,17 +76,12 @@ public class App
             return form;
         });
 
-        post ("/vehicles",(request, response) ->{ 
-            String name = request.queryParams("Name");
-            String model = request.queryParams("Model (YYYY)");
-            String km = request.queryParams("KM (in numbers)"); //should take integers in the form
-            String user = request.queryParams("User name"); //later we should use the id of the user logged
-            Vehicle v = Vehicle.create("name", name, "model", model,"km",km);
-            User u = User.findFirst("first_name = ?",user);
-            u.add(v);
-            u.saveIt();//writes to te DB
-            response.redirect("/vehicles");
-            return "success"; 
+        // Form Add Address
+        get("/users/add/addresses" , (request, response) ->{
+            response.type("text/html");
+            String[] data = {"User name","Street","Address number"};
+            String form = WebStuff.form("Add Address",data,"/addresses","post");
+            return form;
         });
 
         post ("/users",(request, response) ->{ 
@@ -98,14 +93,27 @@ public class App
             return "success"; 
         });
 
+        //List of users
+        get("/users",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<User> users = User.findAll();
+            attributes.put("users_count", users.size());
+            attributes.put("users", users);
+            return new ModelAndView(attributes, "users.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
-        // Form Add Address
-        get("/users/add/addresses" , (request, response) ->{
-            response.type("text/html");
-            String[] data = {"User name","Street","Address number"};
-            String form = WebStuff.form("Add Address",data,"/addresses","post");
-            return form;
+        
+        //Show Users 
+        get("/users/:id", (request, response) -> {
+            User u = User.findById(Integer.parseInt(request.params(":id")));
+            String name = u.getString("first_name") +" "+ u.getString("last_name");
+            String email = u.getString("email");
+            return "User: "+name+"\n"+"Email: "+email+"\n";
         });
+
+        /*----------------------ADDRESS STUFF-----------------*/
 
         //Add User Address
         post ("/addresses",(request, response) ->{ 
@@ -120,28 +128,34 @@ public class App
             return "success";
         });
 
-        //List of users
-        get("/users",(request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            List<User> users = User.findAll();
-            attributes.put("users_count", users.size());
-            attributes.put("users", users);
-            return new ModelAndView(attributes, "users.moustache");
-        },
-            new MustacheTemplateEngine()
-        );
-
-        //List of vehicles
-        get("/vehicles", (request,response) -> {
-            List<Vehicle> vehicleList = Vehicle.findAll();
+        //List of Addresses
+        get("/addresses", (request,response) -> {
+            List<Address> addressList = Address.findAll();
             String list = new String();
-            for (Vehicle v: vehicleList) {
-                User u = User.findById(v.getInteger("user_id"));
-                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
+            for (Address a: addressList) {
+                User u = User.findById(a.getInteger("user_id"));
+                list = list+"User Name: "+u.getString("first_name")+" "+"Street: "+a.getString("street")+" "+"Address Number: "+a.getString("address_number")+"\n";
             }
             return list;
         });
-        
+
+
+        //Show Address
+        get("/addresses/:id", (request, response) -> {
+            Address a = Address.findById(Integer.parseInt(request.params(":id")));
+            User u = User.findById(a.getInteger("user_id"));
+            String address = a.getString("street")+" "+a.getString("address_number");
+            return "Address: "+ u.getString("first_name")+" "+address;
+        });
+
+        /*----------------------POST STUFF-----------------*/
+
+        //Show Posts
+        get("/posts/:id", (request, response) -> {
+            Post p = Post.findById(Integer.parseInt(request.params(":id")));
+            return "Post: " + p.toString();
+        });
+
         //List of Posts
         get("/posts", (request,response) -> {
             List<Post> postList = Post.findAll();
@@ -154,6 +168,46 @@ public class App
             return list;
         });
 
+        /*----------------------VEHICLE STUFF----------------*/
+
+        post ("/vehicles",(request, response) ->{ 
+            String name = request.queryParams("Name");
+            String model = request.queryParams("Model (YYYY)");
+            String km = request.queryParams("KM (in numbers)"); //should take integers in the form
+            String user = request.queryParams("User name"); //later we should use the id of the user logged
+            Vehicle v = Vehicle.create("name", name, "model", model,"km",km);
+            User u = User.findFirst("first_name = ?",user);
+            u.add(v);
+            u.saveIt();//writes to te DB
+            response.redirect("/vehicles");
+            return "success"; 
+        });
+
+        
+        //List of vehicles
+        get("/vehicles", (request,response) -> {
+            List<Vehicle> vehicleList = Vehicle.findAll();
+            String list = new String();
+            for (Vehicle v: vehicleList) {
+                User u = User.findById(v.getInteger("user_id"));
+                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
+            }
+            return list;
+        });
+
+        //Show Vehicles 
+        get("/vehicles/:id", (request, response) -> {
+            Vehicle v = Vehicle.findById(Integer.parseInt(request.params(":id")));
+            String vehicleName = v.getString("name") +" "+ v.getString("model");
+            String km = v.getString("km");
+            User u1 = User.findById(v.getInteger("user_id"));
+            String userName = u1.getString("first_name");
+            return "Vehicle: " + vehicleName+"\n"+"Belongs to: "+userName;
+        });
+
+        /*----------------------QUESTION STUFF----------------*/
+
+        
         //List of Questions
         get("/questions", (request,response) -> {
             List<Question> questionList = Question.findAll();
@@ -165,6 +219,14 @@ public class App
             }
             return list;
         });
+
+        //Show Questions 
+        get("/questions/:id", (request, response) -> {
+            Question q = Question.findById(Integer.parseInt(request.params(":id")));
+            return "Question: " + q.toString();
+        });
+
+        /*----------------------ANSWER STUFF----------------*/
 
         //List of Answers
         get("/answers", (request,response) -> {
@@ -178,60 +240,15 @@ public class App
             return list;
         });
 
-        //List of Addresses
-        get("/addresses", (request,response) -> {
-            List<Address> addressList = Address.findAll();
-            String list = new String();
-            for (Address a: addressList) {
-                User u = User.findById(a.getInteger("user_id"));
-                list = list+"User Name: "+u.getString("first_name")+" "+"Street: "+a.getString("street")+" "+"Address Number: "+a.getString("address_number")+"\n";
-            }
-            return list;
-        });
-
-        //Show Users 
-        get("/users/:id", (request, response) -> {
-            User u = User.findById(Integer.parseInt(request.params(":id")));
-            String name = u.getString("first_name") +" "+ u.getString("last_name");
-            String email = u.getString("email");
-            return "User: "+name+"\n"+"Email: "+email+"\n";
-        });
-
-        //Show Vehicles 
-        get("/vehicles/:id", (request, response) -> {
-            Vehicle v = Vehicle.findById(Integer.parseInt(request.params(":id")));
-            String vehicleName = v.getString("name") +" "+ v.getString("model");
-            String km = v.getString("km");
-            User u1 = User.findById(v.getInteger("user_id"));
-            String userName = u1.getString("first_name");
-            return "Vehicle: " + vehicleName+"\n"+"Belongs to: "+userName;
-        });
-
-        //Show Posts
-        get("/posts/:id", (request, response) -> {
-            Post p = Post.findById(Integer.parseInt(request.params(":id")));
-            return "Post: " + p.toString();
-        });
-
-        //Show Questions 
-        get("/questions/:id", (request, response) -> {
-            Question q = Question.findById(Integer.parseInt(request.params(":id")));
-            return "Question: " + q.toString();
-        });
 
         //Show Answers
         get("/answers/:id", (request, response) -> {
             Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
             return "Answer: " + a.toString();
         });
+        
+        /*----------------------SEARCH STUFF----------------*/
 
-        //Show Address
-        get("/addresses/:id", (request, response) -> {
-            Address a = Address.findById(Integer.parseInt(request.params(":id")));
-            User u = User.findById(a.getInteger("user_id"));
-            String address = a.getString("street")+" "+a.getString("address_number");
-            return "Address: "+ u.getString("first_name")+" "+address;
-        });
 
         //Show a search
         get("/search", (request,response) -> {
