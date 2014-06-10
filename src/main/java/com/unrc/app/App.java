@@ -25,7 +25,7 @@ public class App {
 	public static void main( String[] args) {
 		
 		before((request, response) -> {
-        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
+        	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development?zeroDateTimeBehavior=convertToNull", "root", "");
         });
 		
 		after((request, response) -> {
@@ -60,7 +60,9 @@ public class App {
 		get("/users", (request, response) -> {
 			Map<String,Object> attributes = new HashMap<String,Object>();
 			List<User> users = User.findAll();
+			boolean notEmpty = !users.isEmpty();
 			attributes.put("users",users);
+			attributes.put("notEmpty",notEmpty);
 			return new ModelAndView(attributes,"users.mustache");
 			},
 			new MustacheTemplateEngine()
@@ -85,11 +87,12 @@ public class App {
         get("/users/:id/posts", (request, response) -> {
         	User u = User.findById(request.params("id"));
         	List<Post> posts = Post.where("user_id = ?", request.params("id"));
-        	//if (!posts.isEmpty()) {
-				Map<String,Object> attributes = new HashMap<String,Object>();
-				attributes.put("userName",u.name());
-				attributes.put("userPosts",posts);
-				return new ModelAndView(attributes,"user_posts.mustache");
+			boolean notEmpty = !posts.isEmpty();
+			Map<String,Object> attributes = new HashMap<String,Object>();
+			attributes.put("userName",u.name());
+			attributes.put("userPosts",posts);
+			attributes.put("notEmpty",notEmpty);
+			return new ModelAndView(attributes,"user_posts.mustache");
         	//else {
 			//	return "El usuario no posee posts";
 			//}
@@ -119,9 +122,11 @@ public class App {
          get("/users/:id/vehicles", (request, response) -> {
         	User u = User.findById(request.params("id"));
         	List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
+        	boolean notEmpty = !vehicles.isEmpty();
         	Map<String,Object> attributes = new HashMap<String,Object>();
         	attributes.put("userName",u.name());
         	attributes.put("userVehicles",vehicles);
+        	attributes.put("notEmpty",notEmpty);
         	return new ModelAndView(attributes,"user_vehicles.mustache");
         	},
         	new MustacheTemplateEngine()
@@ -252,11 +257,14 @@ public class App {
         
         /*
          * Getting posts
+         
          */
         get("/posts", (request, response) -> {
         	List<Post> posts = Post.findAll();
+        	boolean notEmpty = !posts.isEmpty();
         	Map<String,Object> attributes = new HashMap<String,Object>();
         	attributes.put("posts",posts);
+        	attributes.put("notEmpty",notEmpty);
         	return new ModelAndView(attributes,"posts.mustache");
 			},
 			new MustacheTemplateEngine()

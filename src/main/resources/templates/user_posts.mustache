@@ -1,10 +1,13 @@
 <h2> Posts de {{userName}}</h2><br>
 
-<table border="1">
+{{#notEmpty}}
+	<table border="1">
 	<tr><th>        Título        </th></tr>
 	{{#userPosts}}
-		<tr>
-			<td><a href="posts/{{id}}">{{title}}</a></td>
-		</tr>
+		<tr><td><a href="posts/{{id}}">{{title}}</a></td></tr>
 	{{/userPosts}}
- </table>
+	</table>
+{{/notEmpty}}
+{{^notEmpty}}
+	<b>El usuario no posee posts</b>
+{{/notEmpty}}
