@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.elasticsearch.client.*;
 import org.elasticsearch.node.*;
-import org.elasticsearch.action.index.IndexResponse;
 
 import static org.elasticsearch.node.NodeBuilder.*;
 
@@ -30,24 +29,28 @@ public class User extends Model {
 	}
   
 	
-	protected void afterSave() {
-		
-		Node node = nodeBuilder().clusterName("carsapp").local(true).node();
-		
-		Client client = node.client();
-		
-		Map<String, Object> json = new HashMap<String, Object>();
-		json.put("user",this.name());
-		//json.put("city",this.city());
-		
-		IndexResponse indexResponse = client.prepareIndex("users", "user")
-				.setSource(json)
-				.execute()
-				.actionGet();
-		
-		node.close();
+	public void afterSave() {
+        
+        Node node = org.elasticsearch.node
+                              .NodeBuilder
+                              .nodeBuilder()
+                              .clusterName("carsapp")
+                              .local(true)
+                              .node();
+        
+        Client client = node.client();
+        
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("name",this.name());
+        json.put("email",this.email());
 
-	}
+        client.prepareIndex("users", "user")
+                .setSource(json)
+                .execute()
+                .actionGet();
+        
+        node.close();
+    }
 	
 	public String id() {
 		return this.getString("id");

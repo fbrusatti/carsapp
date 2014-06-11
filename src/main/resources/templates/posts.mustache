@@ -1,10 +1,12 @@
+<a href="/"> Inicio </a><br>
 <h2> Posts </h2><br>
 {{#notEmpty}}
 <table border="1">
 	<tr><th>        Título        </th><th>      Dueño      </th></tr>
 	{{#posts}}
 		<tr>
-			<td><a href="/users/{{ownerId}}/posts/{{id}}">{{title}}</a></td><td> {{ownerName}} </td>
+			<td><a href="/users/{{ownerId}}/posts/{{id}}">{{title}}</a></td>
+			<td><a href="/users/{{ownerId}}">{{ownerName}}</a></td>
 		</tr>
 	{{/posts}}
  </table>

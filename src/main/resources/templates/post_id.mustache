@@ -1,5 +1,16 @@
+<a href="/"> Inicio </a><br>
 {{#post}}
-	<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2><br>
+	<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2>
+	<button type="button" > Editar post </button>
+	<button type="button" onclick="toogle_eliminar()">Eliminar post</button>
+	<span id="span_eliminar" style="display:none">
+		<form action="/users/{{ownerId}}/posts/{{id}}/delete" method="delete" >
+			<b>¿Seguro que desea eliminar el post?: </b>
+			<input type="submit" value="Si">
+			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
+		</form>
+	</span>
+	<br>
 	<b>Post creado el: </b> {{createdAt}}<br>
 	{{description}} 
 	<br>
@@ -7,4 +18,21 @@
 	{{#vehicle}}
 		{{type}} {{generalBrand}} {{color}}
 	{{/vehicle}}
+	<h3>     Consultas   </h3><br>
+    {{#questions}}
+        {{description}} {{createdAt}} <a href="/question/{{id}}/answers"> Ver respuestas </a><br>
+    {{/questions}}
 {{/post}}
+
+<script>
+<!--
+function toogle_eliminar() {
+	document.getElementById("span_eliminar").style.display = "inline";
+}
+
+function toogle_cancelarEliminacion() {
+	document.getElementById("span_eliminar").style.display = "none";
+}
+
+-->
+</script>

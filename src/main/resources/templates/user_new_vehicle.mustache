@@ -1,7 +1,8 @@
+<a href="/"> Inicio </a><br>
 <form action="/users/{{id}}/newVehicle" method="post">
-	<b>Brand: </b><input type="text" name="brand" size="20" required/><br>
-    <b>Model: </b><input type="text" name="model" size="20" required/><br>
-    <b>Year: </b><input type="text" pattern="[0-9]{4}" name="year" size="4" required/><br>
+	<b>Marca: </b><input type="text" name="brand" size="20" required/><br>
+    <b>Modelo: </b><input type="text" name="model" size="20" required/><br>
+    <b>Año: </b><input type="text" pattern="[0-9]{4}" name="year" size="4" required/><br>
     <b>Color: </b><input type="color" name="color" size="10" required/><br>
 	<b>Seleccione un tipo: </b><select name="type" onchange="toggle_vehicleType(this)">
 		<option value="1">Auto</option>

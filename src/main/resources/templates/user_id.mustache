@@ -1,5 +1,16 @@
+<a href="/"> Inicio </a><br>
 {{#user}}
-<h2>{{name}}</h2><br>
+	<h2>{{name}}</h2>
+	<button type="button" > Editar </button>
+	<button type="button" onclick="toogle_eliminar()"> Eliminar </button>
+	<span id="span_eliminar" style="display:none">
+		<form action="/users/{{id}}/delete" method="delete" >
+			<b>¿Seguro que desea eliminar al usuario?: </b>
+			<input type="submit" value="Si">
+			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
+		</form>
+	</span>
+	<br>
 	<b>Email:</b> {{email}}<br>
     <b>Teléfono móvil:</b> {{mobile}}<br>
     <b>Teléfono fijo:</b> {{telephone}}<br>
@@ -7,3 +18,16 @@
     <a href="{{id}}/posts">Ver posts</a>     <a href="{{id}}/newPost">Agregar post</a><br>
     <a href="{{id}}/vehicles">Ver vehiculos</a>     <a href="{{id}}/newVehicle">Agregar vehículo</a>
 {{/user}}
+
+<script>
+<!--
+function toogle_eliminar() {
+	document.getElementById("span_eliminar").style.display = "inline";
+}
+
+function toogle_cancelarEliminacion() {
+	document.getElementById("span_eliminar").style.display = "none";
+}
+
+-->
+</script>

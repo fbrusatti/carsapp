@@ -43,7 +43,6 @@ public class App {
 		);
 		
 		get("/search", (request, response) -> {
-			//Map<String,Object> attributes = new HashMap<String,Object>();
 			return new ModelAndView(null,"search.mustache");
 			},
 			new MustacheTemplateEngine()
@@ -82,40 +81,68 @@ public class App {
         );
         
         /**
+         * Deleting a user
+         */
+        get("users/:id/delete", (request, response) -> {
+            User u = User.findById(request.params("id"));
+            u.deleteCascade();
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            String url = "/users";
+            attributes.put("url",url);
+            return new ModelAndView(attributes,"redirect.mustache"); 
+            },
+            new MustacheTemplateEngine()
+        );
+
+        /**
          * Getting the posts of a user
          */
         get("/users/:id/posts", (request, response) -> {
-        	User u = User.findById(request.params("id"));
+            User u = User.findById(request.params("id"));
         	List<Post> posts = Post.where("user_id = ?", request.params("id"));
 			boolean notEmpty = !posts.isEmpty();
-			Map<String,Object> attributes = new HashMap<String,Object>();
-			attributes.put("userName",u.name());
+            Map<String,Object> attributes = new HashMap<String,Object>();
+			attributes.put("id",u.id());
+            attributes.put("userName",u.name());
 			attributes.put("userPosts",posts);
 			attributes.put("notEmpty",notEmpty);
-			return new ModelAndView(attributes,"user_posts.mustache");
-        	//else {
-			//	return "El usuario no posee posts";
-			//}
+            return new ModelAndView(attributes,"user_posts.mustache");
         	},
         	new MustacheTemplateEngine()
         );
         
         /**
-         * Getting post by of a user
+         * Getting a post of a user
          */
         get("users/:id/posts/:postId", (request, response) -> {
 			Post p = Post.findById(request.params("postId"));
-			User u = User.findById(request.params("id"));
-			Vehicle v = Vehicle.findById(p.get("vehicle_id"));
-			Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("userName",u.name());
-        	attributes.put("post",p);
-        	attributes.put("vehicle",v);
-        	return new ModelAndView(attributes,"post_id.mustache");
-			},
-			new MustacheTemplateEngine()
+            User u = User.findById(request.params("id"));
+            Vehicle v = Vehicle.findById(p.get("vehicle_id"));
+            List<Question> q = Question.where("post_id = ?",request.params("postId"));
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("userName",u.name());
+            attributes.put("post",p);
+            attributes.put("vehicle",v);
+            attributes.put("questions",q);
+            return new ModelAndView(attributes,"post_id.mustache");
+            },
+            new MustacheTemplateEngine()
 		);
 		
+        /**
+         * Deleting a post of a user
+         */
+        get("users/:id/posts/:postId/delete", (request, response) -> {
+            Post p = Post.findById(request.params("postId"));
+            p.deleteCascade();
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            String url = "/users/"+request.params("id")+"/posts";
+            attributes.put("url",url);
+            return new ModelAndView(attributes,"redirect.mustache"); 
+            },
+            new MustacheTemplateEngine()
+        );
+
         /**
          * Getting vehicles of a User
          */ 
@@ -159,21 +186,6 @@ public class App {
         	
         	City c = City.findById(request.queryParams("ciudad"));
         	c.add(u);
-        	
-        	/*Node node = nodeBuilder().clusterName("elasticsearch").node();
-			Client client = node.client();
-			
-        	
-        	Map<String, Object> json = new HashMap<String, Object>();
-			json.put("user",u.name());
-			json.put("city",c.name());
-			json.put("message","trying out Elasticsearch");
-			
-			IndexResponse indexResponse = client.prepareIndex("users", "user")
-				.setSource(json)
-				.execute()
-				.actionGet();
-			node.close();	*/
 			
         	Map<String,Object> attributes = new HashMap<String,Object>();
             String url = "/users/"+u.id();
@@ -272,7 +284,6 @@ public class App {
         
         /*
          * Getting posts
-         
          */
         get("/posts", (request, response) -> {
         	List<Post> posts = Post.findAll();
@@ -286,25 +297,18 @@ public class App {
         );
         
         /**
-         * Getting posts by vehicle type.
+         * Getting the answers of a question
          */
-        get("/posts/:vehicleType", (request, response)-> {
-        	List<Vehicle> vehicles = Vehicle.where("type = ?", request.params("vehicleType"));
-      	  	if (vehicles!=null) {
-      	  		if (vehicles.isEmpty()) {
-      	  			return "No hay posts correspondientes a este tipo de vehículo.";
-      	  		} else {
-      	  			List<Post> postOfVehicleType=new LinkedList<Post>();
-      	  			for (Vehicle v : vehicles) {
-      	  				Post p = Post.findFirst("vehicle_id = ?", v.getId());
-      	  				postOfVehicleType.add(p);
-      	  			}
-      	  			return postOfVehicleType;
-      	  		}
-      	  	} else {
-      	  		return "El tipo de vehículo no es correcto";
-      	  	}
-      	 }); 
+        get("/question/:id/answers", (request, response) -> {
+            List<Answer> answers = Answer.where("question_id = ?",request.params("id"));
+            Question q = Question.findById(request.params("id"));
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("question",q);
+            attributes.put("answers",answers);
+            return new ModelAndView(attributes,"question_answers.mustache");
+            },
+            new MustacheTemplateEngine()
+        );
         
         /**
          * Getting cities
@@ -343,38 +347,5 @@ public class App {
         	return vehicles.toString();
         });
         
-        //Spark.stop();
-        /*
-        user.add(post);
-        car.add(post);
-        
-        
-        User user2 = new User();
-        user2.set("first_name", "Pedro");
-        user2.set("last_name", "Gonzales");
-        user2.set("mobile","3584256357");
-        user2.saveIt();
-        
-        City city = new City();
-        city.set("name","Río Cuarto");
-        city.saveIt();
-        city.add(user);
-        city.add(user2);
-        
-        Question question = new Question();
-        question.set("description","¿A qué precio lo vendés?");
-        question.saveIt();
-        user2.add(question);
-        post.add(question);
-        
-        Answer answer = new Answer();
-        answer.set("description","Contactame a mi movil");
-        answer.saveIt();
-        
-        user.add(answer);
-        question.add(answer);
-        User user3 = User.findFirst("id = 1");
-        System.out.println(user3.searchPostByLocation("Río Cuarto").get(0).toString());*/
-        //Base.close();
     }  
 }
