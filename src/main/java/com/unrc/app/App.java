@@ -83,7 +83,7 @@ public class App {
         /**
          * Deleting a user
          */
-        get("users/:id/delete", (request, response) -> {
+        post("users/:id/delete", (request, response) -> {
             User u = User.findById(request.params("id"));
             u.deleteCascade();
             Map<String,Object> attributes = new HashMap<String,Object>();
@@ -132,7 +132,7 @@ public class App {
         /**
          * Deleting a post of a user
          */
-        get("users/:id/posts/:postId/delete", (request, response) -> {
+        post("users/:id/posts/:postId/delete", (request, response) -> {
             Post p = Post.findById(request.params("postId"));
             p.deleteCascade();
             Map<String,Object> attributes = new HashMap<String,Object>();

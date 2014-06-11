@@ -4,7 +4,7 @@
 	<button type="button" > Editar </button>
 	<button type="button" onclick="toogle_eliminar()"> Eliminar </button>
 	<span id="span_eliminar" style="display:none">
-		<form action="/users/{{id}}/delete" method="delete" >
+		<form action="/users/{{id}}/delete" method="post" >
 			<b>¿Seguro que desea eliminar al usuario?: </b>
 			<input type="submit" value="Si">
 			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
