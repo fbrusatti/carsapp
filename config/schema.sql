@@ -76,7 +76,8 @@ CREATE TABLE trucks(
 DROP TABLE IF EXISTS motorcycles; -- Motocicletas
 CREATE TABLE motorcycles(
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	cylinder_capacity INT(11) NOT NULL
+	cylinder_capacity INT(11) NOT NULL,
+	vehicle_id INT(11) UNIQUE
 );
 
 DROP TABLE IF EXISTS questions; -- Preguntas

@@ -1,22 +1,22 @@
 <form action="/users/{{id}}/newVehicle" method="post">
-	<b>Brand: </b><input type="text" name="brand" size="20"><br>
-    <b>Model: </b><input type="text" name="model" size="20"><br>
-    <b>Year: </b><input type="text" name="year" size="4"><br>
-    <b>Color: </b><input type="text" name="color" size="10"><br>
+	<b>Brand: </b><input type="text" name="brand" size="20" required/><br>
+    <b>Model: </b><input type="text" name="model" size="20" required/><br>
+    <b>Year: </b><input type="text" pattern="[0-9]{4}" name="year" size="4" required/><br>
+    <b>Color: </b><input type="color" name="color" size="10" required/><br>
 	<b>Seleccione un tipo: </b><select name="type" onchange="toggle_vehicleType(this)">
 		<option value="1">Auto</option>
 		<option value="2">Motocicleta</option>
 		<option value="3">Camión</option>
 	</select><br>
 	<span id="span_car" style="display:inline">
-		<b>Cantidad de asientos: </b><input name="capacity" type="text"/><br>
+		<b>Cantidad de asientos: </b><input name="capacity" type="text" required><br>
 	</span>
 	<span id="span_motorcycle" style="display:none">
-		<b>Cilindradas: </b><input name="cylinder_capacity" type="text"  /><br>
+		<b>Cilindradas: </b><input name="cylinder_capacity" type="text"><br>
 	</span>
 	<span id="span_truck" style="display:none">
-		<b>Altura: </b><input name="height" type="text" /><br>
-		<b>Longitud: </b><input name="length" type="text" /><br>
+		<b>Altura: </b><input name="height" type="text"><br>
+		<b>Longitud: </b><input name="length" type="text"><br>
 	</span>
 	<input type="submit" value="Enviar"><input type="reset" value="Borrar">
 </form>
@@ -28,15 +28,24 @@ function toggle_vehicleType(elemento) {
 	document.getElementById("span_car").style.display = "none";
 	document.getElementById("span_motorcycle").style.display = "none";
 	document.getElementById("span_truck").style.display = "none";
+	document.getElementsByName("height")[0].required = false;
+	document.getElementsByName("length")[0].required = false;
+	document.getElementsByName("cylinder_capacity")[0].required = false;
+	document.getElementsByName("capacity")[0].required = false;
+	
 	
 	if(elemento.value==1) {
 		document.getElementById("span_car").style.display = "inline";
+		document.getElementsByName("capacity")[0].required = true; 
 	} 
 	if (elemento.value==2) {
 		document.getElementById("span_motorcycle").style.display = "inline";
+		document.getElementsByName("cylinder_capacity")[0].required = true; 
 	}
 	if (elemento.value==3) {
 		document.getElementById("span_truck").style.display = "inline";
+		document.getElementsByName("height")[0].required = true; 
+		document.getElementsByName("length")[0].required = true; 
 	}
 }
 
