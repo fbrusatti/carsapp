@@ -13,6 +13,11 @@ import org.elasticsearch.*;
  */
 public class App 
 {
+    
+   
+    
+    
+    
     public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
@@ -31,8 +36,39 @@ public class App
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
         }); 
         
+        get("/hello",(request, response) -> {
+          try {
+              String result = org.apache.http.client.fluent.Request.Get("http://localhost:9200/?pretty").execute().returnContent().asString();
+              System.out.println(result);
+
+              return result;
+          } catch(Exception e) {
+              System.out.println("grrrr, exception...");
+
+              return "Execption catch";
+          }
+        });
         
-        
+         get("/users",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<User> users = User.findAll();
+            
+            String a ="<html> <head> <title> Usuarios </title> </head> <body> <form action=\"/usuario\" method=\"post\">";
+            a= a + "<BODY> <h1> Usuario </h1> ";
+            a= a + "<table border=1>";
+            for (User usuario: users){
+                
+                a = a + "<tr><td>" + usuario.getFirstName() + "</td><td>" + usuario.getLastName()+"</td></tr>";
+            }
+            a = a + "</table>";
+        return a;    
+            
+         } );   
+            
+       
+            
+            
+            
         get ("/usuario/registarse/", (req, res) -> {
                                     
             String a ="<html> <head> <title> Registrarse </title> </head> <body> <form action=\"/usuario\" method=\"post\">";
@@ -44,19 +80,19 @@ public class App
             //lectura apellido
             a=a+"<h3> Apellido </h3><INPUT type=text SIZE=25 NAME=last_name>";
             //lectura email
-            a=a+"<h3> Email <h3><INPUT type=text SIZE=25 NAME=email>";
+            a=a+"<h3> Email </h3><INPUT type=text SIZE=25 NAME=email>";
             //lectura contraseña
-            a=a+"<h3> Contraseña <h3><INPUT type=password SIZE=25 NAME=pass>";
+            a=a+"<h3> Contraseña </h3><INPUT type=password SIZE=25 NAME=pass>";
             
             //ciudad
             //lectura pais
-            a=a+"<h3> Pais <h3><INPUT type=text SIZE=25 NAME=country>";
+            a=a+"<h3> Pais </h3><INPUT type=text SIZE=25 NAME=country>";
             //lectura provincia
-            a=a+"<h3> Provincia <h3><INPUT type=text SIZE=25 NAME=state>";
+            a=a+"<h3> Provincia </h3><INPUT type=text SIZE=25 NAME=state>";
             //lectura ciudad
-            a=a+"<h3> Ciudad <h3><INPUT type=text SIZE=25 NAME=name>";					
+            a=a+"<h3> Ciudad </h3><INPUT type=text SIZE=25 NAME=name>";					
 
-            a= a + "<h3>  <h3><td align=right valign=top><b>Pulsa una vez</b>&nbsp; <b>&gt;</b> </td><td align=center>&nbsp0";
+            a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	
@@ -99,27 +135,27 @@ public class App
       
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo <h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo <h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo <h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo <h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo <h3><INPUT type=text SIZE=25 NAME=year>";          
+            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";          
             
             //auto
             //lectura puertas auto
-            a=a+"<h3> Puertas Auto <h3><INPUT type=text SIZE=25 NAME=doors>";					
+            a=a+"<h3> Puertas Auto </h3><INPUT type=text SIZE=25 NAME=doors>";					
             //lectura version auto
-            a=a+"<h3> Version Auto <h3><INPUT type=text SIZE=25 NAME=version>";					
+            a=a+"<h3> Version Auto </h3><INPUT type=text SIZE=25 NAME=version>";					
             //lectura transmision Auto
-            a=a+"<h3> Transmision (Manual,Automatica)<h3><INPUT type=text SIZE=25 NAME=transmission>";
+            a=a+"<h3> Transmision (Manual,Automatica)</h3><INPUT type=text SIZE=25 NAME=transmission>";
             //lectura direccion auto
-            a=a+"<h3> Direccion Auto (Hidraulica,Asistida,Mecanica) <h3><INPUT type=text SIZE=25 NAME=direction>";       
+            a=a+"<h3> Direccion Auto (Hidraulica,Asistida,Mecanica) </h3><INPUT type=text SIZE=25 NAME=direction>";       
             
-            a= a + "<h3>  <h3><td align=right valign=top><b>Pulsa una vez</b>&nbsp; <b>&gt;</b> </td><td align=center>&nbsp0";
+            a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	
@@ -179,27 +215,27 @@ public class App
       
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo <h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo <h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo <h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo <h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo <h3><INPUT type=text SIZE=25 NAME=year>";  				
+            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";  				
          
             //moto
             //lectura tipo
-            a=a+"<h3> Tipo Moto (Street,Chopper,Standard,Sport,Touring,Scooters)<h3><INPUT type=text SIZE=25 NAME=type>";					
+            a=a+"<h3> Tipo Moto (Street,Chopper,Standard,Sport,Touring,Scooters)</h3><INPUT type=text SIZE=25 NAME=type>";					
             //lectura tipo motor
-            a=a+"<h3> Tipo Motor Moto <h3><INPUT type=text SIZE=25 NAME=type_motor>";					
+            a=a+"<h3> Tipo Motor Moto </h3><INPUT type=text SIZE=25 NAME=type_motor>";					
             //lectura boot_system
-            a=a+"<h3> Sistemas De Arranque Moto (Pedal,Electrico,Pedal y Electrico)<h3><INPUT type=text SIZE=25 NAME=boot_system>";
+            a=a+"<h3> Sistemas De Arranque Moto (Pedal,Electrico,Pedal y Electrico)</h3><INPUT type=text SIZE=25 NAME=boot_system>";
             //lectura cilindrada
             a=a+"<h3> Cilindrada Moto <h3><INPUT type=text SIZE=25 NAME=displacement>";       
                     
-            a= a + "<h3>  <h3><td align=right valign=top><b>Pulsa una vez</b>&nbsp; <b>&gt;</b> </td><td align=center>&nbsp0";
+            a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	
@@ -255,25 +291,25 @@ public class App
       
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo <h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo <h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo <h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo <h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo <h3><INPUT type=text SIZE=25 NAME=year>";  				
+            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";  				
          
             //camion
             //lectura sistema de frenos
-            a=a+"<h3> Sistema de frenos Camion <h3><INPUT type=text SIZE=25 NAME=brake_system>";					
+            a=a+"<h3> Sistema de frenos Camion </h3><INPUT type=text SIZE=25 NAME=brake_system>";					
             //lectura direction 
-            a=a+"<h3> direccion Camion (Hidraulica,Asistida,Mecanica) <h3><INPUT type=text SIZE=25 NAME=direction>";					
+            a=a+"<h3> direccion Camion (Hidraulica,Asistida,Mecanica) </h3><INPUT type=text SIZE=25 NAME=direction>";					
             //lectura capacidad
-            a=a+"<h3> Capacidad Camion <h3><INPUT type=text SIZE=25 NAME=capacity>"; 
+            a=a+"<h3> Capacidad Camion </h3><INPUT type=text SIZE=25 NAME=capacity>"; 
                                
-            a= a + "<h3>  <h3><td align=right valign=top><b>Pulsa una vez</b>&nbsp; <b>&gt;</b> </td><td align=center>&nbsp0";
+            a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	
