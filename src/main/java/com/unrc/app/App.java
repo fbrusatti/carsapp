@@ -175,15 +175,20 @@ public class App {
 				.actionGet();
 			node.close();	*/
 			
-        	return "Agregado exitosamente";
-        });
+        	Map<String,Object> attributes = new HashMap<String,Object>();
+            String url = "/users/"+u.id();
+            attributes.put("url",url);
+        	return new ModelAndView(attributes,"redirect.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
         
         /**
          *Adding a new Post 
         */
         get("/users/:id/newPost", (request,response) -> {
-			Map<String,Object> attributes = new HashMap<String,Object>();
-			attributes.put("id",request.params("id"));
+		Map<String,Object> attributes = new HashMap<String,Object>();
+		attributes.put("id",request.params("id"));
         	List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
         	attributes.put("vehicles",vehicles);
         	return new ModelAndView(attributes,"user_new_post.mustache"); 
@@ -202,8 +207,13 @@ public class App {
         	Vehicle v = Vehicle.findById(request.queryParams("vehicles"));
         	p.saveIt();
         	v.add(p);
-        	return "Post agregado existosamente";
-        });
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            String url = "posts/"+p.id();
+            attributes.put("url",url);
+        	return new ModelAndView(attributes,"redirect.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
          
          
          /**
@@ -252,8 +262,13 @@ public class App {
 				t.saveIt();
 				v.add(t);
 			}
-			return "Vehículo agregado exitosamente";
-		});   
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            String url = "newPost";
+            attributes.put("url",url);
+        	return new ModelAndView(attributes,"redirect.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);  
         
         /*
          * Getting posts
