@@ -11,6 +11,10 @@ public class Post extends Model {
 		return this.getString("id");
 	}
 	
+	public String vehicle_id() {
+		return this.getString("vehicle_id");
+	}
+	
 	public String title() {
 		return this.getString("title");
 	}
@@ -31,5 +35,7 @@ public class Post extends Model {
 		User u = User.findById(this.get("user_id"));
 		return u.name();
 	}
+	
+	
 	
 }

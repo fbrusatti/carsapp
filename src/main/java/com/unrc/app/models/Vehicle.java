@@ -1,5 +1,6 @@
 package com.unrc.app.models;
 
+import java.util.List;
 import org.javalite.activejdbc.Model;
 
 public class Vehicle extends Model {
@@ -21,4 +22,10 @@ public class Vehicle extends Model {
 	public String type() {
 		return this.getString("type");
 	}
+	
+	public Boolean notPosted(){
+		List<Post> posts = Post.where("vehicle_id = ?", this.getString("id"));
+		return posts.isEmpty();
+	}
+	
 }

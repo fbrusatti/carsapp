@@ -3,8 +3,10 @@
     <b>Descripción: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
 	<b>Seleccione un vehículo: </b><select name="vehicles">
 	{{#vehicles}}
-		<option value="{{id}}">{{generalBrand}}</option>
+		{{#notPosted}}
+			<option value="{{id}}">{{generalBrand}}</option>
+		{{/notPosted}}
 	{{/vehicles}}
-	</select><br>
+	</select><a href="/users/{{id}}/newVehicle"><button type="button">Agregar vehículo</button></a><br>
 	<input type="submit" value="Enviar"><input type="reset" value="Borrar">
 </form>
