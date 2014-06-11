@@ -63,7 +63,7 @@ CREATE TABLE carsapp_development.trucks(
 	id INT(11) NOT NULL auto_increment,
 	brake_system VARCHAR(20), 
 	direction ENUM('Hidraulica','Asistida','Mecanica'),
-	capacity INT(11),
+	capacity VARCHAR(11),
 	vehicle_id  INT(11),
     CONSTRAINT trucks_pk PRIMARY KEY (id)
 );
