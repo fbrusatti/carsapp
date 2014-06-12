@@ -185,16 +185,16 @@ public class App
 
         
         //List of vehicles
-        get("/vehicles", (request,response) -> {
-            List<Vehicle> vehicleList = Vehicle.findAll();
-            String list = new String();
-            for (Vehicle v: vehicleList) {
-                User u = User.findById(v.getInteger("user_id"));
-                list = list+v.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+"Belongs to:"+u.getString("first_name")+"\n";
-            }
-            return list;
-        });
-
+        get("/vehicles",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<Vehicle> vehicles = Vehicle.findAll();
+            attributes.put("vehicles_count", vehicles.size());
+            attributes.put("vehicles", vehicles);
+            return new ModelAndView(attributes, "vehicles.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
+        
         //Show Vehicles 
         get("/vehicles/:id", (request, response) -> {
             Vehicle v = Vehicle.findById(Integer.parseInt(request.params(":id")));
