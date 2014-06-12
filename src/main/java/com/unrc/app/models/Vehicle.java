@@ -20,9 +20,8 @@ public class Vehicle extends Model {
     return this.getString("km");
   }
 
-  //check option
-  public String user() {
+  public User user() {
     User u = User.findById(getInteger("user_id"));
-    return u.name();
+    return u;
   }
 }
