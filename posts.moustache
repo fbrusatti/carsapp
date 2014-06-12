@@ -1,0 +1,39 @@
+<h1>Posts</h1>
+
+ 	<h2>Posts count: {{posts_count}}</h2>
+
+ 	<style>
+ 	table,th,td
+ 	{
+ 	border:1px solid black;
+ 	border-collapse:collapse;
+ 	}
+ 	th,td
+ 	{
+ 	padding:5px;
+ 	}
+ 	</style>
+ 	</head>
+ 	<body>
+	 	<table style type="text/css">
+			<tr>
+				<th> Vehicle </th>
+				<th> Price </th>
+				<th> Description </th>
+				<th> User </th>
+			</tr>
+			{{#posts}}
+				<tr>
+					{{#vehicle}}
+					<td>{{name}}</td>
+					{{/vehicle}}
+					<td>{{price}}</td> 
+					<td>{{description}}</td>
+					{{#user}}
+					<td>{{name}}</td>
+					{{/user}}
+	        	</tr>
+	    	{{/posts}}
+	    </style>
+	  	</table>
+	</body>
