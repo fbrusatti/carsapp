@@ -16,8 +16,20 @@
 	<br>
 	<br>
 	{{#vehicle}}
-		{{type}} {{generalBrand}} {{color}}
-	{{/vehicle}}
+		<b>{{type}}: </b> {{generalBrand}}<br>
+                {{#car}}
+                    <b>Asientos: </b>{{capacity}}<br>
+                {{/car}}
+                {{#motorcycle}}
+                    <b>Cilindrada: </b>{{cylinderCapacity}}<br>
+                {{/motorcycle}}
+                {{#truck}}
+                    <b>Longitud: </b>{{length}}<br>
+                    <b>Altura: </b> {{height}}<br>
+                {{/truck}}
+                <b>Color: </b><table bgcolor= "{{color}}" border="1" cellpadding="1" cellspacing="1"><tr><td><font color="{{color}}">Color</td></font></tr></table>
+        {{/vehicle}}
+
 	<h3>     Consultas   </h3><br>
     {{#questions}}
         {{description}} {{createdAt}} <a href="/question/{{id}}/answers"> Ver respuestas </a><br>

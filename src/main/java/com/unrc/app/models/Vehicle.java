@@ -27,5 +27,5 @@ public class Vehicle extends Model {
 		List<Post> posts = Post.where("vehicle_id = ?", this.getString("id"));
 		return posts.isEmpty();
 	}
-	
+        
 }

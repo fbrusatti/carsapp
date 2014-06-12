@@ -115,7 +115,7 @@ public class App {
          * Getting a post of a user
          */
         get("users/:id/posts/:postId", (request, response) -> {
-			Post p = Post.findById(request.params("postId"));
+            Post p = Post.findById(request.params("postId"));
             User u = User.findById(request.params("id"));
             Vehicle v = Vehicle.findById(p.get("vehicle_id"));
             List<Question> q = Question.where("post_id = ?",request.params("postId"));
@@ -124,10 +124,24 @@ public class App {
             attributes.put("post",p);
             attributes.put("vehicle",v);
             attributes.put("questions",q);
+            switch (v.type()) {
+                case "Auto":
+                    Car c = Car.findFirst("vehicle_id = ?", v.id());
+                    attributes.put("car",c);
+                break;
+                case "Motocicleta":
+                    Motorcycle m = Motorcycle.findFirst("vehicle_id = ?", v.id());
+                    attributes.put("motorcycle",m);
+                break;
+                case "Camión":
+                   Truck t = Truck.findFirst("vehicle_id = ?", v.id());
+                    attributes.put("truck",t);
+                break;
+            }     
             return new ModelAndView(attributes,"post_id.mustache");
             },
             new MustacheTemplateEngine()
-		);
+	);
 		
         /**
          * Deleting a post of a user
