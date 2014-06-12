@@ -4,7 +4,25 @@ import org.javalite.activejdbc.Model;
 
 
 public class Vehicle extends Model {
-    static {
-      validatePresenceOf("name", "model","km");
+  static {
+    validatePresenceOf("name", "model","km", "user_id");
+  }
+
+  public String name() {
+    return this.getString("name");
+  }
+
+  public String model() {
+    return this.getString("model");
+  }
+
+  public String km() {
+    return this.getString("km");
+  }
+
+  //check option
+  public String user() {
+    User u = User.findById(getInteger("user_id"));
+    return u.name();
   }
 }
