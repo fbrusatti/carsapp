@@ -27,7 +27,9 @@
 					<td>{{name}}</td> 
 					<td>{{model}}</td>
 					<td>{{km}}</td>
-					<td>{{user}}</td>
+					{{#user}}
+					<td>{{name}}</td>
+					{{/user}}
 	        	</tr>
 	    	{{/vehicles}}
 	    </style>
