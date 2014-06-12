@@ -242,14 +242,37 @@ public class App {
 			new MustacheTemplateEngine()
 		);
          
+         get("/users/:id/edit", (request,response) -> {
+		Map<String,Object> attributes = new HashMap<String,Object>();
+		User u = User.findById(request.params("id"));
+                City c=City.findById(u.getInteger("city_id"));
+                attributes.put("users",u);
+                attributes.put("cities",c);
+        	
+        	return new ModelAndView(attributes,"edit_user.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
          
-         /**
-          *Adding a new Vehicle 
-          */
-         get("/users/:id/newVehicle", (request,response) -> {
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("id",request.params("id"));
-        	return new ModelAndView(attributes,"user_new_vehicle.mustache"); 
+       
+         post("/users/:id/edit", (request,response) -> {
+             System.out.println("ID "+ request.params("id"));
+        	User u = User.findById(request.params("id"));
+                
+                u.set("email", request.params("email"));
+                System.out.println(request.params("email"));
+        	u.set("first_name",request.params("firstName"));
+        	u.set("last_name", request.params("lastName"));
+        	u.set("mobile",request.params("movil"));
+        	u.set("telephone",request.params("fijo"));
+        	u.set("address",request.params("direccion"));
+                u.set("city_id",request.params("cities"));
+        	u.saveIt();
+        	Map<String,Object> attributes = new HashMap<>();
+                String url = "/users/"+request.params("id");
+                attributes.put("url",url);
+                System.out.println(request.params("url"));
+        	return new ModelAndView(attributes,"redirect.mustache"); 
 			},
 			new MustacheTemplateEngine()
 		);

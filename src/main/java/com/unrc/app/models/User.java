@@ -55,7 +55,12 @@ public class User extends Model {
 	public String id() {
 		return this.getString("id");
 	}
-	
+	public String firstName() {
+		return this.getString("first_name");
+	}
+        public String lastName() {
+		return this.getString("last_name");
+	}
 	public String name() {
 		return this.get("first_name")+" "+this.get("last_name");
 	}
