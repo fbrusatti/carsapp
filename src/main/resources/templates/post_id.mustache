@@ -30,11 +30,25 @@
                 <b>Color: </b><table bgcolor= "{{color}}" border="1" cellpadding="1" cellspacing="1"><tr><td><font color="{{color}}">Color</td></font></tr></table>
         {{/vehicle}}
 
-	<h3>     Consultas   </h3><br>
+	<h3>     Consultas   </h3>
+
+<form action="/users/{{ownerId}}/posts/{{id}}/newQuestion" method="post">
+<b>Nueva Consulta: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
+<b>IdUsuario: </b><br><textarea name="userId" rows="1" cols="3" required/></textarea><br>
+<input type="submit" value="Enviar">
+</form>
+
+
+
+
+
     {{#questions}}
-        {{description}} {{createdAt}} <a href="/question/{{id}}/answers"> Ver respuestas </a><br>
+      <b>{{ownerName}}:  </b> {{description}} {{createdAt}} <a href="/users/{{ownerId}}/posts/{{postId}}/question/{{id}}"><button type="button">Ver repuestas/Responder</button></a><br>
     {{/questions}}
 {{/post}}
+
+
+
 
 <script>
 <!--

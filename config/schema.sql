@@ -95,5 +95,5 @@ CREATE TABLE answers(
 	description TEXT,
 	created_at DATETIME,
 	user_id INT(11),
-	question_id INT(11) UNIQUE
+	question_id INT(11)
 );

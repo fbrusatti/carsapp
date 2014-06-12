@@ -1,7 +1,16 @@
 <a href="/"> Inicio </a><br>
 {{#question}}
     <h2> {{description}}</h2>
+
+<form action="/users/{{user}}/posts/{{post}}/question/{{id}}/newAnswer" method="post">
+<b>Responder: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
+<input type=hidden name="questionId" value={{id}}>
+<input type=hidden name="userId" value={{user}}>
+<input type="submit" value="Enviar">
+</form>
+
 {{/question}}
+
 {{#answers}}
-    {{description}} {{createdAt}} <br>
+   <b>{{userName}}:  </b> {{description}} {{createdAt}} <br>
 {{/answers}}

@@ -124,6 +124,7 @@ public class App {
             attributes.put("post",p);
             attributes.put("vehicle",v);
             attributes.put("questions",q);
+            attributes.put("postId",p.id());
             switch (v.type()) {
                 case "Auto":
                     Car c = Car.findFirst("vehicle_id = ?", v.id());
@@ -310,19 +311,6 @@ public class App {
 			new MustacheTemplateEngine()
         );
         
-        /**
-         * Getting the answers of a question
-         */
-        get("/question/:id/answers", (request, response) -> {
-            List<Answer> answers = Answer.where("question_id = ?",request.params("id"));
-            Question q = Question.findById(request.params("id"));
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            attributes.put("question",q);
-            attributes.put("answers",answers);
-            return new ModelAndView(attributes,"question_answers.mustache");
-            },
-            new MustacheTemplateEngine()
-        );
         
         /**
          * Getting cities
@@ -360,6 +348,62 @@ public class App {
         	List<Vehicle> vehicles = Vehicle.findAll();
         	return vehicles.toString();
         });
+        
+        
+        /**
+         * Getting the answers of a question
+         */
+        get("users/:userId/posts/:postId/question/:idQuestion", (request, response) -> {
+            List<Answer> answers = Answer.where("question_id = ?",request.params("idQuestion"));
+            Question q = Question.findById(request.params("idQuestion"));
+            Post p = Post.findById(request.params("postId"));
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("question",q);
+            attributes.put("answers",answers);
+			attributes.put("post",request.params("postId"));
+            attributes.put("user",request.params("userId"));
+            attributes.put("userName", p.ownerName());
+            return new ModelAndView(attributes,"question_answers.mustache");
+            },
+            new MustacheTemplateEngine()
+        );
+        
+        
+        
+        /**
+        *Posting a new question 
+         */
+         post("users/:id/posts/:postId/newQuestion", (request, response) -> {
+            Question q = new Question();
+            q.set("description",request.queryParams("descrip"));
+            q.set("user_id", request.queryParams("userId"));
+            q.set("post_id",request.params("postId"));
+            q.saveIt();        	
+            Map<String,Object> attributes = new HashMap<>();
+            String url = "/users/"+request.params("id")+"/posts/"+request.params("postId");
+            attributes.put("url",url);
+        	return new ModelAndView(attributes,"redirect.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
+        
+        /**
+        *Posting a new answer 
+         */
+         post("users/:id/posts/:postId/question/:questionId/newAnswer", (request, response) -> {
+            Answer a = new Answer();
+            a.set("description",request.queryParams("descrip"));
+            a.set("user_id", request.params("id"));
+            a.set("question_id",request.params("questionId"));
+            a.saveIt();        	
+            Map<String,Object> attributes = new HashMap<>();
+            String url = "/users/"+request.params("id")+"/posts/"+request.params("postId")+"/question/"+request.params("questionId");
+            attributes.put("url",url);
+        	return new ModelAndView(attributes,"redirect.mustache"); 
+			},
+			new MustacheTemplateEngine()
+		);
+        
         
     }  
 }
