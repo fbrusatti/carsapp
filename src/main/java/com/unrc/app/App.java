@@ -157,16 +157,15 @@ public class App
         });
 
         //List of Posts
-        get("/posts", (request,response) -> {
-            List<Post> postList = Post.findAll();
-            String list = new String();
-            for (Post p: postList) {
-                User u = User.findById(p.getInteger("user_id"));
-                Vehicle v = Vehicle.findById(p.getInteger("vehicle_id"));
-                list = list+p.getString("id")+" "+"Vehicle Name: "+v.getString("name")+" "+"Model: "+v.getString("model")+" "+"KM: "+v.getString("km")+" "+"Price: "+p.getString("price")+" "+"Description: "+p.getString("description")+" "+"Belongs to:"+u.getString("first_name")+"\n";
-            }
-            return list;
-        });
+        get("/posts",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<Post> posts = Post.findAll();
+            attributes.put("posts_count", posts.size());
+            attributes.put("posts", posts);
+            return new ModelAndView(attributes, "posts.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         /*----------------------VEHICLE STUFF----------------*/
 
