@@ -139,7 +139,8 @@ public class App {
         });
  
         post("/User", (request, response) -> {
-            
+            String retornar;
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("first_name", request.queryParams("first_name"));
@@ -157,7 +158,9 @@ public class App {
 
             user.saveIt();
             city.add(user);
-            return "carga exitosa";
+			retornar = retornar + "Usuario Cargado Correctamente";
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            return retornar;
             
          });   
      
@@ -212,6 +215,7 @@ public class App {
  
         post("/CarVehicle", (request, response) -> {
             String retornar;
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
@@ -220,7 +224,7 @@ public class App {
             User user2 = new User();
             user2 = User.findFirst("email=?",user.get("email"));
             if (user2 == null){
-                retornar="No se encontro usuario";
+                retornar=retornar + "No se encontro usuario";
             }else{
                 Vehicle vehicle = new Vehicle();
                 //carga variable vehicle con datos tomados por pantalla
@@ -243,8 +247,9 @@ public class App {
                 
                 car.saveIt();
                 vehicle.add(car);
-                retornar ="carga exitosa";
+                retornar =retornar +"Carga Exitosa";
            }
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });   
         
@@ -298,6 +303,7 @@ public class App {
         
         post("/InsertMotorcyle", (request, response) -> {
             String retornar;
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
@@ -306,7 +312,7 @@ public class App {
             User user2 = new User();
             user2 = User.findFirst("email=?",user.get("email"));
             if (user2 == null){
-                retornar="No se encontro usuario";
+                retornar=retornar +"No se encontro usuario";
             }else{
                 Vehicle vehicle = new Vehicle();
                 //carga variable vehicle con datos tomados por pantalla
@@ -329,8 +335,9 @@ public class App {
                 moto.saveIt();
                 vehicle.add(moto);
                 
-                retornar ="carga exitosa";
+                retornar =retornar +"Carga Exitosa";
             }
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });   
         
@@ -381,6 +388,7 @@ public class App {
         post("/InsertTruck", (request, response) -> {
             String retornar;
             User user = new User();
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
             
@@ -388,7 +396,7 @@ public class App {
             User user2 = new User();
             user2 = User.findFirst("email=?",user.get("email"));
             if (user2 == null){
-                retornar="No se encontro usuario";
+                retornar=retornar +"No se encontro usuario";
             }else{
                 Vehicle vehicle = new Vehicle();
                 //carga variable vehicle con datos tomados por pantalla
@@ -409,8 +417,10 @@ public class App {
                 camion.saveIt();
                 vehicle.add(camion);
                 
-                retornar ="carga exitosa";
+                
+				retornar =retornar +"Carga Exitosa";
             }
+				retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });   
         
@@ -447,6 +457,7 @@ public class App {
         
         post("/Post", (request, response) -> {
             String retornar;
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
@@ -462,7 +473,7 @@ public class App {
             vehiculo2 = vehiculo.findFirst("patent=?",vehiculo.get("patent"));
             
             if ((user2 == null) || (vehiculo2 == null)){
-                retornar="No se encontro usuario o vehiculo";
+                retornar=retornar +"No se encontro usuario o vehiculo";
             }else{
                 Post post = new Post();
                 post.set("title",request.queryParams("title"));
@@ -471,8 +482,9 @@ public class App {
                 post.saveIt();
                 user2.add(post);
                 vehiculo2.add(post);
-                retornar ="carga exitosa";
+                retornar =retornar +"Carga Exitosa";
             }
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });
         
@@ -502,6 +514,7 @@ public class App {
         
         post("/Pregunta", (request, response) -> {
             String retornar;
+			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
@@ -517,15 +530,16 @@ public class App {
             post2 = post.findFirst("title=?",post.get("title"));
             
             if ((user2 == null) || (post2 == null)){
-                retornar="No se encontro usuario o post";
+                retornar=retornar +"No se encontro usuario o post";
             }else{
                 Question question = new Question();
                 question.set("textQ",request.queryParams("textQ"));
                 question.saveIt();
                 post2.add(question);
                 user2.add(question);
-                retornar ="carga exitosa";
+                retornar =retornar +"Carga Exitosa";
             }
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });
                    
@@ -573,7 +587,8 @@ public class App {
      
    		post("/dUser",(request,response)->{
         User user = new User();
-        String retornar ="";
+        String retornar;
+		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
         //Cargar variable user con datos tomados por pantalla
         user.set("email",request.queryParams("email"));
 
@@ -581,11 +596,12 @@ public class App {
         User user2 = new User();
         user2 = User.findFirst("email=?",user.get("email"));
         if (user2 == null){
-           retornar="No se encontro usuario";
+           retornar=retornar +"No se encontro usuario";
         }else{
              user2.deleteCascade();
-             retornar = "Usuario Eliminado correctamete";
+             retornar = retornar +"Usuario Eliminado correctamete";
         }
+		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
         return retornar;
     });   
     
@@ -611,7 +627,8 @@ public class App {
      
     post("/dVehicle",(request,response)->{
         User user = new User();
-        String retornar ="";
+        String retornar;
+		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
         //Cargar variable user con datos tomados por pantalla
         user.set("email",request.queryParams("email"));
 
@@ -627,11 +644,12 @@ public class App {
        
         
         if ((user2 == null) || (vehiculo2 == null) ){
-           retornar="No se encontro usuario o vehiculo";
+           retornar=retornar +"No se encontro usuario o vehiculo";
         }else{
              vehiculo2.deleteCascade();
-             retornar = "Vehiculo Eliminado correctamete";
+             retornar =retornar + "Vehiculo Eliminado correctamete";
         }
+		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
         return retornar;
     });   
     
@@ -659,7 +677,8 @@ public class App {
     post("/dPost",(request,response)->{
         User user = new User();
         Post post = new Post();
-        String retornar ="";
+        String retornar;
+		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
         //Cargar variable user con datos tomados por pantalla
         user.set("email",request.queryParams("email"));
         post.set("title",request.queryParams("title"));
@@ -669,11 +688,12 @@ public class App {
         user2 = User.findFirst("email=?",user.get("email"));
         post2 = Post.findFirst("title=?",post.get("title"));
         if ((user2 == null) || (post2 == null)) {
-           retornar="No se encontro usuario o post ha eliminar";
+           retornar=retornar +"No se encontro usuario o post ha eliminar";
         }else{
              post2.delete();
              retornar = "Post Eliminado correctamete";
         }
+		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
         return retornar;
     });          
         

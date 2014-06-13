@@ -22,6 +22,11 @@
 			</tr>
 			<tr>
 				<td>
+					<a href="http://localhost:4567/CreatePost"> Crear Post </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
 					<a href="http://localhost:4567/Delete"> (+) Elminar</a> </br>
 				</td>
 			</tr>
