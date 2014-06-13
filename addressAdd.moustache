@@ -1,0 +1,14 @@
+<title>
+	Load vehicle
+</title>
+<body>
+	<form action="/addresses" method="post">
+		Street
+		<input type="text" name="street"><br>
+		Number
+		<input type="text" name="number"><br>
+		Login (user email)
+		<input type="text" name="user"><br>
+		Guardar 
+		<input type="submit" value= "Save"> </form> 
+</body>
