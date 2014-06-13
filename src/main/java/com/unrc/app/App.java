@@ -64,17 +64,23 @@ public class App
 
         /*------------------------USER STUFF----------------------------*/
         get("/users/new" , (request, response) ->{
-            String[] a={"name","lastname","email"};
-            String form = WebStuff.form("Create User",a,"/users","post");
-            return form;
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "usersNew.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         get("/users/add/vehicles" , (request, response) ->{
-            response.type("text/html");
-            String[] data = {"Name","Model (YYYY)","KM (in numbers)","User name"};
-            String form = WebStuff.form("Add Vehicle",data,"/vehicles","post");
-            return form;
-        });
+        //     response.type("text/html");
+        //     String[] data = {"Name","Model (YYYY)","KM (in numbers)","User name"};
+        //     String form = WebStuff.form("Add Vehicle",data,"/vehicles","post");
+        //     return form;
+        // });
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "vehiclesAdd.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         // Form Add Address
         get("/users/add/addresses" , (request, response) ->{
@@ -85,12 +91,19 @@ public class App
         });
 
         post ("/users",(request, response) ->{ 
-            String name = request.queryParams("name");
-            String lastname = request.queryParams("lastname");
-            String email = request.queryParams("email");
-            User.createIt("first_name", name, "last_name", lastname,"email",email,"is_admin","0"); //acá iria nuestro metodo de creacion
-            response.redirect("/users");
-            return "success"; 
+            User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
+            String message = new String();
+            if (admin.getInteger("is_admin")==0) {
+                message = "fail";
+            } else {
+                String name = request.queryParams("name");
+                String lastname = request.queryParams("lastname");
+                String email = request.queryParams("email");
+                admin.createUser(name,lastname,email); 
+                message = "success"; 
+            }
+            response.redirect("/hello");
+            return message;
         });
 
         //List of users
@@ -170,12 +183,12 @@ public class App
         /*----------------------VEHICLE STUFF----------------*/
 
         post ("/vehicles",(request, response) ->{ 
-            String name = request.queryParams("Name");
-            String model = request.queryParams("Model (YYYY)");
-            String km = request.queryParams("KM (in numbers)"); //should take integers in the form
-            String user = request.queryParams("User name"); //later we should use the id of the user logged
+            String name = request.queryParams("name");
+            String model = request.queryParams("model");
+            String km = request.queryParams("km"); //should take integers in the form
+            String user = request.queryParams("user"); //later we should use the id of the user logged
             Vehicle v = Vehicle.create("name", name, "model", model,"km",km);
-            User u = User.findFirst("first_name = ?",user);
+            User u = User.findFirst("email = ?",user);
             u.add(v);
             u.saveIt();//writes to te DB
             response.redirect("/vehicles");
