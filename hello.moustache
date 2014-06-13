@@ -11,4 +11,6 @@
 	<a href="http://localhost:4567/users/add/vehicles">Agregar Vehiculo</a><br>
 	<a href="http://localhost:4567/users/add/addresses">Agregar Dirección</a><br>
 	<a href="http://localhost:4567/users">Listado de usuarios</a><br>
+	<a href="http://localhost:4567/posts">Listado de posts</a><br>
+	<a href="http://localhost:4567/vehicles">Listado de vehiculos</a><br>
 </body>
