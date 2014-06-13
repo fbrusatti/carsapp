@@ -19,7 +19,7 @@ public class User extends Model {
   		User.createIt("first_name", fn, "last_name", ln,"email",email,"is_admin",false);
   	}
   }
-
+  /*-------------------------------MOUSTACHE STUFF---------------------------------------*/
   public String name() {
     return this.getString("first_name") +" "+ this.getString("last_name");
   }
@@ -27,6 +27,12 @@ public class User extends Model {
   public String email() {
     return this.getString("email");
   }
+
+  public String id(){
+    return this.getString("id");
+  }
+
+  /*------------------------------ELASTIC SEARCH STUFF-----------------------------------*/
 
   public void afterSave() {
     //Starts the elastic search cluster
