@@ -1,11 +1,4 @@
 package com.unrc.app.models;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.elasticsearch.client.*;
-import org.elasticsearch.node.*;
-
-import static org.elasticsearch.node.NodeBuilder.*;
 
 import org.javalite.activejdbc.Model;
 public class Post extends Model {

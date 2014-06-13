@@ -1,0 +1,41 @@
+<html>
+	<head > 
+		<title> Paginal Principal </title>
+	</head>
+	
+	<body bgcolor="#BDBDBD">
+	<body link="#4000FF">
+	<body alink="#4000FF">
+	<body vlink="#4000FF">
+
+		<h1 style="color:#0000FF" > Paginal Principal </h1> </br>
+		<table border=1 align="center"> 
+			<tr>
+				<td>
+	    			<a href="http://localhost:4567/usuario/registarse/"> Registrarse </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/CargarVehiculo"> (+) Cargar Vehiculo </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/EliminarVehiculo"> (+) Elminar Vehiculo </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/Listar"> (+) Listar </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/app"> (-) Buscar </a> </br>
+				</td>
+			</tr>
+		</table>
+		
+	</body>
+</html>

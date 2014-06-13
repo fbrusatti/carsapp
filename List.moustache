@@ -1,0 +1,52 @@
+<html>
+	<head > 
+		<title> Paginal Principal </title>
+	</head>
+	
+	<body bgcolor="#BDBDBD">
+	<body link="#4000FF">
+	<body alink="#4000FF">
+	<body vlink="#4000FF">
+
+		<h1 style="color:#0000FF" > Paginal Principal </h1> </br>
+		<table border=1 align="center"> 
+			<tr>
+				<td>
+	    			<a href="http://localhost:4567/app/RegisterUser"> Registrarse </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/InsertVehicle"> (+) Cargar Vehiculo </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/CreatePost"> Crear Post </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/Delete"> (+) Elminar</a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/app"> (-) Listar </a> </br>
+					
+					<a href="http://localhost:4567/ListUsers" style="color:#B40404" > -> Listar Usuarios </a> </br>
+
+					<a href="http://localhost:4567/ListVehicles" style="color:#B40404" > -> Listar Vehiculos </a> </br>
+
+					<a href="http://localhost:4567/ListPost" style="color:#B40404" > -> Listar Posts </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/Search"> (+) Buscar </a> </br>
+				</td>
+			</tr>
+		</table>
+		
+	</body>
+</html>

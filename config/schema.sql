@@ -26,8 +26,9 @@ CREATE TABLE carsapp_development.addresses (
 CREATE TABLE carsapp_development.vehicles(
     id INT(11) NOT NULL auto_increment,
 	model VARCHAR(20),
+	patent VARCHAR(20) unique,
     color VARCHAR(20),
-    km VARCHAR(4) NOT NULL,
+    km VARCHAR(40) NOT NULL,
     mark VARCHAR(20),
 	year VARCHAR(10) NOT NULL,
 	user_id INT(11),
@@ -82,7 +83,7 @@ CREATE TABLE carsapp_development.posts(
 -- DROP TABLE IF EXISTS answers; -- Respuestas
 CREATE TABLE carsapp_development.answers(
     id INT(11) NOT NULL auto_increment,
-    text TEXT,
+    textA TEXT,
 	question_id INT(11),
     user_id INT(11),
 	CONSTRAINT answer_pk PRIMARY KEY (id)
@@ -91,7 +92,7 @@ CREATE TABLE carsapp_development.answers(
 -- DROP TABLE IF EXISTS questions; -- Preguntas
 CREATE TABLE carsapp_development.questions(
     id INT(11) NOT NULL auto_increment,
-    text TEXT, 
+    textQ TEXT, 
 	post_id INT(11),
     user_id INT(11),
 	CONSTRAINT question_pk PRIMARY KEY (id)

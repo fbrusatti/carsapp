@@ -10,7 +10,6 @@ public class Vehicle extends Model {
   //get model
   public String getModel(){
 	  return (this.getString("model"));
-}
 
   //get patent
   public String getPatent(){
