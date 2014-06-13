@@ -1,0 +1,17 @@
+<title>
+	Load vehicle
+</title>
+<body>
+	<form action="/vehicles" method="post">
+		Name 
+		<input type="text" name="name"><br>
+		Model (YYYY)
+		<input type="text" name="model"><br>
+		KM (in numbers)
+		<input type="text" name="km"><br>
+		<br>
+		Login (user email)
+		<input type="text" name="user"><br>
+		Guardar 
+		<input type="submit" value= "Save"> </form> 
+</body>
