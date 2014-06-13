@@ -1,15 +1,7 @@
 <a href="/"> Inicio </a><br>
 {{#user}}
 	<h2>{{name}}</h2>
-	<button type="button" > Editar </button>
-	<span id="span_editar" style="display:none">
-		<form action="/users/{{id}}/edit" method="get" >
-		<!--
-			<b>¿Seguro que desea eliminar al usuario?: </b>
-			<input type="submit" value="Si">
-			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">-->
-		</form>
-	</span>
+	<a href="/users/{{id}}/edit"><button type="button" > Editar </button></a>
 	<button type="button" onclick="toogle_eliminar()"> Eliminar </button>
 	<span id="span_eliminar" style="display:none">
 		<form action="/users/{{id}}/delete" method="post" >

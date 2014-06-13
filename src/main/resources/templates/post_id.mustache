@@ -1,7 +1,7 @@
 <a href="/"> Inicio </a><br>
 {{#post}}
 	<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2>
-	<button type="button" > Editar post </button>
+	<a href="/users/{{ownerId}}/posts/{{id}}/edit"><button type="button" > Editar </button></a>
 	<button type="button" onclick="toogle_eliminar()">Eliminar post</button>
 	<span id="span_eliminar" style="display:none">
 		<form action="/users/{{ownerId}}/posts/{{id}}/delete" method="post" >
