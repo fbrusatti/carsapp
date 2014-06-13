@@ -184,12 +184,7 @@ public class App {
          get("/users/:id/posts/:postId/edit", (request,response) -> {
             Map<String,Object> attributes = new HashMap<String,Object>();
             Post p = Post.findById(request.params("postId"));
-            List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
-            p.set("vehicle_id",null);
-            p.saveIt();
-            
             attributes.put("post",p);
-            attributes.put("vehicles",vehicles);
             return new ModelAndView(attributes,"edit_post.mustache"); 
             },
             new MustacheTemplateEngine()
@@ -203,8 +198,6 @@ public class App {
             p.set("title", request.queryParams("title"));
             p.set("description",request.queryParams("descrip"));
             p.saveIt();
-            Vehicle v = Vehicle.findById(request.queryParams("vehicles"));
-            v.add(p);
             Map<String,Object> attributes = new HashMap<String,Object>();
             String url = "/users/"+request.params("id")+"/posts/"+p.id();
             attributes.put("url",url);
@@ -448,14 +441,6 @@ public class App {
       	  		return "La ubicación ingresada no es válida";
       	  	}
       	  
-        });
-        
-        /**
-         * Getting vehicles
-         */
-        get("/vehicles", (request, response) -> {
-        	List<Vehicle> vehicles = Vehicle.findAll();
-        	return vehicles.toString();
         });
         
         
