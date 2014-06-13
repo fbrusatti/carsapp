@@ -12,6 +12,8 @@ import spark.Spark.*;
 import spark.ModelAndView;
 import static spark.Spark.*;
 
+import org.elasticsearch.node.*;
+import static org.elasticsearch.node.NodeBuilder.*;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.action.search.SearchResponse;
@@ -67,8 +69,17 @@ public class App {
             }*/
 
             Settings settings = ImmutableSettings.settingsBuilder().put("client.transport.sniff",true).build();
-            TransportClient client = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress("hostname", 9300));
-                 
+            TransportClient client1 = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress("localhostx", 9300));
+            
+            Node node = org.elasticsearch.node
+                              .NodeBuilder
+                              .nodeBuilder()
+                              .clusterName("carsapp")
+                              .local(true)
+                              .node();
+        
+        	Client client = node.client();
+            
             SearchResponse resp = client.prepareSearch("users", "user")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                         .setQuery(QueryBuilders.termQuery("name", word))   // Query

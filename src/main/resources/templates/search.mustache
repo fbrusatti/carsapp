@@ -6,10 +6,10 @@
 		<option value="2">Anuncios</option>
 	</select><br>
 	<span id="span_user" style="display:inline">
-		<input name="name" type="text"required/>
+		<input name="name" type="text" required/>
 	</span>
 	<span id="span_post" style="display:none">
-		<input name="dates" type="text"  required/>
+		<input name="dates" type="text" />
 	</span>
 	<input type="submit" value="Buscar">
 </form>
@@ -20,11 +20,15 @@
 function toggle_selection(elemento) {
 	document.getElementById("span_user").style.display = "none";
 	document.getElementById("span_post").style.display = "none";
+	document.getElementsByName("name")[0].required = false;
+	document.getElementsByName("dates")[0].required = false;
 	if(elemento.value==1) {
 		document.getElementById("span_user").style.display = "inline";
+		document.getElementsByName("name")[0].required = true;
 	} 
 	if (elemento.value==2) {
 		document.getElementById("span_post").style.display = "inline";
+		document.getElementsByName("dates")[0].required = true;
 	}
 }
 
