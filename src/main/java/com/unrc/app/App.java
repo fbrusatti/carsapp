@@ -25,7 +25,7 @@ import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.*;
 import org.elasticsearch.common.settings.*;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-
+import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 
 
 public class App {
@@ -60,42 +60,60 @@ public class App {
         );
         
         post("/search", (request, response) -> {
-            String word = "Gonzales";
-            /*if (request.queryParams("type").charAt(0)=='1') {
-                word = request.queryParams("name");
-            }
-            if (request.queryParams("type").charAt(0)=='2') {
-                word = request.queryParams("dates");
-            }*/
+           
+            Client client = new TransportClient()
+        					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 
-            Settings settings = ImmutableSettings.settingsBuilder().put("client.transport.sniff",true).build();
-            TransportClient client1 = new TransportClient(settings).addTransportAddress(new InetSocketTransportAddress("localhostx", 9300));
-            
-            Node node = org.elasticsearch.node
-                              .NodeBuilder
-                              .nodeBuilder()
-                              .clusterName("carsapp")
-                              .local(true)
-                              .node();
-        
-        	Client client = node.client();
-            
-            SearchResponse resp = client.prepareSearch("users", "user")
+            ClusterHealthResponse health = client.admin()
+            								.cluster()
+            								.prepareHealth()
+            								.setWaitForGreenStatus()
+            								.execute()
+            								.actionGet();
+
+            String word = "";
+            SearchResponse resp = new SearchResponse();
+            if (request.queryParams("type").charAt(0)=='1') {
+                word = request.queryParams("name");
+                resp = client.prepareSearch("users")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                        .setQuery(QueryBuilders.termQuery("name", word))   // Query
+                        .setQuery(QueryBuilders.matchQuery("name", word))   // Query
                         .setFrom(0).setSize(60).setExplain(true)
                         .execute()
                         .actionGet();
+            }
+            if (request.queryParams("type").charAt(0)=='2') {
+                word = request.queryParams("dates");
+                resp = client.prepareSearch("posts")
+                        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                        .setQuery(QueryBuilders.matchQuery("title", word))   // Query
+                        .setFrom(0).setSize(60).setExplain(true)
+                        .execute()
+                        .actionGet();
+            }
+           
 
             SearchHit[] docs = resp.getHits().getHits();
-            System.out.println(docs.toString());
             
+           	List<String> res = new LinkedList<String>(); 
+            
+            for (SearchHit hit : docs) {
+				System.out.println("------------------------------");
+				Map<String,Object> result = hit.getSource();  
+				res.add(result.toString());
+				System.out.println(result);
+			}
+            
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            
+            attributes.put("searchResult",res);
 
             client.close();
 
             
-            return "";
-            }
+            return new ModelAndView(attributes,"search.mustache");
+            },
+            new MustacheTemplateEngine()
         );
 		
 		/**

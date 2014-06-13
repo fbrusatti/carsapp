@@ -9,6 +9,9 @@ import java.util.Map;
 
 import org.elasticsearch.client.*;
 import org.elasticsearch.node.*;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.settings.*;
 
 import static org.elasticsearch.node.NodeBuilder.*;
 
@@ -29,17 +32,11 @@ public class User extends Model {
 	}
   
 	
-	public void afterSave() {
+	public void afterCreate() {
         
-        Node node = org.elasticsearch.node
-                              .NodeBuilder
-                              .nodeBuilder()
-                              .clusterName("carsapp")
-                              .local(true)
-                              .node();
-        
-        Client client = node.client();
-        
+        Client client = new TransportClient()
+        					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
         Map<String, Object> json = new HashMap<String, Object>();
         json.put("name",this.name());
         json.put("email",this.email());
@@ -49,7 +46,7 @@ public class User extends Model {
                 .execute()
                 .actionGet();
         
-        node.close();
+        client.close();
     }
 	
 	public String id() {
