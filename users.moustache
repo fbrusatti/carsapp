@@ -22,7 +22,7 @@
 			</tr>
 			{{#users}}
 				<tr>
-					<td>{{name}} </td> 
+					<td><a href="http://localhost:4567/users/{{id}}">  {{name}} </a></td> 
 					<td>{{email}}</td>
 	        	</tr>
 	    	{{/users}}
