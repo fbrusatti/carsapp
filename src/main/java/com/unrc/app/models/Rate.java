@@ -31,4 +31,20 @@ public class Rate extends Model {
         return findById(rate.getInteger("id"));
     }
 
+    public int id(){
+        return this.getInteger("id");
+    }
+
+    public int stars(){
+        return this.getInteger("stars");
+    }  
+
+    public int id_post(){
+        return this.getInteger("id_post");
+    }     
+
+    public int id_user(){
+        return this.getInteger("id_user");
+    }
+
 }

@@ -219,27 +219,34 @@ public class App
         });
 
         //List all posts
-        get("/posts",(request,response)->{
+        /*get("/posts",(request,response)->{
             List<Post> postsList = Post.findAll();
             String list = new String();
             for(Post p: postsList){
                 list = list+"Titulo: "+p.getString("title")+". "+"Descripcion: "+" "+p.getString("description")+"<br>";
             }
             return list;
-        });        
+        });  
+        */
+        get("/posts",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<Post> posts = Post.findAll();
+            attributes.put("posts_count", posts.size());
+            attributes.put("posts", posts);   
+            return new ModelAndView(attributes, "posts.mustache");
+        },
+         new MustacheTemplateEngine()
+        );      
 
         //Lista un post particular
         get("/posts/:id",(request,response)->{
-            Post postRequested = Post.findById(request.params(":id"));
-            if(postRequested!=null){
-                String titulo = postRequested.getString("title");
-                String descripcion = postRequested.getString("description");
-                return "Titulo: "+titulo+". "+"Descripcion: "+descripcion;
-            }
-            else{
-                return "Post no encontrado!";
-            }            
-        });    
+            Map<String, Object> attributes = new HashMap<>();
+            Post postsSelect = Post.findById(request.params("id"));
+            attributes.put("posts_id",postsSelect);
+            return new ModelAndView(attributes,"posts_id.mustache");            
+        },
+            new MustacheTemplateEngine()
+        );    
 
         //List all questions
         get("/questions",(request,response)->{
@@ -285,27 +292,27 @@ public class App
             }
         });
 
-        //List all rates
-        get("/rates", (request,response) ->{
-            List<Rate> rateList = Rate.findAll();
-            String list = new String();
-            for(Rate a : rateList){
-                list = list+"N° de puntuacion: "+a.getInteger("id")+". "+"puntos: "+a.getInteger("stars")+". "+"N° post: "+a.getInteger("id_post")+"."+"N° usuario: "+a.getInteger("id_user")+"."+"<br>";
-            }
-            return list;
-        });   
+ 
 
-        //Lista una puntuacion particular
+	get("/rates",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<Rate> rates = Rate.findAll();
+            attributes.put("rates_count", rates.size());
+            attributes.put("rates", rates);   
+            return new ModelAndView(attributes, "rates.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
+        
+         //Lista un post particular
         get("/rates/:id",(request,response)->{
-            Rate rateRequested = Rate.findById(request.params(":id"));
-            if(rateRequested!=null){
-                int points = rateRequested.getInteger("stars");
-                return "Cantidad de puntos: "+points+".";
-            }
-            else{
-                return "Puntuacion no encontrada!";
-            }            
-        });                 
+            Map<String, Object> attributes = new HashMap<>();
+            Rate rateSelect = Rate.findById(request.params("id"));
+            attributes.put("rates_id",rateSelect);
+            return new ModelAndView(attributes,"rates_id.mustache");            
+        },
+            new MustacheTemplateEngine()
+        );     
 
         //List all Punctuations
         get("/punctuations",(request,response)->{

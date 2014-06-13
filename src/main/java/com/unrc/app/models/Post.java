@@ -43,5 +43,17 @@ public class Post extends Model {
         }else{
             return false;
         }
-    }       
+    }
+
+    public String title(){
+        return this.getString("title");
+    }
+
+    public String description(){
+        return this.getString("description");
+    }  
+
+    public int id(){
+        return this.getInteger("id");
+    }     
 }
