@@ -1,0 +1,17 @@
+<title>
+	Create user
+</title>
+<body>
+	<form action="/users" method="post">
+		Name 
+		<input type="text" name="name"><br>
+		Last Name
+		<input type="text" name="lastname"><br>
+		Email
+		<input type="text" name="email"><br>
+		<br>
+		Login (admin email)
+		<input type="text" name="admin"><br>
+		Guardar 
+		<input type="submit" value= "Save"> </form> 
+</body>
