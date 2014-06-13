@@ -37,7 +37,7 @@ public class UserTest{
         the(user.errors().get("last_name")).shouldBeEqual("value is missing");
         the(user.errors().get("email")).shouldBeEqual("value is missing");
 
-        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","0");
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",false);
 
         // Everything is good:
         the(user).shouldBe("valid");
@@ -45,9 +45,9 @@ public class UserTest{
     @Test
     public void createUserTest(){
         User user = new User();
-        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","1");
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
         user.createUser("John","Hanckok","hanckok@mail.com");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
-        assertThat(user2.get("is_admin"),is(0));
+        assertThat(user2.getBoolean("is_admin"),is(false));
     }
 }

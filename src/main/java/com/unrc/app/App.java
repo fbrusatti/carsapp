@@ -93,7 +93,7 @@ public class App
         post ("/users",(request, response) ->{ 
             User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
             String message = new String();
-            if (admin.getInteger("is_admin")==0) {
+            if (!(admin.getBoolean("is_admin"))) {
                 message = "fail";
             } else {
                 String name = request.queryParams("name");
