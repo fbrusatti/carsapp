@@ -36,9 +36,6 @@ public class Truck extends Model{
     	return status;
     }
    
-
-   
-
     //elimina una camioneta de la bd indicando con un valor booleano el estado de finalizacion de la operacion
     //true=operacion exitosa
     //false=operacion fallida
@@ -51,6 +48,11 @@ public class Truck extends Model{
         else{return false;}
     }  
 
-
-   
+    public String licensePlate() {
+        return this.getString("id_vehicle");
+    }
+  
+    public String belt() {
+        return this.getString("count_belt");
+    }     
 }

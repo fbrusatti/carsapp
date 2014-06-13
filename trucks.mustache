@@ -1,0 +1,11 @@
+  <h1>Camionetas</h1>
+
+  <h2>Cantidad de camionetas: {{trucks_count}}</h2>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    {{#trucks}}
+        <tr>
+          <td><b>Patente:</b> {{licensePlate}} <b>Cantidad de cinturones:</b> {{belt}}</td>
+        </tr>
+    {{/trucks}}
+  </table>

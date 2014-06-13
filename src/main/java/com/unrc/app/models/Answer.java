@@ -43,5 +43,8 @@ public class Answer extends Model {
         }
         else{return false;}
     }
-              
+
+    public String description(){
+        return this.getString("description");
+    }             
 }

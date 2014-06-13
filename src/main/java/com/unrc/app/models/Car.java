@@ -36,9 +36,6 @@ public class Car extends Model{
     	return status;
     }
    
-
-   
-
     //elimina un auto de la bd indicando con un valor booleano el estado de finalizacion de la operacion
     //true = operacion exitosa
     //false = operacion fallida
@@ -49,5 +46,28 @@ public class Car extends Model{
             return true;
         }
         else{return false;}
-    }   
+    }
+
+    public String licensePlate() {
+        return this.getString("id_vehicle");
+    }
+  
+    /*public String model() {
+        return this.getString("model");
+    }  */
+
+    /*public String brand() {
+        return this.getString("brand");
+    } */       
+
+    public String coupe() {
+        String res;
+        if(this.getString("is_coupe")=="true"){
+            res="SI";
+        }
+        else{
+            res="NO";
+        }
+        return res;
+    }        
 }

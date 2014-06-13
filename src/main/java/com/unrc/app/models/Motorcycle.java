@@ -35,9 +35,6 @@ public class Motorcycle extends Model{
     	}
     	return status;
     }
-   
-
-   
 
     //elimina un usuario de la bd indicando con un valor booleano el estado de finalizacion de la operacion
     public static Boolean deleteMotorcycle(String iden){
@@ -49,6 +46,15 @@ public class Motorcycle extends Model{
         else{return false;}
     }  
 
+    public String licensePlate() {
+        return this.getString("id_vehicle");
+    }
+  
+    public int wheelSize(){
+        return this.getInteger("wheel_size");
+    }   
 
-   
+    public int engineSize(){
+        return this.getInteger("engine_size");
+    }
 }

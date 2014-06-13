@@ -1,0 +1,31 @@
+  <h1>User</h1>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    {{#user_id}}
+        <tr>
+          <td><b>Nombre:</b> {{name}} <b>Email:</b> {{email}}</td>
+        </tr>
+    {{/user_id}}
+  </table>
+<br><br>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <td><form method="get" action="/newAddress">
+    <button type="submit">Agregar direccion</button>
+  </form></td>
+
+  <td><form method="get" action="/newVehicle">
+    <button type="submit">Agregar vehiculo</button>
+  </form></td>
+
+  <td><form method="get" action="/newPost">
+    <button type="submit">Agregar publicacion</button>
+  </form></td>
+
+  <td><form method="get" action="/newQuestion">
+    <button type="submit">Realizar pregunta</button>
+  </form></td>
+
+  <td><form method="get" action="/newAnswer">
+    <button type="submit">Responder pregunta</button>
+  </form></td>
+</table>

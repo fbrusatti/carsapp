@@ -33,7 +33,15 @@ public class Punctuation extends Model {
         return status;
     }
 
+    public int points(){
+      return this.getInteger("point_u");
+    }            
 
+    public int receiver(){
+      return this.getInteger("id_user_receiver");
+    }
 
-              
+    public int giver(){
+      return this.getInteger("id_user");
+    }
 }

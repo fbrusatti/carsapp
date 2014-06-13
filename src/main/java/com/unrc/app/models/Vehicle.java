@@ -25,7 +25,6 @@ public class Vehicle extends Model {
    
     //a partir de la patente,modelo y marca crea un vehiculo nuevo siempre y cuando este no exista en la bd
 	public static Vehicle createVehicle(String patente, String modelo, String marca,User usuario){
-    	//Vehicle vehiculo=create("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
         Vehicle vehiculo = new Vehicle();
         vehiculo.set("patent", patente, "model", modelo, "brand", marca,"id_user",usuario.getInteger("id"));
         if(!existVehicle(patente)){
@@ -45,7 +44,16 @@ public class Vehicle extends Model {
         }
         else{return false;}
     }  
-
-
    
+    public String licensePlate() {
+        return this.getString("patent");
+    }
+  
+    public String model() {
+        return this.getString("model");
+    }  
+
+    public String brand() {
+        return this.getString("brand");
+    }     
 }
