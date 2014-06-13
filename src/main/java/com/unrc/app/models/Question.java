@@ -46,5 +46,12 @@ public class Question extends Model {
         }
         else{return false;}
     }
-              
+
+    public String description(){
+        return this.getString("description");
+    }
+     
+    public int id(){
+        return this.getInteger("id");
+    }          
 }

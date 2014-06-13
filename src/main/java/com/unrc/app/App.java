@@ -227,7 +227,7 @@ public class App
             new MustacheTemplateEngine()
         );    
 
-        //List all questions
+        /*//List all questions
         get("/questions",(request,response)->{
             List<Question> questionsList = Question.findAll();
             String list = new String();
@@ -247,7 +247,28 @@ public class App
             else{
                 return "Pregunta no encontrado!";
             }            
-        });  
+        }); */
+
+        get("/questions",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            List<Question> questions = Question.findAll();
+            attributes.put("questions_count", questions.size());
+            attributes.put("questions", questions);   
+            return new ModelAndView(attributes, "questions.mustache");
+        },
+         new MustacheTemplateEngine()
+        );  
+
+
+        //Lista una question particular
+        get("/questions/:id",(request,response)->{
+            Map<String, Object> attributes = new HashMap<>();
+            Question questionsSelect = Question.findById(request.params("id"));
+            attributes.put("questions_id",questionsSelect);
+            return new ModelAndView(attributes,"questions_id.mustache");            
+        },
+            new MustacheTemplateEngine()
+        );   
        
         //List all answers
         get("/answers", (request,response) ->{
