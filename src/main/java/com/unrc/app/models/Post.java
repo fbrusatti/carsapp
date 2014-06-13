@@ -4,7 +4,7 @@ import org.javalite.activejdbc.Model;
 
 public class Post extends Model {
   static {
-	validatePresenceOf("price", "description", "user_id", "vehicle_id");
+	validatePresenceOf("price");
   }
 
    public Integer price() {

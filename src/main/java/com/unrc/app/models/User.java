@@ -1,6 +1,12 @@
 package com.unrc.app.models;
 
 import org.javalite.activejdbc.Model;
+import java.util.Map;
+import java.util.HashMap;
+import org.elasticsearch.node.Node;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.action.index.IndexResponse;
+import static org.elasticsearch.node.NodeBuilder.*;
 
 public class User extends Model {
   static {
@@ -20,6 +26,28 @@ public class User extends Model {
   
   public String email() {
     return this.getString("email");
+  }
+
+  public void afterSave() {
+    //Starts the elastic search cluster
+    Node node = nodeBuilder().local(true).clusterName("carsapp").node();
+    Client client = node.client();
+
+    //Index the just created user
+    Map<String, Object> json = new HashMap<String, Object>();
+    json.put("name",this.name());
+    json.put("email",this.email());
+    /**
+    *TODO: add is_admin field
+    **/
+
+    IndexResponse response = client.prepareIndex("users","user")
+                                    .setSource(json)
+                                    .execute()
+                                    .actionGet();
+
+
+    node.close();
   }
 
 }
