@@ -122,112 +122,91 @@ public class App
                 return "Usuario no encontrado!";
             }            
         });
-
-
         //Lista todos los vehiculos
         get("/vehicles",(request,response)->{
-            List<Vehicle> vehiclesList = Vehicle.findAll();
-            String list = new String();
-            for(Vehicle v: vehiclesList){
-                list = list+"Patente: "+v.getString("patent")+" "+v.getString("model")+" "+v.getString("brand")+"<br>";
-            }
-            return list;
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            List<Vehicle> vehicles = Vehicle.findAll();
+            attributes.put("vehicles_count", vehicles.size());
+            attributes.put("vehicles", vehicles);   
+            return new ModelAndView(attributes, "vehicles.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         //Lista un vehiculo particular
         get("/vehicles/:patent",(request,response)->{
-            Vehicle vehicleRequested = Vehicle.findByPatent(request.params(":patent"));
-            if(vehicleRequested!=null){
-                String patente = vehicleRequested.getString("patent");
-                String marca = vehicleRequested.getString("brand");
-                String modelo = vehicleRequested.getString("model");
-                return "Chapa patente: "+patente+". "+"Marca: "+marca+". "+"Modelo: "+modelo;
-            }
-            else{
-                return "Vehiculo no encontrado!";
-            }            
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Vehicle vehicleSelected = Vehicle.findByPatent(request.params("patent"));
+            attributes.put("vehicle_id", vehicleSelected);
+            return new ModelAndView(attributes, "vehicleId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         //Lista todos los autos
         get("/cars",(request,response)->{
-            List<Car> carsList = Car.findAll();
-            String list = new String();
-            for(Car i: carsList){
-                list = list+"Patente: "+i.getString("id_vehicle")+" "+i.getBoolean("is_coupe")+"<br>";
-            }
-            return list;
-        });    
+            Map<String, Object> attributes = new HashMap<>();
+            List<Car> cars = Car.findAll();
+            attributes.put("cars_count", cars.size());
+            attributes.put("cars", cars);   
+            return new ModelAndView(attributes, "cars.mustache");
+        },
+         new MustacheTemplateEngine()
+        );   
 
         //Lista un auto particular
         get("/cars/:patent",(request,response)->{
-            Car carRequested = Car.findByCar(request.params(":patent"));
-            if(carRequested!=null){
-                String patente = carRequested.getString("id_vehicle");
-                Boolean coupe = carRequested.getBoolean("is_coupe");
-                return "Chapa patente: " + patente + ". "+"Coupe? " + coupe;
-            }
-            else{
-                return "Vehiculo no encontrado!";
-            }            
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Car carSelected = Car.findByCar(request.params("patent"));
+            attributes.put("car_id", carSelected);
+            return new ModelAndView(attributes, "carId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
+
 
         //Lista todas las motocicletas
         get("/motorcycles",(request,response)->{
-            List<Motorcycle> motorcyclesList = Motorcycle.findAll();
-            String list = new String();
-            for(Motorcycle i: motorcyclesList){
-                list = list+"Patente: "+i.getString("id_vehicle")+". Rodado: "+i.getInteger("wheel_size")+". Cilindrada: "+i.getInteger("engine_size")+"<br>";
-            }
-            return list;
-        });    
+            Map<String, Object> attributes = new HashMap<>();
+            List<Motorcycle> motorcycles = Motorcycle.findAll();
+            attributes.put("motorcycles_count", motorcycles.size());
+            attributes.put("motorcycles", motorcycles);   
+            return new ModelAndView(attributes, "motorcycles.mustache");
+        },
+         new MustacheTemplateEngine()
+        );       
 
         //Lista una motocicleta en particular
         get("/motorcycles/:patent",(request,response)->{
-            Motorcycle motorcycleRequested = Motorcycle.findByMotorcycle(request.params(":patent"));
-            if(motorcycleRequested!=null){
-                String patente = motorcycleRequested.getString("id_vehicle");
-                Integer rodado = motorcycleRequested.getInteger("wheel_size");
-                Integer cilindrada = motorcycleRequested.getInteger("engine_size");
-                return "Chapa patente: " + patente + ". "+"Rodado: " + rodado + ". "+"Cilindrada " + cilindrada;
-            }
-            else{
-                return "Vehiculo no encontrado!";
-            }            
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Motorcycle motorcycleSelected = Motorcycle.findByMotorcycle(request.params("patent"));
+            attributes.put("motorcycles_id", motorcycleSelected);
+            return new ModelAndView(attributes, "motorcycleId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         //Lista todos los Trucks
         get("/trucks",(request,response)->{
-        List<Truck> trucksList = Truck.findAll();
-        String list = new String();
-        for(Truck i: trucksList){
-            list = list+"Patente: "+i.getString("id_vehicle")+". n° cinturones: "+i.getInteger("count_belt")+"<br>";
-        }
-        return list;
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            List<Truck> trucks = Truck.findAll();
+            attributes.put("trucks_count", trucks.size());
+            attributes.put("trucks", trucks);   
+            return new ModelAndView(attributes, "trucks.mustache");
+        },
+         new MustacheTemplateEngine()
+        );       
 
         //Lista un truck particular
         get("/trucks/:patent",(request,response)->{
-            Truck truckRequested = Truck.findByTruck(request.params(":patent"));
-            if(truckRequested!=null){
-                String patente = truckRequested.getString("id_vehicle");
-                Integer cinturones = truckRequested.getInteger("count_belt");
-                return "Chapa patente: " + patente + ". "+"n° cinturones " + cinturones;
-            }
-            else{
-                return "Vehiculo no encontrado!";
-            }            
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Truck truckSelected = Truck.findByTruck(request.params("patent"));
+            attributes.put("trucks_id", truckSelected);
+            return new ModelAndView(attributes, "truckId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
-        //List all posts
-        /*get("/posts",(request,response)->{
-            List<Post> postsList = Post.findAll();
-            String list = new String();
-            for(Post p: postsList){
-                list = list+"Titulo: "+p.getString("title")+". "+"Descripcion: "+" "+p.getString("description")+"<br>";
-            }
-            return list;
-        });  
-        */
         get("/posts",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             List<Post> posts = Post.findAll();
@@ -272,25 +251,24 @@ public class App
        
         //List all answers
         get("/answers", (request,response) ->{
-            List<Answer> answerList = Answer.findAll();
-            String list = new String();
-            for(Answer a : answerList){
-                list = list+"Respuesta: "+a.getString("description")+". "+"<br>";
-            }
-            return list;
-        });  
+            Map<String, Object> attributes = new HashMap<>();
+            List<Answer> answers = Answer.findAll();
+            attributes.put("answers_count", answers.size());
+            attributes.put("answers", answers);   
+            return new ModelAndView(attributes, "answers.mustache");
+        },
+         new MustacheTemplateEngine()
+        );       
 
         //List a specific answer
         get("/answers/:id", (request,responser)->{
-            Answer answerRequested = Answer.findById(request.params(":id"));
-            if(answerRequested!=null){
-                String respuesta = answerRequested.getString("description");
-                return "Descripcion: "+respuesta+".";
-            }
-            else{
-                return "Respuesta no encontrada!";
-            }
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Answer answerSelected = Answer.findById(request.params("id"));
+            attributes.put("answers_id", answerSelected);
+            return new ModelAndView(attributes, "answerId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
  
 
@@ -316,50 +294,45 @@ public class App
 
         //List all Punctuations
         get("/punctuations",(request,response)->{
-            List<Punctuation> punctuationsList = Punctuation.findAll();
-            String list = new String();
-            for(Punctuation p: punctuationsList){
-                list = list+"Puntuación: "+p.getInteger("point_u")+" "+"Entregada por "+(User.findById(p.getInteger("id_user"))).getString("first_name")+" a "+(User.findById(p.getInteger("id_user_receiver"))).getString("first_name")+"<br>";
-            }
-            return list;
-        });        
+            Map<String, Object> attributes = new HashMap<>();
+            List<Punctuation> punctuations = Punctuation.findAll();
+            attributes.put("punctuations_count", punctuations.size());
+            attributes.put("punctuations", punctuations);   
+            return new ModelAndView(attributes, "punctuations.mustache");
+        },
+         new MustacheTemplateEngine()
+        );             
 
         //List a specific Punctuation
         get("/punctuations/:id",(request,response)->{
-            Punctuation punctuationRequested = Punctuation.findById(request.params(":id"));
-            if(punctuationRequested!=null){
-                String puntuacion = punctuationRequested.getString("point_u");
-                int usuarioPuntuado = punctuationRequested.getInteger("id_user_receiver");
-                int usuarioPuntuador = punctuationRequested.getInteger("id_user");
-                return "Puntaje: "+puntuacion+". "+"Entregado por "+(User.findById(punctuationRequested.getInteger("id_user"))).getString("first_name")+" a "+(User.findById(punctuationRequested.getInteger("id_user_receiver"))).getString("first_name");
-            }
-            else{
-                return "Pregunta no encontrada!";
-            }            
-        }); 
+            Map<String, Object> attributes = new HashMap<>();
+            Punctuation punctuationSelected = Punctuation.findById(request.params("id"));
+            attributes.put("punctuations_id", punctuationSelected);
+            return new ModelAndView(attributes, "punctuationsId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         //List all addresses
         get("/addresses", (request, response)->{
-            List<Address> addressesList = Address.findAll();
-            String list = new String();
-            for(Address a : addressesList){
-                list = list+" <br> "+" Calle: "+a.getString("street")+" "+" Numero "+a.getInteger("num")+"Ciudad "+a.getString("city");
-            }
-            return list;
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            List<Address> addresses = Address.findAll();
+            attributes.put("addresses_count", addresses.size());
+            attributes.put("addresses", addresses);   
+            return new ModelAndView(attributes, "addresses.mustache");
+        },
+         new MustacheTemplateEngine()
+        );  
 
         //List a specific address
         get("/addresses/:id",(request,response)->{
-            Address addressRequested = Address.findById(request.params(":id")) ;
-            if(addressRequested!=null){
-                String direccion = addressRequested.getString("street");
-                int numero = addressRequested.getInteger("num");
-                return "Calle: "+direccion+". "+"Numero: "+numero;
-            }
-            else{
-                return "Direccion no encontrada!";
-            }            
-        }); 
+            Map<String, Object> attributes = new HashMap<>();
+            Address addressSelected = Address.findById(request.params("id"));
+            attributes.put("addresses_id", addressSelected);
+            return new ModelAndView(attributes, "addressId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         /**INSERCIONES**/
         get("/newUser",(request,response)->{
