@@ -6,7 +6,7 @@ CREATE TABLE users(
     email VARCHAR(60) UNIQUE,
     first_name VARCHAR(56),
     last_name VARCHAR(56),
-    is_admin BOOLEAN,
+    is_admin INT(2),
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 

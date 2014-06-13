@@ -7,6 +7,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import static org.javalite.test.jspec.JSpec.the;
 import static org.junit.Assert.assertEquals;
 
@@ -34,9 +37,19 @@ public class UserTest{
         the(user.errors().get("last_name")).shouldBeEqual("value is missing");
         the(user.errors().get("email")).shouldBeEqual("value is missing");
 
-        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","false");
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","0");
 
         // Everything is good:
         the(user).shouldBe("valid");
+    }
+    @Test
+    public void createUserTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","1");
+        user.createUser("John","Hanckok","hanckok@mail.com");
+        User user2 = User.findFirst("email = ?","hanckok@mail.com");
+        assertThat(user2.get("is_admin"),is(false));
+
+
     }
 }
