@@ -48,8 +48,6 @@ public class UserTest{
         user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin","1");
         user.createUser("John","Hanckok","hanckok@mail.com");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
-        assertThat(user2.get("is_admin"),is(false));
-
-
+        assertThat(user2.get("is_admin"),is(0));
     }
 }
