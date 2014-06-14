@@ -88,7 +88,6 @@ public class App
         Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
         Base.close();
 
-
         get("/hello",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "hello.mustache");
@@ -108,8 +107,8 @@ public class App
             return new ModelAndView(attributes, "users.mustache");
         },
          new MustacheTemplateEngine()
-        );
-
+       );
+/*
         //Lista un usuario particular
         get("/users/:id",(request,response)->{
             User userRequested = User.findById(request.params(":id"));
@@ -122,6 +121,16 @@ public class App
                 return "Usuario no encontrado!";
             }            
         });
+*/
+        get("/users/:id",(request,response)->{
+            Map<String, Object> attributes = new HashMap<>();
+            User userSelected = User.findById(request.params("id"));
+            attributes.put("user_id", userSelected);
+            return new ModelAndView(attributes, "userId.mustache");
+        },
+         new MustacheTemplateEngine()
+        );  
+
         //Lista todos los vehiculos
         get("/vehicles",(request,response)->{
             Map<String, Object> attributes = new HashMap<>();
@@ -293,7 +302,7 @@ public class App
 
  
 
-	get("/rates",(request, response) -> {
+	    get("/rates",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             List<Rate> rates = Rate.findAll();
             attributes.put("rates_count", rates.size());
@@ -380,7 +389,7 @@ public class App
             return "success";
         });
 
-
+        //Insert an address
         get("/newAddress",(request,response)->{
             String form = "<form action= \"/addresses \" method= \"post\">";
             form+="Email usuario : ";
@@ -628,7 +637,7 @@ public class App
         post ("/answers",(request, response) ->{
             String mail = request.queryParams("userEmail");
             String question = request.queryParams("questionTitle");
-            String respuesta = request.queryParams("respuesta");     
+            String respuesta = request.queryParams("descripcion");     
             Answer resp = Answer.createAnswer(respuesta,User.findByEmail(mail),Question.findByDescription(question));
             response.redirect("/answers");
             return "success";

@@ -52,6 +52,10 @@ public class User extends Model {
         return true;
     }
 
+    public int id(){
+        return this.getInteger("id");
+    }
+
     public String name() {
         return this.getString("first_name")+" "+this.getString("last_name");
     }
