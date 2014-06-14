@@ -83,11 +83,6 @@ public class App
         );
 
         get("/users/add/vehicles" , (request, response) ->{
-        //     response.type("text/html");
-        //     String[] data = {"Name","Model (YYYY)","KM (in numbers)","User name"};
-        //     String form = WebStuff.form("Add Vehicle",data,"/vehicles","post");
-        //     return form;
-        // });
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "vehiclesAdd.moustache");
         },
@@ -96,11 +91,11 @@ public class App
 
         // Form Add Address
         get("/users/add/addresses" , (request, response) ->{
-            response.type("text/html");
-            String[] data = {"User name","Street","Address number"};
-            String form = WebStuff.form("Add Address",data,"/addresses","post");
-            return form;
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "addressAdd.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         post ("/users",(request, response) ->{ 
             User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
@@ -142,11 +137,11 @@ public class App
 
         //Add User Address
         post ("/addresses",(request, response) ->{ 
-            String user = request.queryParams("User name");
-            String street = request.queryParams("Street");
-            String number = request.queryParams("Address number");
+            String user = request.queryParams("user");
+            String street = request.queryParams("street");
+            String number = request.queryParams("number");
             Address a = Address.create("street", street, "address_number", number);
-            User u = User.findFirst("first_name = ?",user);
+            User u = User.findFirst("email = ?",user);
             u.add(a);
             u.saveIt();
             response.redirect("/addresses");
