@@ -6,8 +6,20 @@ import spark.ModelAndView;
 import spark.TemplateEngine;
 
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+
+import org.elasticsearch.node.Node;
+import org.elasticsearch.client.Client;
+import static org.elasticsearch.node.NodeBuilder.*;
+import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.index.query.FilterBuilders.*;
+import org.elasticsearch.index.query.QueryBuilders.*;
+import org.elasticsearch.index.query.*;
 
 import com.unrc.app.MustacheTemplateEngine;
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -260,12 +272,50 @@ public class App
         });
         
         /*----------------------SEARCH STUFF----------------*/
-
+        get("/search/users",(request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes,"search.moustache");
+        }, 
+            new MustacheTemplateEngine()
+        );
 
         //Show a search
-        get("/search", (request,response) -> {
+        post("/search/users", (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "search.moustache");
+            String query = request.queryParams("carsappsearch");
+
+            Node node = nodeBuilder().local(true).clusterName("carsapp").node();
+            Client client = node.client();
+
+            ClusterHealthResponse health = client.admin()
+                                            .cluster()
+                                            .prepareHealth()
+                                            .setWaitForGreenStatus()
+                                            .execute()
+                                            .actionGet();
+
+            SearchResponse res = client.prepareSearch("users")
+                                        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                                        .setQuery(QueryBuilders.termQuery("name",query))
+                                        .execute()
+                                        .actionGet();
+
+            SearchHit[] docs = res.getHits().getHits();
+
+
+            node.close();
+
+            Map<String,Object> map;
+            List<String> userList = new LinkedList<String>();
+            for (SearchHit sh : docs) {
+                map = sh.getSource();
+                userList.add(map.toString());
+            }
+            System.out.println("*** SEARCH ***");
+
+            attributes.put("result",userList);
+
+            return new ModelAndView(attributes,"search.moustache");
         },
             new MustacheTemplateEngine()
         );
