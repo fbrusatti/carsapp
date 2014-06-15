@@ -304,9 +304,9 @@ public class App
             List<String> userList = new LinkedList<String>();
             for (SearchHit sh : docs) {
                 map = sh.getSource();
-                userList.add(map.toString());
+                userList.add((String) map.get("name"));
+
             }
-            System.out.println("*** SEARCH ***");
 
             attributes.put("result",userList);
 
