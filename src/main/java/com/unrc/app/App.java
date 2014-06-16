@@ -16,6 +16,7 @@ import static org.elasticsearch.node.NodeBuilder.*;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.index.query.FilterBuilders.*;
 import org.elasticsearch.index.query.QueryBuilders.*;
@@ -267,21 +268,24 @@ public class App
         });
         
         /*----------------------SEARCH STUFF----------------*/
+        //Show a search bar
         get("/search/users",(request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes,"search.moustache");
+            return new ModelAndView(attributes,"searchUsers.mustache");
         }, 
             new MustacheTemplateEngine()
         );
 
-        //Show a search
         post("/search/users", (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
+
             String query = request.queryParams("carsappsearch");
 
+            //Starts the elasticsearch cluster
             Node node = nodeBuilder().local(true).clusterName("carsapp").node();
             Client client = node.client();
 
+            //Waits until the cluster is ready
             ClusterHealthResponse health = client.admin()
                                             .cluster()
                                             .prepareHealth()
@@ -289,28 +293,31 @@ public class App
                                             .execute()
                                             .actionGet();
 
+            //Executes the search
             SearchResponse res = client.prepareSearch("users")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                                         .setQuery(QueryBuilders.termQuery("name",query))
                                         .execute()
                                         .actionGet();
 
+            //Gets the search results
             SearchHit[] docs = res.getHits().getHits();
 
-
+            //Closes the cluster
             node.close();
 
-            Map<String,Object> map;
-            List<String> userList = new LinkedList<String>();
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<Map<String,Object>> userList = new LinkedList<Map<String,Object>>();
             for (SearchHit sh : docs) {
                 map = sh.getSource();
-                userList.add((String) map.get("name"));
+                userList.add(map);
 
-            }
+            } //Puts all the results in a list to be treated in the mustache
 
             attributes.put("result",userList);
+            attributes.put("result_count",res.getHits().getTotalHits());
 
-            return new ModelAndView(attributes,"search.moustache");
+            return new ModelAndView(attributes,"searchUsers.mustache");
         },
             new MustacheTemplateEngine()
         );
