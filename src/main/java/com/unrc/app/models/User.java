@@ -41,6 +41,7 @@ public class User extends Model {
 
     //Index the just created user
     Map<String, Object> json = new HashMap<String, Object>();
+    json.put("id",this.id());
     json.put("name",this.name());
     json.put("email",this.email());
     /**
