@@ -19,6 +19,25 @@ public class User extends Model {
   		User.createIt("first_name", fn, "last_name", ln,"email",email,"is_admin",false);
   	}
   }
+
+  public void addAddress (String s, String n){
+    Address a= Address.create("street",s,"address_number",n);
+    this.add(a);
+    this.saveIt();
+  }
+
+  public void addVehicle (String n, String m, String k){ //not finished, add truck, car, moto, or other
+    Vehicle v= Vehicle.create("name", n,"model", m,"km",k );
+    this.add(v);
+    this.saveIt();
+  }
+
+  // public void addPost (String p, String d){
+  //   Post p = Post.create("price",p,"description",d);
+  //   this.add(p);
+  //   this.saveIt();
+  // }
+
   /*-------------------------------MOUSTACHE STUFF---------------------------------------*/
   public String name() {
     return this.getString("first_name") +" "+ this.getString("last_name");
