@@ -98,6 +98,13 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        // get("/users/add/post" , (request,response) -> {
+        //     Map<String, Object> attributes = new HashMap<>();
+        //     return new ModelAndView(attributes, "postAdd.moustache");
+        // },
+        //     new MustacheTemplateEngine()
+        // );
+
         post ("/users",(request, response) ->{ 
             User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
             String message = new String();
@@ -138,15 +145,13 @@ public class App
 
         //Add User Address
         post ("/addresses",(request, response) ->{ 
-            String user = request.queryParams("user");
-            String street = request.queryParams("street");
-            String number = request.queryParams("number");
-            Address a = Address.create("street", street, "address_number", number);
-            User u = User.findFirst("email = ?",user);
-            u.add(a);
-            u.saveIt();
-            response.redirect("/addresses");
-            return "success";
+                   String user = request.queryParams("user");
+                   String street = request.queryParams("street");
+                   String number = request.queryParams("number");
+                   User u = User.findFirst("email = ?",user);
+                   u.addAddress(street,number);
+                   response.redirect("/addresses");
+                   return "success";
         });
 
         //List of Addresses
@@ -195,10 +200,8 @@ public class App
             String model = request.queryParams("model");
             String km = request.queryParams("km"); //should take integers in the form
             String user = request.queryParams("user"); //later we should use the id of the user logged
-            Vehicle v = Vehicle.create("name", name, "model", model,"km",km);
             User u = User.findFirst("email = ?",user);
-            u.add(v);
-            u.saveIt();//writes to te DB
+            u.addVehicle(name,model,km);
             response.redirect("/vehicles");
             return "success"; 
         });
