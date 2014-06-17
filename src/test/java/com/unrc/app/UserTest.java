@@ -1,6 +1,8 @@
 package com.unrc.app;
 
 import com.unrc.app.models.User;
+import com.unrc.app.models.Address;
+import com.unrc.app.models.Vehicle;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -49,5 +51,27 @@ public class UserTest{
         user.createUser("John","Hanckok","hanckok@mail.com");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
         assertThat(user2.getBoolean("is_admin"),is(false));
+    }
+    @Test
+    public void addAddressTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
+        user.saveIt();
+        user.addAddress("calle","101");
+        Address a = Address.findFirst("user_id = ?", user.getString("id"));
+        assertThat(a.getString("street"),is("calle"));
+        assertThat(a.getString("address_number"),is("101"));
+
+    }
+    public void addVehicleTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
+        user.saveIt();
+        user.addVehicle("car","90","10000");
+        Vehicle a = Vehicle.findFirst("user_id = ?", user.getString("id"));
+        assertThat(a.getString("name"),is("car"));
+        assertThat(a.getString("model"),is("90"));
+        assertThat(a.getString("km"),is("10000"));
+
     }
 }
