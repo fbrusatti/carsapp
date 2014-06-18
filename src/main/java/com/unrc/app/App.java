@@ -66,11 +66,16 @@ public class App
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
+        });
+
+        get("/",(request, response) -> {
+            response.redirect("/hello");
+            return "Welcome";
         }); 
         
         get("/hello",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "hello.moustache");
+            return new ModelAndView(attributes, "hello.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -98,13 +103,43 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        // get("/users/add/post" , (request,response) -> {
-        //     Map<String, Object> attributes = new HashMap<>();
-        //     return new ModelAndView(attributes, "postAdd.moustache");
-        // },
-        //     new MustacheTemplateEngine()
-        // );
+        //From to create a Post
+        get("/users/add/post" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "postAdd.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
+        post("/users/add/post" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            String email = request.queryParams("login");
+            User u = User.findFirst("email = ?",email);
+            List<Vehicle> vehicles = Vehicle.where("user_id = ?", u.id());
+
+            attributes.put("vehicles",vehicles);
+
+            return new ModelAndView(attributes, "postAdd.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+        post("/posts" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            User user = User.findFirst("email = ?",request.queryParams("login"));
+            Vehicle vehicle = Vehicle.findById(request.params("vehicle"));
+            user.addPost(request.queryParams("price"),request.queryParams("description"),vehicle);
+            
+            return new ModelAndView(attributes, "posts.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+
+
+        /** **** **/
         post ("/users",(request, response) ->{ 
             User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
             String message = new String();
@@ -274,6 +309,7 @@ public class App
         //Show a search bar
         get("/search/users",(request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("found?",false);
             return new ModelAndView(attributes,"searchUsers.mustache");
         }, 
             new MustacheTemplateEngine()
@@ -292,7 +328,7 @@ public class App
             ClusterHealthResponse health = client.admin()
                                             .cluster()
                                             .prepareHealth()
-                                            .setWaitForGreenStatus()
+                                            .setWaitForYellowStatus()
                                             .execute()
                                             .actionGet();
 
@@ -317,8 +353,11 @@ public class App
 
             } //Puts all the results in a list to be treated in the mustache
 
+            long hits = res.getHits().getTotalHits();
+
             attributes.put("result",userList);
-            attributes.put("result_count",res.getHits().getTotalHits());
+            attributes.put("result_count",hits);
+            if (hits > 0) { attributes.put("found?",true); }
 
             return new ModelAndView(attributes,"searchUsers.mustache");
         },
