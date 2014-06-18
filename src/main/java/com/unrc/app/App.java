@@ -129,7 +129,6 @@ public class App
         post("/posts" , (request,response) -> {
             User user = User.findById(request.queryParams("userId"));
             Vehicle vehicle = Vehicle.findById(request.queryParams("vehicle"));
-            System.out.println(vehicle.getString("name"));
             user.addPost(request.queryParams("price"),request.queryParams("description"),vehicle);
             response.redirect("/posts");
             return "success";
@@ -147,7 +146,9 @@ public class App
                 String name = request.queryParams("name");
                 String lastname = request.queryParams("lastname");
                 String email = request.queryParams("email");
-                admin.createUser(name,lastname,email); 
+                String street = request.queryParams("street");
+                String address_number = request.queryParams("address_number");
+                admin.createUser(name,lastname,email,street,address_number); 
                 message = "success"; 
             }
             response.redirect("/hello");
@@ -169,42 +170,20 @@ public class App
         //Show Users 
         get("/users/:id", (request, response) -> {
             User u = User.findById(Integer.parseInt(request.params(":id")));
-            String name = u.getString("first_name") +" "+ u.getString("last_name");
-            String email = u.getString("email");
-            return "User: "+name+"\n"+"Email: "+email+"\n";
-        });
-
-        /*----------------------ADDRESS STUFF-----------------*/
-
-        //Add User Address
-        post ("/addresses",(request, response) ->{ 
-                   String user = request.queryParams("user");
-                   String street = request.queryParams("street");
-                   String number = request.queryParams("number");
-                   User u = User.findFirst("email = ?",user);
-                   u.addAddress(street,number);
-                   response.redirect("/addresses");
-                   return "success";
-        });
-
-        //List of Addresses
-        get("/addresses", (request,response) -> {
-            List<Address> addressList = Address.findAll();
-            String list = new String();
-            for (Address a: addressList) {
-                User u = User.findById(a.getInteger("user_id"));
-                list = list+"User Name: "+u.getString("first_name")+" "+"Street: "+a.getString("street")+" "+"Address Number: "+a.getString("address_number")+"\n";
+            if (u == null) {
+                response.redirect("/whoops", 404);
+                return "not found";
             }
-            return list;
+            else {
+                String name = u.getString("first_name") +" "+ u.getString("last_name");
+                String email = u.getString("email");
+                return "User: "+name+"\n"+"Email: "+email+"\n";
+            }
         });
 
-
-        //Show Address
-        get("/addresses/:id", (request, response) -> {
-            Address a = Address.findById(Integer.parseInt(request.params(":id")));
-            User u = User.findById(a.getInteger("user_id"));
-            String address = a.getString("street")+" "+a.getString("address_number");
-            return "Address: "+ u.getString("first_name")+" "+address;
+        get("/whoops", (request, response) -> {
+            response.body("Resource not found");
+            return "not found";
         });
 
         /*----------------------POST STUFF-----------------*/
