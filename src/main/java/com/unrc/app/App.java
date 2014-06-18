@@ -119,6 +119,7 @@ public class App
             List<Vehicle> vehicles = Vehicle.where("user_id = ?", u.id());
 
             attributes.put("vehicles",vehicles);
+            attributes.put("userId",u.id());
 
             return new ModelAndView(attributes, "postAdd.mustache");
         },
@@ -126,16 +127,13 @@ public class App
         );
 
         post("/posts" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-
-            User user = User.findFirst("email = ?",request.queryParams("login"));
-            Vehicle vehicle = Vehicle.findById(request.params("vehicle"));
+            User user = User.findById(request.queryParams("userId"));
+            Vehicle vehicle = Vehicle.findById(request.queryParams("vehicle"));
+            System.out.println(vehicle.getString("name"));
             user.addPost(request.queryParams("price"),request.queryParams("description"),vehicle);
-            
-            return new ModelAndView(attributes, "posts.mustache");
-        },
-            new MustacheTemplateEngine()
-        );
+            response.redirect("/posts");
+            return "success";
+        });
 
 
 
@@ -223,7 +221,7 @@ public class App
             List<Post> posts = Post.findAll();
             attributes.put("posts_count", posts.size());
             attributes.put("posts", posts);
-            return new ModelAndView(attributes, "posts.moustache");
+            return new ModelAndView(attributes, "posts.mustache");
         },
             new MustacheTemplateEngine()
         );
