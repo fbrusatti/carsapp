@@ -14,9 +14,10 @@ public class User extends Model {
   }
 
 /* Before the invocation of the method, should check if is the admin who create the user*/
-  public void createUser (String fn, String ln, String email){
+  public void createUser (String fn, String ln, String email, String street, String address_number){
   	if (getBoolean("is_admin")){
-  		User.createIt("first_name", fn, "last_name", ln,"email",email,"is_admin",false);
+  		User newuser = User.createIt("first_name", fn, "last_name", ln,"email",email,"is_admin",false);
+      newuser.addAddress(street,address_number);
   	}
   }
 
@@ -51,6 +52,11 @@ public class User extends Model {
 
   public Integer id(){
     return this.getInteger("id");
+  }
+
+  public String address() {
+    Address address = Address.findFirst("user_id = ?", this.id());
+    return address.getString("street")+" "+address.getString("address_number");
   }
 
   /*------------------------------ELASTIC SEARCH STUFF-----------------------------------*/
