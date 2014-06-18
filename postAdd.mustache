@@ -1,0 +1,38 @@
+<title>
+    Create Post
+</title>
+
+    <head>
+    <style>
+    table,th,td
+    {
+    border:1px solid black;
+    border-collapse:collapse;
+    }
+    th,td
+    {
+    padding:5px;
+    }
+    </style>
+    </head>
+
+<body>
+    <form name="login" action="/users/add/post" method="post">
+    Login (email): <input type="text" name="login" autofocus required>
+                   <input type="submit" value="Login">
+    </form>
+
+    {{#vehicles}}
+        <!-- vehicles list -->
+        <form name="post" action="/posts" method="post">
+            <input type="radio" name="vehicle" value="{{id}}"> {{name}}
+            <br>
+    {{/vehicles}}
+            Price:
+            <input type="number" name="price" min="0">
+            <br>
+            <textarea name="description" style="width:250px;height:150px;" required></textarea>
+            <input type="submit" value="Post">
+    </form>
+
+</body>
