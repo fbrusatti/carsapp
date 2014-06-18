@@ -32,11 +32,12 @@ public class User extends Model {
     this.saveIt();
   }
 
-  // public void addPost (String p, String d){
-  //   Post p = Post.create("price",p,"description",d);
-  //   this.add(p);
-  //   this.saveIt();
-  // }
+  public void addPost (String price, String descr, Vehicle vehicle){
+    Post p = Post.create("price",price,"description",descr);
+    p.add(vehicle);
+    this.add(p);
+    this.saveIt();
+  }
 
   /*-------------------------------MOUSTACHE STUFF---------------------------------------*/
   public String name() {
@@ -47,8 +48,8 @@ public class User extends Model {
     return this.getString("email");
   }
 
-  public String id(){
-    return this.getString("id");
+  public Integer id(){
+    return this.getInteger("id");
   }
 
   /*------------------------------ELASTIC SEARCH STUFF-----------------------------------*/
