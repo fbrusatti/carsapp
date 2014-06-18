@@ -20,10 +20,12 @@
     </style>
      
     <table style= "width:300px" width="100%" border="0" cellspacing="0" cellpadding="3">
+        {{#found?}}
         <tr>
             <th> Name </th>
             <th> Email </th>
         </tr>
+        {{/found?}}
         {{#result}}
         <tr>
             <td><a href="http://localhost:4567/users/{{id}}">  {{name}} </a></td> 
