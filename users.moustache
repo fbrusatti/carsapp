@@ -19,11 +19,13 @@
 			<tr>
 				<th> Name </th>
 				<th> Email </th>
+				<th> Address</th>
 			</tr>
 			{{#users}}
 				<tr>
 					<td><a href="http://localhost:4567/users/{{id}}">  {{name}} </a></td> 
 					<td>{{email}}</td>
+					<td>{{address}}</td>
 	        	</tr>
 	    	{{/users}}
 	  	</table>
