@@ -34,7 +34,8 @@ public class User extends Model {
 
   public void addPost (String price, String descr, Vehicle vehicle){
     Post p = Post.create("price",price,"description",descr);
-    p.add(vehicle);
+    p.saveIt();
+    vehicle.add(p);
     this.add(p);
     this.saveIt();
   }
