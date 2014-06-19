@@ -1,0 +1,17 @@
+<html>
+
+<center><h1>Autos</h1>
+
+  <h2>Cantidad de automóviles cargados: {{cars_count}}</h2>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    {{#cars}}
+        <tr>
+          <td><b>Patente:</b> {{licensePlate}} <b>Es coupe?:</b> {{coupe}}</td>
+        </tr>
+    {{/cars}}
+  </table>
+
+</center>
+<button><a href="http://localhost:4567/">Inicio</a></button>
+</html>

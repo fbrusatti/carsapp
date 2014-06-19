@@ -1,8 +1,10 @@
 package com.unrc.app;
+
 import org.javalite.activejdbc.Base;
 import com.unrc.app.models.*;
 import java.util.*;
 import com.unrc.app.MustacheTemplateEngine;
+
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -11,84 +13,14 @@ import spark.TemplateEngine;
 import static spark.Spark.*;
 import static org.elasticsearch.node.NodeBuilder.*;
 import static org.elasticsearch.common.xcontent.XContentFactory.*;
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
-    public static void main( String[] args )
+	public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
 
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        User user = User.createUser ("gustavo", "martinez", "mfwebdesign@gmail.com");
-        User user2 = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");      
-        Address address1 = Address.createAddress("Lincoln", 874,"Venado Tuerto", User.findByEmail("mfwebdesign@gmail.com"));
-        Address address2 = Address.createAddress("Sobremonte", 547,"Rio Cuarto", user2);
-        Address address3 = Address.createAddress("Chiclana", 4686,"Rio Cuarto", user2);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Vehicle vehicle1 = Vehicle.createVehicle("ghg345","corsa","chevrolet", User.findByEmail("adriantissera@gmail.com"));
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Car car1 = Car.createCar(true, vehicle1);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Post post1 = Post.createPost("Vendo chevrolet corsa", "chevrolet corsa casi nuevo", user2, vehicle1);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Vehicle vehicle2 = Vehicle.createVehicle("qwe123","modeloChata","chevrolet", User.findByEmail("mfwebdesign@gmail.com"));
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Truck truck1 = Truck.createTruck(5, vehicle2);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Post post3 = Post.createPost("vendo chata", "chata chevrolet casi nueva sin parabrisa", user, vehicle2);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Vehicle vehicle3 = Vehicle.createVehicle("asd456","ninja","kawasaki", User.findByEmail("mfwebdesign@gmail.com"));
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Motorcycle motorcycle1 = Motorcycle.createMotorcycle(24, 600, vehicle3);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Post post2 = Post.createPost("vendo moto", "kawasaki ninja para repuestos", user, vehicle3);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Question question1 = Question.createQuestion("a cuanto me vendes la rueda de auxilio?", user, post1);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Answer answer1= Answer.createAnswer("a veinte pe!" , user2, question1);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Question question2 = Question.createQuestion("a cuanto la cadena mosstro?", user2, post2);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Rate rate1 = Rate.createRate(5, post1, user2);
-        Base.close();
-
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        Punctuation punctuation1 = Punctuation.createPunctuation(5, post2, user2);
-        Base.close();
-
-        get("/hello",(request, response) -> {
+        get("/",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "hello.mustache");
         },
@@ -108,20 +40,7 @@ public class App
         },
          new MustacheTemplateEngine()
        );
-/*
-        //Lista un usuario particular
-        get("/users/:id",(request,response)->{
-            User userRequested = User.findById(request.params(":id"));
-            if(userRequested!=null){
-                String name = userRequested.getString("first_name")+" "+userRequested.getString("last_name");
-                String email = userRequested.getString("email");
-                return "Nombre: "+name+" Email: "+email;
-            }
-            else{
-                return "Usuario no encontrado!";
-            }            
-        });
-*/
+
         get("/users/:id",(request,response)->{
             Map<String, Object> attributes = new HashMap<>();
             User userSelected = User.findById(request.params("id"));
@@ -236,28 +155,6 @@ public class App
             new MustacheTemplateEngine()
         );    
 
-        /*//List all questions
-        get("/questions",(request,response)->{
-            List<Question> questionsList = Question.findAll();
-            String list = new String();
-            for(Question q: questionsList){
-                list = list+"Pregunta: "+q.getString("description")+". "+"<br>";
-            }
-            return list;
-        });    
-
-        //List a specific question
-        get("/questions/:id",(request,response)->{
-            Question questionRequested = Question.findById(request.params(":id"));
-            if(questionRequested!=null){
-                String pregunta = questionRequested.getString("description");
-                return "Descripcion: "+pregunta+".";
-            }
-            else{
-                return "Pregunta no encontrado!";
-            }            
-        }); */
-
         get("/questions",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             List<Question> questions = Question.findAll();
@@ -299,8 +196,6 @@ public class App
         },
          new MustacheTemplateEngine()
         );
-
- 
 
 	    get("/rates",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -366,19 +261,12 @@ public class App
 
         /**INSERCIONES**/
         get("/newUser",(request,response)->{
-            String form = "<form action= \"/users \" method= \"post\">";
-            form+="First name : ";
-            form+="<input type = \"text\" name=\"first_name\"> <br>";
-            form+="Last Name: ";
-            form+="<input type = \"text\" name=\"last_name\"> <br>";
-            form+="Email: ";
-            form+="<input type = \"text\" name=\"email\"> <br>";            
-            form+="<input type= \"submit\" value = \"Submit\">";
-            form+="</form>";
-            return form;
-        });      
-     
-     
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "newUser.mustache");
+        },
+            new MustacheTemplateEngine()
+        );   
+    
         //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
@@ -392,6 +280,7 @@ public class App
         //Insert an address
         get("/newAddress",(request,response)->{
             String form = "<form action= \"/addresses \" method= \"post\">";
+            form+="<center><h1>Crear Direccion</h1></center>";
             form+="Email usuario : ";
             //combobox para seleccionar el usuario al cual corresponde la direccion a agregar
             form+="<select name=\"userEmail\">";
@@ -412,7 +301,7 @@ public class App
             form+="<input type= \"submit\" value = \"Submit\">";
             form+="</form>";
             return form;
-        });      
+        });  
 
         post ("/addresses",(request, response) ->{
             String email = request.queryParams("userEmail");
@@ -429,6 +318,7 @@ public class App
 
         get("/newVehicle",(request,response)->{
             String form = "<form action= \"/vehicles \" method= \"post\">";
+            form+="<center><h1>Crear Vehículo</h1></center>";
             form+="Email usuario : ";
             //combobox para seleccionar el usuario al cual corresponde el vehiculo a agregar
             form+="<select name=\"userEmail\">";
@@ -511,7 +401,6 @@ public class App
                 t.set("id_vehicle",patente);
                 t.set("count_belt",cinturones);
                 t.saveIt();
-                
             }            
             response.redirect("/vehicles");
             return "success";
@@ -519,6 +408,7 @@ public class App
         
         get("/newPost",(request,response)->{
             String form = "<form action= \"/posts \" method= \"post\">";
+            form+="<center><h1>Crear nueva publicación</h1></center>";
             form+="Email usuario : ";
             //combobox para seleccionar el usuario al cual corresponde el post a publicar
             form+="<select name=\"userEmail\">";
@@ -563,6 +453,7 @@ public class App
 
         get("/newQuestion",(request,response)->{
             String form = "<form action= \"/questions \" method= \"post\">";
+            form+="<center><h1>Realizar pregunta</h1></center>";
             form+="Quien pregunta? : ";
             //combobox para seleccionar el usuario al cual corresponde el post a publicar
             form+="<select name=\"userEmail\">";
@@ -604,6 +495,7 @@ public class App
 
         get("/newAnswer",(request,response)->{
             String form = "<form action= \"/answers \" method= \"post\">";
+            form+="<center><h1>Responder pregunta</h1></center>";
             form+="Quien responde? : ";
             //combobox para seleccionar el usuario al cual corresponde el post a publicar
             form+="<select name=\"userEmail\">";
@@ -647,7 +539,5 @@ public class App
         after((request, response) -> {
             Base.close();    
         });
-
-
     }
 }
