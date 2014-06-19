@@ -20,6 +20,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.index.query.QueryBuilders.*;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.*;
@@ -32,6 +33,9 @@ public class App {
     
 	public static void main( String[] args) {
 		
+		/**
+		 * Open and close de database.
+		 */
 		before((request, response) -> {
         	Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development?zeroDateTimeBehavior=convertToNull", "root", "");
         });
@@ -59,6 +63,9 @@ public class App {
             new MustacheTemplateEngine()
         );
         
+        /**
+         * Realizing a search
+         */
         post("/search", (request, response) -> {
            
             Client client = new TransportClient()
@@ -71,46 +78,61 @@ public class App {
             								.execute()
             								.actionGet();
 
-            String word = "";
             SearchResponse resp = new SearchResponse();
+            SearchHit[] docs;
+            Map<String,Object> attributes = new HashMap<String,Object>();
+
+            //The search was executed through users.
             if (request.queryParams("type").charAt(0)=='1') {
-                word = request.queryParams("name");
                 resp = client.prepareSearch("users")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                        .setQuery(QueryBuilders.matchQuery("name", word))   // Query
+                        .setQuery(QueryBuilders.matchQuery("name",request.queryParams("name"))) 
                         .setFrom(0).setSize(60).setExplain(true)
                         .execute()
                         .actionGet();
+            
+            	List<Map<String,Object>> usersFounded = new LinkedList<Map<String,Object>>();
+            	docs = resp.getHits().getHits();
+            	for (SearchHit hit : docs) {
+					Map<String,Object> result = hit.getSource(); 
+					String userId = hit.getId();
+					result.put("id",userId);
+					usersFounded.add(result);
+				}
+
+				attributes.put("searchExecuted",true);
+				if (!usersFounded.isEmpty()) { 
+					attributes.put("results",true); 
+					attributes.put("userSearchResult",usersFounded);
+				}
             }
+
+            //The search was executed through posts.
             if (request.queryParams("type").charAt(0)=='2') {
-                word = request.queryParams("dates");
                 resp = client.prepareSearch("posts")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                        .setQuery(QueryBuilders.matchQuery("title", word))   // Query
+                        .setQuery(QueryBuilders.matchQuery("title",request.queryParams("dates")))   
                         .setFrom(0).setSize(60).setExplain(true)
                         .execute()
                         .actionGet();
-            }
-           
 
-            SearchHit[] docs = resp.getHits().getHits();
-            
-           	List<String> res = new LinkedList<String>(); 
-            
-            for (SearchHit hit : docs) {
-				System.out.println("------------------------------");
-				Map<String,Object> result = hit.getSource();  
-				res.add(result.toString());
-				System.out.println(result);
+            	List<Map<String,Object>> postsFounded = new LinkedList<Map<String,Object>>();
+            	docs = resp.getHits().getHits();
+            	for (SearchHit hit : docs) {
+					Map<String,Object> result = hit.getSource(); 
+					String postId = hit.getId();
+					result.put("id",postId);
+					postsFounded.add(result);
+				}
+				attributes.put("searchExecuted",true);
+				if (!postsFounded.isEmpty()) { 
+					attributes.put("results",true); 
+					attributes.put("postSearchResult",postsFounded);
+				}
 			}
-            
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            
-            attributes.put("searchResult",res);
 
             client.close();
 
-            
             return new ModelAndView(attributes,"search.mustache");
             },
             new MustacheTemplateEngine()
@@ -158,7 +180,7 @@ public class App {
         );
 
         /**
-         * Getting the posts of a user
+         * Getting all the posts of a user
          */
         get("/users/:id/posts", (request, response) -> {
             User u = User.findById(request.params("id"));
@@ -210,7 +232,7 @@ public class App {
         /**
          * Editing a post
          */ 
-         get("/users/:id/posts/:postId/edit", (request,response) -> {
+        get("/users/:id/posts/:postId/edit", (request,response) -> {
             Map<String,Object> attributes = new HashMap<String,Object>();
             Post p = Post.findById(request.params("postId"));
             attributes.put("post",p);
@@ -253,7 +275,7 @@ public class App {
         /**
          * Getting vehicles of a User
          */ 
-         get("/users/:id/vehicles", (request, response) -> {
+        get("/users/:id/vehicles", (request, response) -> {
         	User u = User.findById(request.params("id"));
         	List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
         	boolean notEmpty = !vehicles.isEmpty();
@@ -320,7 +342,7 @@ public class App {
         /**
          * Posting a user edited
          */       
-         post("/users/:id/edit", (request,response) -> {
+        post("/users/:id/edit", (request,response) -> {
             User u = User.findById(request.params("id"));
             u.set("email", request.queryParams("email"));
             u.set("first_name",request.queryParams("firstName"));
@@ -342,8 +364,8 @@ public class App {
         );
 
         /**
-         *Adding a new Post 
-        */
+         * Adding a new Post 
+         */
         get("/users/:id/newPost", (request,response) -> {
 		Map<String,Object> attributes = new HashMap<String,Object>();
 		attributes.put("id",request.params("id"));
@@ -355,9 +377,9 @@ public class App {
 		);
 		
 		/**
-		 *Posting a new Post  
+		 * Posting a new Post  
          */
-         post("/users/:id/newPost", (request, response) -> {
+        post("/users/:id/newPost", (request, response) -> {
             Post p = new Post();
         	p.set("title", request.queryParams("title"));
         	p.set("description",request.queryParams("descrip"));
@@ -374,7 +396,7 @@ public class App {
 		);
  
         /*
-         *Adding a new Vehicle           
+         * Adding a new Vehicle           
          */
         get("/users/:id/newVehicle", (request,response) -> {
            Map<String,Object> attributes = new HashMap<String,Object>();
@@ -385,8 +407,8 @@ public class App {
         );
 
 
-         /**
-         *Posting a new Vehicle 
+        /**
+         * Posting a new Vehicle 
 		 */
         post("users/:id/newVehicle", (request, response) -> {
 			Vehicle v = new Vehicle();
@@ -429,7 +451,7 @@ public class App {
 		);  
         
         /*
-         * Getting posts
+         * Getting all the posts
          */
         get("/posts", (request, response) -> {
         	List<Post> posts = Post.findAll();
@@ -494,9 +516,9 @@ public class App {
         
         
         /**
-        *Posting a new question 
+         * Posting a new question 
          */
-         post("users/:id/posts/:postId/newQuestion", (request, response) -> {
+        post("users/:id/posts/:postId/newQuestion", (request, response) -> {
             Question q = new Question();
             q.set("description",request.queryParams("descrip"));
             q.set("user_id", request.queryParams("userId"));
@@ -511,7 +533,7 @@ public class App {
 		);
         
         /**
-        *Posting a new answer 
+         * Posting a new answer 
          */
          post("users/:id/posts/:postId/question/:questionId/newAnswer", (request, response) -> {
             Answer a = new Answer();

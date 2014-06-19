@@ -9,6 +9,10 @@ public class Motorcycle extends Model{
 		validatePresenceOf("cylinder_capacity");
 	}
 	
+	/**
+	 * String representation of each attribute.
+	 */
+	
 	public String cylinderCapacity() {
 		return this.getString("cylinder_capacity");
 	}

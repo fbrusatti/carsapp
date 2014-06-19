@@ -13,9 +13,20 @@
 	</span>
 	<input type="submit" value="Buscar">
 </form>
-
-	{{searchResult}}
-
+{{#searchExecuted}}
+	{{#results}}
+		<b>Resultados: </b><br>	
+		{{#userSearchResult}}
+			<a href="users/{{id}}">{{name}}</a> - {{email}}<br>
+		{{/userSearchResult}}
+		{{#postSearchResult}}
+			<a href="users/{{ownerId}}/posts/{{id}}">{{title}}</a> - <a href="users/{{ownerId}}">{{ownerName}}</a><br>
+		{{/postSearchResult}}
+	{{/results}}
+	{{^results}}
+		<b>No se han encontrado resultados.</b>
+	{{/results}}
+{{/searchExecuted}}
 <script>
 <!--
 

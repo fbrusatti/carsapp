@@ -7,6 +7,10 @@ public class Answer extends Model {
 		validatePresenceOf("description");
 	}
 
+	/**
+	 * String representation of each attribute.
+	 */
+	
 	public String description() {
 		return this.getString("description");
 	}
@@ -15,7 +19,7 @@ public class Answer extends Model {
 		return this.getString("created_at");
 	}
         
-        public String ownerName() {
+    public String ownerName() {
 		User u = User.findById(this.get("user_id"));
 		return u.name();
 	}

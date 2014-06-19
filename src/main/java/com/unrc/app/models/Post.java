@@ -12,12 +12,18 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.settings.*;
 import static org.elasticsearch.node.NodeBuilder.*;
 
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.delete.DeleteRequestBuilder;
+
 public class Post extends Model {
 	
 	static {
 		validatePresenceOf("title", "description");
 	}
 	
+	/**
+	 * Indexing a post
+	 */
 	public void afterCreate() {
         
         Client client = new TransportClient()
@@ -25,8 +31,10 @@ public class Post extends Model {
         
         Map<String, Object> json = new HashMap<String, Object>();
         json.put("title",this.title());
-        
-        client.prepareIndex("posts", "post")
+        json.put("ownerName",this.ownerName());
+        json.put("ownerId",this.ownerId());
+
+        client.prepareIndex("posts", "post",this.id())
                 .setSource(json)
                 .execute()
                 .actionGet();
@@ -34,6 +42,25 @@ public class Post extends Model {
         client.close();
     }
 
+    /**
+	 * Deleting a post indexed
+	 */
+    public void beforeDelete() {
+		
+		Client client = new TransportClient()
+        					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
+        DeleteResponse response = client.prepareDelete("posts","post",this.id())
+        							.execute()
+        							.actionGet();
+        client.close();
+
+	}
+
+	/**
+	 * String representation of each attribute.
+	 */
+	
 	public String id() {
 		return this.getString("id");
 	}

@@ -13,9 +13,13 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.settings.*;
 
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.delete.DeleteRequestBuilder;
+
 import static org.elasticsearch.node.NodeBuilder.*;
 
 public class User extends Model {
+	
 	static {     
 		validatePresenceOf("first_name", "last_name");
 	}
@@ -31,7 +35,9 @@ public class User extends Model {
 		}
 	}
   
-	
+	/**
+	 * Indexing a user
+	 */
 	public void afterCreate() {
         
         Client client = new TransportClient()
@@ -41,7 +47,7 @@ public class User extends Model {
         json.put("name",this.name());
         json.put("email",this.email());
 
-        client.prepareIndex("users", "user")
+        client.prepareIndex("users", "user",this.id())
                 .setSource(json)
                 .execute()
                 .actionGet();
@@ -49,15 +55,38 @@ public class User extends Model {
         client.close();
     }
 	
+	/**
+	 * Deleting a user indexed
+	 */
+	public void beforeDelete() {
+		
+		Client client = new TransportClient()
+        					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
+
+        DeleteResponse response = client.prepareDelete("users","user",this.id())
+        							.execute()
+        							.actionGet();
+        client.close();
+
+	}
+
+	
+	/**
+	 * String representation of each attribute.
+	 */
+	
 	public String id() {
 		return this.getString("id");
 	}
+
 	public String firstName() {
 		return this.getString("first_name");
 	}
-        public String lastName() {
+       
+    public String lastName() {
 		return this.getString("last_name");
 	}
+
 	public String name() {
 		return this.get("first_name")+" "+this.get("last_name");
 	}

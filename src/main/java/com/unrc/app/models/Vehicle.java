@@ -4,9 +4,14 @@ import java.util.List;
 import org.javalite.activejdbc.Model;
 
 public class Vehicle extends Model {
+	
 	static {     
 		validatePresenceOf("brand", "model", "year","color","type");
 	}
+
+	/**
+	 * String representation of each attribute.
+	 */
 
 	public String id() {
 		return this.getString("id");
@@ -23,6 +28,9 @@ public class Vehicle extends Model {
 		return this.getString("type");
 	}
 	
+	/**
+	 * Return true if this vehicle has not been posted
+	 */
 	public Boolean notPosted(){
 		List<Post> posts = Post.where("vehicle_id = ?", this.getString("id"));
 		return posts.isEmpty();
