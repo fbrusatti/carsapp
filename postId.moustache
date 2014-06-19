@@ -1,0 +1,49 @@
+<h1>Post</h1>
+    
+    <h2>Vehicle: {{vehicle_name}}</h2>
+
+    <style>
+    table,th,td
+    {
+    border:1px solid black;
+    border-collapse:collapse;
+    }
+    th,td
+    {
+    padding:5px;
+    }
+    </style>
+    </head>
+    <body> 
+        <table style type="text/css">
+            {{#post}}
+                {{#vehicle}}
+                <tr>
+                    <td> Model </td>
+                    <td>{{model}}</td>
+                </tr>
+                <tr>
+                    <td> Km </td>
+                    <td>{{km}}</td>
+                </tr>
+                {{/vehicle}}
+
+                <tr>
+                    <td> Descripcion </td>
+                    <td>{{description}}</td>
+                </tr>
+                <tr>
+                    <td> Price </td>
+                    <td>$ {{price}}</td>
+                </tr>
+                {{#user}}
+                <tr>
+                    <td> User </td>
+                    <td>{{name}}</td>
+                </tr>
+                {{/user}}
+            {{/post}}
+        </style>
+        </table>
+        <a href="http://localhost:4567/users/add/question"> Question </a>
+    </body>
