@@ -103,6 +103,14 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        // Form Add Question
+        get("/users/add/question" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "questionAdd.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
         //From to create a Post
         get("/users/add/post" , (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -190,9 +198,14 @@ public class App
 
         //Show Posts
         get("/posts/:id", (request, response) -> {
-            Post p = Post.findById(Integer.parseInt(request.params(":id")));
-            return "Post: " + p.toString();
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            Post post = Post.findById(Integer.parseInt(request.params(":id")));
+            attributes.put("vehicle_name", post.vehicle().name());
+            attributes.put("post", post);
+            return new ModelAndView(attributes, "postId.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         //List of Posts
         get("/posts",(request, response) -> {
