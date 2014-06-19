@@ -73,6 +73,7 @@ CREATE TABLE questions(
 DROP TABLE IF EXISTS answers;
 CREATE TABLE answers(
     id INT(11) NOT NULL AUTO_INCREMENT,
+    question_id INT(11),
     user_id INT(11),
     post_id INT(11),
     description VARCHAR(200) NOT NULL,
