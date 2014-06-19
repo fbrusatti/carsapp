@@ -8,6 +8,10 @@ public class Vehicle extends Model {
     validatePresenceOf("name", "model","km");
   }
 
+  public String id() {
+    return this.getString("id");
+  }
+
   public String name() {
     return this.getString("name");
   }

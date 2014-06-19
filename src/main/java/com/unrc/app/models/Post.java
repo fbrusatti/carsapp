@@ -7,7 +7,11 @@ public class Post extends Model {
 	validatePresenceOf("price");
   }
 
-   public Integer price() {
+  public Integer idp() {
+    return this.getInteger("id");
+  }
+
+  public Integer price() {
     return this.getInteger("price");
   }
 
