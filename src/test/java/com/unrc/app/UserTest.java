@@ -48,7 +48,7 @@ public class UserTest{
     public void createUserTest(){
         User user = new User();
         user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
-        user.createUser("John","Hanckok","hanckok@mail.com");
+        user.createUser("John","Hanckok","hanckok@mail.com","alvear","244");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
         assertThat(user2.getBoolean("is_admin"),is(false));
     }
