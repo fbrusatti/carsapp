@@ -11,11 +11,20 @@ import com.github.mustachejava.MustacheFactory;
 import spark.ModelAndView;
 import spark.TemplateEngine;
 import static spark.Spark.*;
-import static org.elasticsearch.node.NodeBuilder.*;
-import static org.elasticsearch.common.xcontent.XContentFactory.*;
+import org.elasticsearch.node.*;
+import org.elasticsearch.client.*;
 
 public class App 
 {
+    public static final Node node = org.elasticsearch.node
+                                        .NodeBuilder
+                                        .nodeBuilder()
+                                        .clusterName("carsapp")
+                                        .local(true)
+                                        .node();
+    public static Client client(){
+    return node.client();
+    }
 	public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
@@ -535,9 +544,23 @@ public class App
             return "success";
         });
 
+        post ("/search",(request, response) ->{
+            /*String mail = request.queryParams("userEmail");
+            String question = request.queryParams("questionTitle");
+            String respuesta = request.queryParams("descripcion");     
+            Answer resp = Answer.createAnswer(respuesta,User.findByEmail(mail),Question.findByDescription(question));
+            response.redirect("/answers");
+            */
+            return "success";
+
+        });
 
         after((request, response) -> {
             Base.close();    
         });
+    }
+
+    public static void close(){
+        node.close();
     }
 }

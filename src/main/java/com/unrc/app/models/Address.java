@@ -1,7 +1,7 @@
 package com.unrc.app.models;
-
-import org.javalite.activejdbc.Model;
+import com.unrc.app.App;
 import java.util.*;
+import org.javalite.activejdbc.Model;
 
 public class Address extends Model {
   static {
@@ -44,5 +44,16 @@ public class Address extends Model {
     }
     else{return false;
     }
+  }
+
+  public void afterCreate() {
+  Map<String, Object> json = new HashMap<String, Object>();
+  json.put("street", this.getString("street"));
+  json.put("number", this.getInteger("num"));
+  json.put("city", this.getString("city"));
+  App.client().prepareIndex("addresses", "address")
+              .setSource(json)
+              .execute()
+              .actionGet();
   }
 }

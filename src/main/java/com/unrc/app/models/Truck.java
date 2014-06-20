@@ -1,5 +1,6 @@
 package com.unrc.app.models;
-
+import com.unrc.app.App;
+import java.util.*;
 import org.javalite.activejdbc.Model;
 
 public class Truck extends Model{
@@ -54,5 +55,15 @@ public class Truck extends Model{
   
     public String belt() {
         return this.getString("count_belt");
-    }     
+    }
+
+    public void afterCreate() {
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("licencePlate", this.licensePlate());
+        json.put("belst", this.belt());
+        App.client().prepareIndex("trucks", "truck")
+                  .setSource(json)
+                  .execute()
+                  .actionGet();
+    }
 }

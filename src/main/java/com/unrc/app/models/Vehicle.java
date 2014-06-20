@@ -1,5 +1,6 @@
 package com.unrc.app.models;
-
+import com.unrc.app.App;
+import java.util.*;
 import org.javalite.activejdbc.Model;
 
 public class Vehicle extends Model {
@@ -55,5 +56,17 @@ public class Vehicle extends Model {
 
     public String brand() {
         return this.getString("brand");
-    }     
+    }
+
+
+    public void afterCreate() {
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("licencePlate", this.licensePlate());
+        json.put("model", this.model());
+        json.put("brand", this.brand());
+        App.client().prepareIndex("vehicles", "vehicle")
+                  .setSource(json)
+                  .execute()
+                  .actionGet();
+    }    
 }

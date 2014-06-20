@@ -1,5 +1,6 @@
 package com.unrc.app.models;
-
+import com.unrc.app.App;
+import java.util.*;
 import org.javalite.activejdbc.Model;
 
 public class Punctuation extends Model {
@@ -43,5 +44,17 @@ public class Punctuation extends Model {
 
     public int giver(){
       return this.getInteger("id_user");
+    }
+    
+    public void afterCreate() {
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("id", this.getInteger("id"));
+        json.put("points", this.points());
+        json.put("receiver", this.receiver());
+        json.put("giver", this.giver());
+        App.client().prepareIndex("puntuations", "puntuation")
+                  .setSource(json)
+                  .execute()
+                  .actionGet();
     }
 }

@@ -1,5 +1,6 @@
 package com.unrc.app.models;
-
+import com.unrc.app.App;
+import java.util.*;
 import org.javalite.activejdbc.Model;
 
 public class Answer extends Model {
@@ -44,7 +45,21 @@ public class Answer extends Model {
         else{return false;}
     }
 
+    public int id(){
+        return this.getInteger("id");
+    }
+
     public String description(){
         return this.getString("description");
-    }             
+    }
+
+    public void afterCreate() {
+    Map<String, Object> json = new HashMap<String, Object>();
+    json.put("id", this.id());
+    json.put("description", this.description());
+    App.client().prepareIndex("answers", "answer")
+              .setSource(json)
+              .execute()
+              .actionGet();
+    }        
 }

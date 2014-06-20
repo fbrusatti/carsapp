@@ -1,7 +1,7 @@
 package com.unrc.app.models;
+import com.unrc.app.App;
+import java.util.*;
 import org.javalite.activejdbc.Model;
-
-
 
 public class Rate extends Model {
   static {
@@ -45,6 +45,18 @@ public class Rate extends Model {
 
     public int id_user(){
         return this.getInteger("id_user");
+    }
+
+    public void afterCreate() {
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("id", this.id());
+        json.put("id_post", this.id_post());
+        json.put("id_user", this.id_user());
+        json.put("stars", this.stars());
+        App.client().prepareIndex("rates", "rate")
+                  .setSource(json)
+                  .execute()
+                  .actionGet();
     }
 
 }
