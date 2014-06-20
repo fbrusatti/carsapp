@@ -41,6 +41,14 @@ public class User extends Model {
     this.saveIt();
   }
 
+
+  public void addQuestion (String d,String p){
+    Question q = Question.create("description",d);
+    q.saveIt();
+    Post post = Post.findById(p);
+    this.add(q);
+    post.add(q);
+  }
   /*-------------------------------MOUSTACHE STUFF---------------------------------------*/
   public String name() {
     return this.getString("first_name") +" "+ this.getString("last_name");

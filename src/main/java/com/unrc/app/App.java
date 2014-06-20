@@ -202,7 +202,7 @@ public class App
             Post post = Post.findById(Integer.parseInt(request.params(":id")));
             attributes.put("vehicle_name", post.vehicle().name());
             attributes.put("post", post);
-            return new ModelAndView(attributes, "postId.moustache");
+            return new ModelAndView(attributes, "postId.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -266,6 +266,16 @@ public class App
                 list = list+q.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Question: "+q.getString("description")+"\n";
             }
             return list;
+        });
+
+        post ("/questions",(request, response) ->{ 
+            String description = request.queryParams("description");
+            String post = request.queryParams("postId");
+            String user = request.queryParams("user"); //later we should use the id of the user logged
+            User u = User.findFirst("email = ?",user);
+            u.addQuestion(description,post);
+            response.redirect("/posts");
+            return "success"; 
         });
 
         //Show Questions 
