@@ -42,8 +42,17 @@
                     <td>{{name}}</td>
                 </tr>
                 {{/user}}
-            {{/post}}
         </style>
         </table>
-        <a href="http://localhost:4567/users/add/question"> Question </a>
+        <br>
+        <form action="/questions" method="post">
+        <input type="hidden" name="postId" value="{{idp}}">
+        Question<br>
+        <textarea name="description" style="width:250px;height:150px;"></textarea><br>
+        Login (user email)
+        <input type="text" name="user">
+        Post
+        <input type="submit" value= "Save"> </form> 
+        
+        {{/post}}
     </body>
