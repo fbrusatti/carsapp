@@ -198,17 +198,15 @@ public class App
         
         //Show Users 
         get("/users/:id", (request, response) -> {
-            User u = User.findById(Integer.parseInt(request.params(":id")));
-            if (u == null) {
-                response.redirect("/whoops", 404);
-                return "not found";
-            }
-            else {
-                String name = u.getString("first_name") +" "+ u.getString("last_name");
-                String email = u.getString("email");
-                return "User: "+name+"\n"+"Email: "+email+"\n";
-            }
-        });
+            Map<String, Object> attributes = new HashMap<>();
+            User user = User.findById(Integer.parseInt(request.params(":id")));
+            String address = user.address();
+            attributes.put("user", user);
+            attributes.put("address_user", address);
+            return new ModelAndView(attributes, "userId.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
         get("/whoops", (request, response) -> {
             response.body("Resource not found");
@@ -365,7 +363,7 @@ public class App
             //Executes the search
             SearchResponse res = client.prepareSearch("users")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                        .setQuery(QueryBuilders.termQuery("name",query))
+                                        .setQuery(QueryBuilders.matchQuery("name",query))
                                         .execute()
                                         .actionGet();
 
