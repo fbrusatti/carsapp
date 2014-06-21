@@ -27,6 +27,32 @@ public class User extends Model {
     this.saveIt();
   }
 
+  public void addCar (String n, String m, String k, String t){
+    Vehicle v= Vehicle.create("name", n,"model", m,"km",k );
+    v.saveIt();
+    Car c = Car.create("type",t);
+    v.add(c);
+    this.add(v);
+    this.saveIt();
+  }
+
+  public void addTruck (String n, String m, String k, String t){
+    Vehicle v= Vehicle.create("name", n,"model", m,"km",k );
+    v.saveIt();
+    Truck tr = Truck.create("type",t);
+    v.add(tr);
+    this.add(v);
+    this.saveIt();
+  }
+
+  public void addMoto (String n, String m, String k, String t){
+    Vehicle v= Vehicle.create("name", n,"model", m,"km",k );
+    v.saveIt();
+    Motorcycle mo = Motorcycle.create("type",t);
+    v.add(mo);
+    this.add(v);
+    this.saveIt();
+  }
   public void addVehicle (String n, String m, String k){ //not finished, add truck, car, moto, or other
     Vehicle v= Vehicle.create("name", n,"model", m,"km",k );
     this.add(v);

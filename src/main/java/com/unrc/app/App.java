@@ -90,7 +90,28 @@ public class App
 
         get("/users/add/vehicles" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
+            attributes.put("selectType",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
             return new ModelAndView(attributes, "vehiclesAdd.moustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+        post("/user/add/vehicles" , (request, response) ->{
+            Map<String, Object> attributes = new HashMap<>();
+            String type = request.queryParams("vehicleType");
+            System.out.println(type);
+            if (type.equals("car")) {
+                attributes.put("car",true);
+            }if (type.equals("truck")) {
+                attributes.put("truck",true);
+            }if (type.equals("moto")) {
+                attributes.put("moto",true);
+            }if (type.equals("other")) {
+                attributes.put("other",true);
+            };
+            attributes.put("load",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
+            
+            return new ModelAndView(attributes,"vehiclesAdd.moustache");
         },
             new MustacheTemplateEngine()
         );
@@ -225,8 +246,17 @@ public class App
             String model = request.queryParams("model");
             String km = request.queryParams("km"); //should take integers in the form
             String user = request.queryParams("user"); //later we should use the id of the user logged
+            String type =request.queryParams("vehicleType");
             User u = User.findFirst("email = ?",user);
-            u.addVehicle(name,model,km);
+            if (type.equals("car")) {
+                u.addCar(name,model,km,request.queryParams("carType"));
+            }if (type.equals("truck")) {
+                u.addTruck(name,model,km,request.queryParams("truckType"));
+            }if (type.equals("moto")) {
+                u.addMoto(name,model,km,request.queryParams("motoType"));
+            }if (type.equals("car")) {
+                u.addVehicle(name,model,km);
+            }
             response.redirect("/vehicles");
             return "success"; 
         });
