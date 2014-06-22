@@ -24,8 +24,9 @@ public class Question extends Model{
     	return p;
   	}
 
-    public String answer() {
-    Answer answer = Answer.findFirst("user_id = ?", this.id());
-    return answer.description();
+    public Answer answer() {
+    Answer a = Answer.findFirst("question_id = ?", this.id());
+    System.out.println (a);
+    return a;
   }
 }
