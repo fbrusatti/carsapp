@@ -23,4 +23,9 @@ public class Question extends Model{
     	Post p = Post.findById(getInteger("post_id"));
     	return p;
   	}
+
+    public String answer() {
+    Answer answer = Answer.findFirst("user_id = ?", this.id());
+    return answer.description();
+  }
 }
