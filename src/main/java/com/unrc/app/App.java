@@ -283,8 +283,14 @@ public class App
         );
 
         post ("/search",(request, response) ->{
+            String query = new String();
+            if(request.queryParams("query") == null){
+                response.redirect("/");
+            }else{
+                query = request.queryParams("query");
+            }
             SearchResponse res = client().prepareSearch("posts")
-                            .setQuery(QueryBuilders.matchQuery("title",request.queryParams("query")))
+                            .setQuery(QueryBuilders.matchQuery("title", query))
                             .execute()
                             .actionGet();
 
