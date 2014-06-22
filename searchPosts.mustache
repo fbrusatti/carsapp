@@ -2,8 +2,10 @@
 
 <body>
     <form name="search" action="/search/posts" method="post">
-    Search (post description): <input type="search" name="carsappsearch" autofocus required>
-                       <input type="submit" value="Search">
+    Search (post description): <input type="search" name="postSearch" autofocus required>
+    Minimum price:             <input type="number" name="minPrice" min="0">
+    Maximum price:             <input type="number" name="maxPrice" min="0">
+                               <input type="submit" value="Search">
     </form>
 
     {{#result_count}}
