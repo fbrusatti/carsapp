@@ -22,22 +22,14 @@
     <table style= "width:300px" width="100%" border="0" cellspacing="0" cellpadding="3">
         {{#found?}}
         <tr>
-            <th> Vehicle </th>
-            <th> Price </th>
+            <th> Price</th>
             <th> Description </th>
-            <th> User</th>
         </tr>
         {{/found?}}
         {{#result}}
         <tr>
-            {{#vehicle}}
-            <td>{{name}}</td>
-            {{/vehicle}}
-            <td>{{price}}</td>
-            <td>{{description}}</td>
-            {{#user}}
-            <td><a href="http://localhost:4567/users/{{id}}">  {{name}} </a></td>
-            {{/user}}
+            <td>${{price}}</td> 
+            <td><a href="http://localhost:4567/posts/{{id}}">{{description}}</td>
         </tr>
         {{/result}}
     </table>
