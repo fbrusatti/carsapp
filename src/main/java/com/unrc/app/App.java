@@ -224,7 +224,7 @@ public class App
         get("/posts/:id", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Post post = Post.findById(Integer.parseInt(request.params(":id")));
-            List<Question> questions = Question.where("post_id = ?", post.idp());
+            List<Question> questions = Question.where("post_id = ?", post.id());
             attributes.put("vehicle_name", post.vehicle().name());
             attributes.put("post", post);
             attributes.put("questions", questions);
@@ -449,9 +449,11 @@ public class App
 
             long hits = res.getHits().getTotalHits();
 
-            attributes.put("result",postList);
-            attributes.put("result_count",hits);
-            if (hits > 0) { attributes.put("found?",true); }
+            if (hits > 0) { 
+                attributes.put("found?",true);
+                attributes.put("result",postList);
+                attributes.put("result_count",hits);
+            }
 
             return new ModelAndView(attributes,"searchPosts.mustache");
         },
