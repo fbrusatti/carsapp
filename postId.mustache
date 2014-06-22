@@ -45,14 +45,20 @@
         </style>
         </table>
         <br>
+        {{#questions}}
+            {{#user}}
+            User: {{name}}<br>
+            {{/user}}
+            {{description}}<br>
+        {{/questions}}
+        <br>
         <form action="/questions" method="post">
         <input type="hidden" name="postId" value="{{idp}}">
         Question<br>
         <textarea name="description" style="width:250px;height:150px;"></textarea><br>
         Login (user email)
-        <input type="text" name="user">
+        <input type="email" name="user">
         Post
-        <input type="submit" value= "Save"> </form> 
-        
+        <input type="submit" value= "Send"> </form>        
         {{/post}}
     </body>
