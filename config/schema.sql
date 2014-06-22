@@ -84,6 +84,8 @@ CREATE TABLE answers(
 
 INSERT INTO users (first_name,last_name,email,is_admin) VALUES("Marilyn","Monroe","monroe@example.com",1);
 INSERT INTO users (first_name,last_name,email,is_admin) VALUES("Marcelo","Uva","uva@example.com",0); 
+INSERT INTO addresses (id,user_id,street,address_number) VALUES(1,1,"Street A",10);
+INSERT INTO addresses (id,user_id,street,address_number) VALUES(2,2,"Street B",15);
 INSERT INTO vehicles (user_id,name,model,km) VALUES(1,"Honda Accord","1999","32000");
 INSERT INTO cars (vehicle_id,type) VALUES(1,"sedan");
 INSERT INTO posts (user_id,vehicle_id,price,description) VALUES(1,1,"15000","hello world");
