@@ -1,0 +1,26 @@
+<html>
+
+<center><h1>Buscar Anuncio</h1>
+
+<form action= "/search" method= "post">
+      Buscar Anuncio :
+      <input type ="text" name="query">
+
+</form>
+</center>
+
+{{#search}}
+	{{#results}}
+		<b>Resultados: </b><br>	
+		{{#print}}
+			<td><b>ID:</b> {{id}} - <a href="posts/{{id}}">{{title}}</a> - <b>Publicado por:</b> <a href="users/{{usrId}}">{{usrEmail}}</a><br>
+		{{/print}}
+	{{/results}}
+	{{^results}}
+		<b>No hubieron coincidencias...</b>
+	{{/results}}
+{{/search}}
+
+</form>
+<button><a href="http://localhost:4567/">Inicio</a></button>
+</html>

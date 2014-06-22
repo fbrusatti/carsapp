@@ -58,11 +58,17 @@ public class Post extends Model {
         return this.getInteger("id");
     }
 
+    public int usrId(){
+        return this.getInteger("id_users");
+    }
+
     public void afterCreate() {
         Map<String, Object> json = new HashMap<String, Object>();
         json.put("id", this.id());
         json.put("title", this.title());
         json.put("description", this.description());
+        json.put("usrId", this.usrId());
+        json.put("usrEmail", (User.findById(this.usrId())).getString("email"));
         App.client().prepareIndex("posts", "post")
                   .setSource(json)
                   .execute()

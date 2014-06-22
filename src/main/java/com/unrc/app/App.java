@@ -14,6 +14,12 @@ import static spark.Spark.*;
 import org.elasticsearch.node.*;
 import org.elasticsearch.client.*;
 
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.index.query.QueryBuilders.*;
+import org.elasticsearch.index.query.*;
+
 public class App 
 {
     public static final Node node = org.elasticsearch.node
@@ -274,8 +280,33 @@ public class App
             return new ModelAndView(attributes, "newUser.mustache");
         },
             new MustacheTemplateEngine()
-        );   
-    
+        );
+
+        post ("/search",(request, response) ->{
+            SearchResponse res = client().prepareSearch("posts")
+                            .setQuery(QueryBuilders.matchQuery("title",request.queryParams("query")))
+                            .execute()
+                            .actionGet();
+
+            List<Map<String,Object>> queryResult = new LinkedList<Map<String,Object>>();
+            SearchHit[] hits = res.getHits().getHits();
+            for (SearchHit hit : hits) {
+                Map<String,Object> result = hit.getSource(); 
+                queryResult.add(result);
+            }
+
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("search",true);
+            attributes.put("results",false);
+            if (!queryResult.isEmpty()) { 
+                attributes.put("results",true); 
+                attributes.put("print",queryResult);
+            }
+            return new ModelAndView(attributes,"search.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
         //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
@@ -544,17 +575,22 @@ public class App
             return "success";
         });
 
-        post ("/search",(request, response) ->{
-            /*String mail = request.queryParams("userEmail");
-            String question = request.queryParams("questionTitle");
-            String respuesta = request.queryParams("descripcion");     
-            Answer resp = Answer.createAnswer(respuesta,User.findByEmail(mail),Question.findByDescription(question));
-            response.redirect("/answers");
-            */
+
+/*
+        post ("/search/posts",(request, response) ->{
+            String query = request.queryParams("carsappsearch");
+
+            SearchResponse res = client().prepareSearch("users")
+                            .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                            .setQuery(QueryBuilders.termQuery("email",query))
+                            .execute()
+                            .actionGet();
+
+            //Gets the search results
+            SearchHit[] docs = res.getHits().getHits();
             return "success";
-
         });
-
+*/
         after((request, response) -> {
             Base.close();    
         });
