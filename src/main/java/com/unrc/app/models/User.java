@@ -90,7 +90,7 @@ public class User extends Model {
 
   public String address() {
     Address address = Address.findFirst("user_id = ?", this.id());
-    return address.getString("street")+" "+address.getString("address_number");
+    return address.street();
   }
 
   /*------------------------------ELASTIC SEARCH STUFF-----------------------------------*/

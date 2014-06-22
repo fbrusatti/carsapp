@@ -198,20 +198,23 @@ public class App
         
         //Show Users 
         get("/users/:id", (request, response) -> {
-            User u = User.findById(Integer.parseInt(request.params(":id")));
-            if (u == null) {
+            Map<String, Object> attributes = new HashMap<>();
+            User user = User.findById(Integer.parseInt(request.params(":id")));
+            if (user == null) {
                 response.redirect("/whoops", 404);
-                return "not found";
+                return new ModelAndView(attributes, "userId.mustache"); //only for compiling purposes
             }
             else {
-                String name = u.getString("first_name") +" "+ u.getString("last_name");
-                String email = u.getString("email");
-                return "User: "+name+"\n"+"Email: "+email+"\n";
+                String address = user.address();
+                attributes.put("user", user);
+                attributes.put("address_user", address);
+                return new ModelAndView(attributes, "userId.mustache");
             }
-        });
+        },
+            new MustacheTemplateEngine()
+        );
 
         get("/whoops", (request, response) -> {
-            response.body("Resource not found");
             return "not found";
         });
 
@@ -221,8 +224,10 @@ public class App
         get("/posts/:id", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Post post = Post.findById(Integer.parseInt(request.params(":id")));
+            List<Question> questions = Question.where("post_id = ?", post.id());
             attributes.put("vehicle_name", post.vehicle().name());
             attributes.put("post", post);
+            attributes.put("questions", questions);
             return new ModelAndView(attributes, "postId.mustache");
         },
             new MustacheTemplateEngine()
@@ -365,7 +370,7 @@ public class App
             //Executes the search
             SearchResponse res = client.prepareSearch("users")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                        .setQuery(QueryBuilders.termQuery("name",query))
+                                        .setQuery(QueryBuilders.matchQuery("name",query))
                                         .execute()
                                         .actionGet();
 
@@ -390,6 +395,67 @@ public class App
             if (hits > 0) { attributes.put("found?",true); }
 
             return new ModelAndView(attributes,"searchUsers.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+
+        //Show a search bar for posts
+        get("/search/posts",(request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            attributes.put("found?",false);
+            return new ModelAndView(attributes,"searchPosts.mustache");
+        }, 
+            new MustacheTemplateEngine()
+        );
+
+        post("/search/posts", (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            String query = request.queryParams("carsappsearch");
+
+            //Starts the elasticsearch cluster
+            Node node = nodeBuilder().local(true).clusterName("carsapp").node();
+            Client client = node.client();
+
+            //Waits until the cluster is ready
+            ClusterHealthResponse health = client.admin()
+                                            .cluster()
+                                            .prepareHealth()
+                                            .setWaitForYellowStatus()
+                                            .execute()
+                                            .actionGet();
+
+            //Executes the search
+            SearchResponse res = client.prepareSearch("posts")
+                                        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                                        .setQuery(QueryBuilders.matchQuery("description",query))
+                                        .execute()
+                                        .actionGet();
+
+            //Gets the search results
+            SearchHit[] docs = res.getHits().getHits();
+
+            //Closes the cluster
+            node.close();
+
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<Map<String,Object>> postList = new LinkedList<Map<String,Object>>();
+            for (SearchHit sh : docs) {
+                map = sh.getSource();
+                postList.add(map);
+
+            } //Puts all the results in a list to be treated in the mustache
+
+            long hits = res.getHits().getTotalHits();
+
+            if (hits > 0) { 
+                attributes.put("found?",true);
+                attributes.put("result",postList);
+                attributes.put("result_count",hits);
+            }
+
+            return new ModelAndView(attributes,"searchPosts.mustache");
         },
             new MustacheTemplateEngine()
         );

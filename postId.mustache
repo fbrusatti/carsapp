@@ -45,14 +45,24 @@
         </style>
         </table>
         <br>
+        {{#questions}}
+            {{#user}}
+            User: <font color = "blue">{{name}}</font><br>
+            {{/user}}
+            {{description}}<br>
+            {{#answer}}
+            <font color = "red">Answer: </font>{{description}}<br>
+            {{/answer}}
+            <br>
+        {{/questions}}
+        <br>
         <form action="/questions" method="post">
-        <input type="hidden" name="postId" value="{{idp}}">
-        Question<br>
-        <textarea name="description" style="width:250px;height:150px;"></textarea><br>
+        <input type="hidden" name="postId" value="{{id}}">
+        Your Question<br>
+        <textarea name="description" style="width:377px;height:50px;"></textarea><br>
         Login (user email)
-        <input type="text" name="user">
+        <input type="email" name="user">
         Post
-        <input type="submit" value= "Save"> </form> 
-        
+        <input type="submit" value= "Send"> </form>        
         {{/post}}
     </body>
