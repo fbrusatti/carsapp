@@ -412,7 +412,9 @@ public class App
         post("/search/posts", (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
-            String query = request.queryParams("carsappsearch");
+            String description = request.queryParams("postSearch");
+            String minPrice = request.queryParams("minPrice");
+            String maxPrice = request.queryParams("maxPrice");
 
             //Starts the elasticsearch cluster
             Node node = nodeBuilder().local(true).clusterName("carsapp").node();
@@ -426,12 +428,49 @@ public class App
                                             .execute()
                                             .actionGet();
 
-            //Executes the search
-            SearchResponse res = client.prepareSearch("posts")
+            SearchResponse res = new SearchResponse();
+
+            if (minPrice.equals("") && maxPrice.equals("")) {
+                //Executes the search without the price range
+                res = client.prepareSearch("posts")
+                            .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                            .setQuery(QueryBuilders.matchQuery("description",description))
+                            .execute()
+                            .actionGet();
+            } else {
+                if (minPrice.equals("") && !(maxPrice.equals(""))) {
+                    //Executes the search only with minimun price range
+                    res = client.prepareSearch("posts")
+                                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                                .setQuery(QueryBuilders.rangeQuery("price")
+                                                        .lte(maxPrice))
+                                .execute()
+                                .actionGet();
+                } else {
+                    if (!(minPrice.equals("")) && maxPrice.equals("")) {
+                        //Executes the search only with maximun price range
+                        res = client.prepareSearch("posts")
+                                    .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                                    .setQuery(QueryBuilders.rangeQuery("price")
+                                                            .gte(minPrice))
+                                    .execute()
+                                    .actionGet();
+                    } else {
+                        if (!(minPrice.equals("")) && !(maxPrice.equals(""))) {
+                            //Executes the search with both price ranges
+                            res = client.prepareSearch("posts")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                        .setQuery(QueryBuilders.matchQuery("description",query))
+                                        .setQuery(QueryBuilders.rangeQuery("price")
+                                                                .from(minPrice)
+                                                                .to(maxPrice)
+                                                                .includeLower(true)
+                                                                .includeUpper(true))
                                         .execute()
                                         .actionGet();
+                        }
+                    }
+                }
+            }
 
             //Gets the search results
             SearchHit[] docs = res.getHits().getHits();
