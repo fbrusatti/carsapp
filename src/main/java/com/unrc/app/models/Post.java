@@ -34,6 +34,7 @@ public class Post extends Model {
     return this.getInteger("user_id");
   }
 
+
   public Vehicle vehicle() {
     Vehicle v = Vehicle.findById(this.getInteger("vehicle_id"));
     return v;
@@ -43,7 +44,8 @@ public class Post extends Model {
     return this.getInteger("vehicle_id");
   }
 
-  public void afterSave() {
+
+  public void afterCreate() {
     //Starts the elastic search cluster
     Node node = nodeBuilder().local(true).clusterName("carsapp").node();
     Client client = node.client();
@@ -51,8 +53,8 @@ public class Post extends Model {
     //Index the just created post
     Map<String, Object> json = new HashMap<String, Object>();
     json.put("id",this.id());
-    json.put("user_id",this.userId());
-    json.put("vehicle_id",this.vehicleId());
+    json.put("userId",this.userId());
+    json.put("vehicleId",this.vehicleId());
     json.put("price",this.price());
     json.put("description",this.description());
 
