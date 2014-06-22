@@ -5,18 +5,23 @@ import com.unrc.app.models.*;
 import static spark.Spark.*;
 import spark.ModelAndView;
 import java.util.*;
-import org.elasticsearch.*;
-
+import org.elasticsearch.node.Node;
+import org.elasticsearch.client.Client;
 /**
  * Hello world!
  *
  */
 public class App {
-    
-   
-    
-    
-    
+    public static final Node node = org.elasticsearch.node
+                                        .NodeBuilder
+                                        .nodeBuilder()
+                                        .clusterName("carsapp")
+                                        .local(true)
+                                        .node();
+    public static Client client(){
+        return node.client();
+    }
+      
     public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
@@ -68,32 +73,142 @@ public class App {
 	
 
 
-
-//------------------------------------------Listaar----------------------------  
+//------------------------------------------Listar----------------------------  
    // Listar Usuario
-		get("/ListUsers", (request, response) -> {
+    get("/ListUser", (request, response) -> {
           Map<String, Object> attributes = new HashMap<>();
+          
+        //pasa a list todos los usuarios
           List<User> users = User.findAll();
+          //carga tamaño de usuarios
           attributes.put("users_count", users.size());
+          //carga list en map
           attributes.put("users", users);
           return new ModelAndView(attributes, "ListUsers.moustache");
       },
       new MustacheTemplateEngine()
   );
+    
 
-	//listar Vehiculos
-		get("/ListVehicles", (request, response) -> {
-          Map<String, Object> attributes = new HashMap<>();
-          List<Vehicle> vehicles = Vehicle.findAll();
-          attributes.put("vehicles_count", vehicles.size());
-          attributes.put("vehicles", vehicles);
-          return new ModelAndView(attributes, "ListVehicles.moustache");
-      },
-      new MustacheTemplateEngine()
-  );
-  
-	// Listar Post
-		get("/ListPost", (request, response) -> {
+    get("/ListUser/:id", (request, response) -> {
+        User u = User.findById(request.params("id"));
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("user",u);
+        return new ModelAndView(attributes,"UserId.moustache");
+                },
+        new MustacheTemplateEngine()
+    );
+     
+        
+        
+    get("/ListUser/:id/posts",(request,response)-> {
+        User u = User.findById(request.params("id"));
+        List <Post> posts = Post.where("user_id = ?", request.params("id"));
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("UserPosts",posts);
+        attributes.put("UserId",u.id());
+        
+        return new ModelAndView(attributes, "UserPosts.moustache");
+        } ,
+       new MustacheTemplateEngine()
+    );
+            
+            
+    get("ListUser/:id/posts/:pId", (request, response) -> {
+        Post p = Post.findById(request.params("pId"));
+        User u = User.findById(request.params("id"));
+        Vehicle v = Vehicle.findById(p.getVehicle());
+        List<Car> listC = Car.where("vehicle_id = ?", v.getId());
+       
+        List<Truck> listT = Truck.where("vehicle_id = ?", v.getId());
+        List<Motorcycle> listM = Motorcycle.where("vehicle_id = ?", v.getId());   
+        
+              
+        
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("userFirstName",u.getFirstName());
+        attributes.put("userFirstName",u.getLastName());
+        attributes.put("price",p.getPrice());
+        attributes.put("title",p.getTitle());
+        attributes.put("model",v.getModel());
+        attributes.put("patent",v.getPatent());
+       
+        
+        
+        if (!(listM.isEmpty())){
+            attributes.put("type_motor",listM.get(0).getTypeMotor()); 
+        } 
+        if (!(listC.isEmpty())) {
+            attributes.put("version",listC.get(0).getVersion());
+    
+        } 
+     
+        if (!(listT.isEmpty())){
+            attributes.put("brake_system",listT.get(0).getbrakeSystem());
+        } 
+            
+           
+        return new ModelAndView(attributes,"postId.mustache");
+        },
+        new MustacheTemplateEngine()
+            );
+
+     get("/ListUser/:id/vehicles",(request,response)-> {
+        User u = User.findById(request.params("id"));
+        List <Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("UserVehicles",vehicles);
+        attributes.put("UserId",u.id());
+        
+        return new ModelAndView(attributes, "UserVehicles.moustache");
+        } ,
+       new MustacheTemplateEngine()
+    );  
+    
+     
+    get("ListUser/:id/vehicles/:vId", (request, response) -> {
+        Vehicle v = Vehicle.findById(request.params("vId"));
+        User u = User.findById(request.params("id"));
+        List<Car> listC = Car.where("vehicle_id = ?", v.getId());
+       
+        List<Truck> listT = Truck.where("vehicle_id = ?", v.getId());
+        List<Motorcycle> listM = Motorcycle.where("vehicle_id = ?", v.getId());   
+        
+              
+        
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("userFirstName",u.getFirstName());
+        attributes.put("userFirstName",u.getLastName());
+        attributes.put("model",v.getModel());
+        attributes.put("patent",v.getPatent());
+        
+        if (!(listM.isEmpty())){
+            attributes.put("type_motor",listM.get(0).getTypeMotor()); 
+        } 
+        if (!(listC.isEmpty())) {
+            attributes.put("version",listC.get(0).getVersion());
+    
+        } 
+     
+        if (!(listT.isEmpty())){
+            attributes.put("brake_system",listT.get(0).getbrakeSystem());
+        } 
+            
+           
+        return new ModelAndView(attributes,"vehicleId.mustache");
+        },
+        new MustacheTemplateEngine()
+            );
+    
+                
+
+     
+
+
+
+
+// Listar Post
+        get("/ListPost", (request, response) -> {
           Map<String, Object> attributes = new HashMap<>();
           List<Post> post = Post.findAll();
           attributes.put("post_count", post.size());
@@ -102,18 +217,167 @@ public class App {
       },
       new MustacheTemplateEngine()
   );
- 
+        
+
+                
+   get("/ListPost/:id", (request, response) -> {
+        Post p = Post.findById(request.params("id"));
+          
+        Vehicle v = Vehicle.findById(p.getVehicle());
+        User u = User.findById(v.getOwner());
+        
+        List<Car> listC = Car.where("vehicle_id = ?", v.getId());
+       
+        List<Truck> listT = Truck.where("vehicle_id = ?", v.getId());
+        List<Motorcycle> listM = Motorcycle.where("vehicle_id = ?", v.getId());   
+        
+              
+        
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("userFirstName",u.getFirstName());
+        attributes.put("userFirstName",u.getLastName());
+        attributes.put("price",p.getPrice());
+        attributes.put("title",p.getTitle());
+        attributes.put("model",v.getModel());
+        attributes.put("patent",v.getPatent());
+        
+       
+        
+        if (!(listM.isEmpty())){
+            attributes.put("type_motor",listM.get(0).getTypeMotor()); 
+        } 
+        if (!(listC.isEmpty())) {
+            attributes.put("version",listC.get(0).getVersion());
     
-  //--------------------------------------Inseert---------------------------------- 
+        } 
+     
+        if (!(listT.isEmpty())){
+            attributes.put("brake_system",listT.get(0).getbrakeSystem());
+        } 
+            
+           
+        return new ModelAndView(attributes,"postId.mustache");
+        },
+        new MustacheTemplateEngine()
+            
+   );
+ 
+  get("ListUser/:id/posts/:idP/questions", (request, response) -> {
+        Post p = Post.findById(request.params("id"));
+        List <Question> questions = Question.where("post_id = ?", request.params("id"));
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("QuestionPosts",questions);
+        
+        
+        return new ModelAndView(attributes, "QuestionPosts.moustache");
+        } ,
+       new MustacheTemplateEngine()
+   );
+
+  
+  ///////////////////////////////////////
+   get("/ListUser/:id/posts/:idP/questions/:idQ/answerInd", (request, response) -> {
+       
+        Question q = Question.findById(request.params("idQ")); 
+        Answer a = new Answer();
+        a = Answer.findFirst("question_id=?",q.getId());
+        
+        
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("getText",a.getText());
+        
+        
+        return new ModelAndView(attributes, "AnswerQuestions.moustache");
+        } ,
+       new MustacheTemplateEngine()
+   );
+ 
+  
+  
+   
+   get("/ListUser/:id/delete", (request, response) -> {
+            User u = User.findById(request.params("id"));
+            u.deleteCascade();
+            return "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+    });
+  
+   
+   
+    
+   
+   
+   
+   
+    //listar Vehiculos
+	get("/ListVehicles", (request, response) -> {
+          Map<String, Object> attributes = new HashMap<>();
+          List<Vehicle> vehicles = Vehicle.findAll();
+          attributes.put("vehicles_count", vehicles.size());
+          attributes.put("vehicles", vehicles);
+          return new ModelAndView(attributes, "ListVehicles.moustache");
+      },
+      new MustacheTemplateEngine()
+  );
+        
+        
+    get("/ListVehicles/:id", (request, response) -> {
+        Vehicle v = Vehicle.findById(request.params("id"));
+        
+        User u = User.findById(v.getOwner());
+        
+        List<Car> listC = Car.where("vehicle_id = ?", v.getId());
+       
+        List<Truck> listT = Truck.where("vehicle_id = ?", v.getId());
+        List<Motorcycle> listM = Motorcycle.where("vehicle_id = ?", v.getId());   
+        
+              
+        
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        attributes.put("userFirstName",u.getFirstName());
+        attributes.put("userFirstName",u.getLastName());
+        attributes.put("model",v.getModel());
+        attributes.put("patent",v.getPatent());
+       
+        if (!(listM.isEmpty())){
+            attributes.put("type_motor",listM.get(0).getTypeMotor()); 
+        } 
+        if (!(listC.isEmpty())) {
+            attributes.put("version",listC.get(0).getVersion());
+    
+        } 
+     
+        if (!(listT.isEmpty())){
+            attributes.put("brake_system",listT.get(0).getbrakeSystem());
+        } 
+            
+           
+        return new ModelAndView(attributes,"vehicleId.mustache");
+        },
+        new MustacheTemplateEngine()
+            );
+ 
+        
+   get("/ListVehicles/:id/delete", (request, response) -> {
+            Vehicle v = Vehicle.findById(request.params("id"));
+            v.deleteCascade();
+            return "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+    });
+        
+        
+           
+        
+    
+    
+  //--------------------------------------Insert---------------------------------- 
      
          get ("/app/RegisterUser", (req, res) -> {                           
             String a ="<html> <head> <title> Registrarse </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/User\" method=\"post\">"; 
             a=a+      " <h1> Registrarse </h1> <FORM >";
             
-			a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-			
-			// crea un enlace para volver a la pag anterior.
-			a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a> </td></table>";
+            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
+
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a> </td></table>";
             //usuario
             //lectura nombre
             a=a+"<h3> Nombre</h3><INPUT type=text SIZE=25 NAME=first_name>";
@@ -163,24 +427,17 @@ public class App {
             return retornar;
             
          });   
-     
-        
-        
-        get ("/app/InsertVehicle/InsertCar", (req, res) -> {         
-            String a ="<html> <head> <title> cargarAuto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/CarVehicle\" method=\"post\">";
+                                                                                                           
+         
+        get ("/ListUser/:id/newCar", (request, response) -> {         
+            String a ="<html> <head> <title> cargarAuto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/car\" method=\"post\">";
             a= a + "<h1> Cargar Auto </h1> <FORM >";
 
 			a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
 			
-			// crea un enlace para volver a la pag anterior.
-			a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
             
-            //usuario
-            //lectura email usuario
-            a=a+"<h3> Email Usuario</h3><INPUT type=text SIZE=25 NAME=email>";
-            //lectura apellido
-            a=a+"<h3> Contraseña Usuario </h3><INPUT type=password SIZE=25 NAME=pass>";
-      
             //vehiculo
             //lectura modelo vehiculo
             a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
@@ -212,64 +469,56 @@ public class App {
         });
  
         
- 
-        post("/CarVehicle", (request, response) -> {
+        
+        post("/ListUser/:id/car", (request, response) -> {
             String retornar;
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
-            user.set("email",request.queryParams("email"));
-            
-            //controlar existencia de usuario en base de datos
             User user2 = new User();
-            user2 = User.findFirst("email=?",user.get("email"));
-            if (user2 == null){
-                retornar=retornar + "No se encontro usuario";
-            }else{
-                Vehicle vehicle = new Vehicle();
-                //carga variable vehicle con datos tomados por pantalla
-                vehicle.set("model",request.queryParams("model"));
-                vehicle.set("patent",request.queryParams("patent"));
-                vehicle.set("color",request.queryParams("color"));
-                vehicle.set("km",request.queryParams("km"));
-                vehicle.set("mark",request.queryParams("mark"));
-                vehicle.set("year",request.queryParams("year"));
-                vehicle.saveIt();
-                user2.add(vehicle); 
+            user.set("id",request.params("id"));
+            
+            user2 = User.findFirst("id=?",user.get("id"));
+            //controlar existencia de usuario en base de datos
+
+            Vehicle vehicle = new Vehicle();
+            //carga variable vehicle con datos tomados por pantalla
+            vehicle.set("model",request.queryParams("model"));
+            vehicle.set("patent",request.queryParams("patent"));
+            vehicle.set("color",request.queryParams("color"));
+            vehicle.set("km",request.queryParams("km"));
+            vehicle.set("mark",request.queryParams("mark"));
+            vehicle.set("year",request.queryParams("year"));
+            vehicle.saveIt();
+            user2.add(vehicle); 
 
 
-                Car car = new Car();
-                //carga variable car con datos tomados por pantalla
-                car.set("doors",request.queryParams("doors"));
-                car.set("version",request.queryParams("version"));
-                car.set("transmission",request.queryParams("transmission"));
-                car.set("direction",request.queryParams("direction"));
-                
-                car.saveIt();
-                vehicle.add(car);
-                retornar =retornar +"Carga Exitosa";
-           }
-			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            Car car = new Car();
+            //carga variable car con datos tomados por pantalla
+            car.set("doors",request.queryParams("doors"));
+            car.set("version",request.queryParams("version"));
+            car.set("transmission",request.queryParams("transmission"));
+            car.set("direction",request.queryParams("direction"));
+
+            car.saveIt();
+            vehicle.add(car);
+            retornar =retornar +"Carga Exitosa";
+           
+            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });   
         
         
         
         
-        get ("/app/InsertVehicle/InsertMotorcycle", (req, res) -> {         
-            String a ="<html> <head> <title> cargarMoto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/InsertMotorcycle\" method=\"post\">";
+        get ("/ListUser/:id/newMotorcycle", (request, response) -> {         
+            String a ="<html> <head> <title> cargarAuto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/motorcycle\" method=\"post\">";
             a= a + "<BODY> <h1> Cargar Moto </h1> <FORM >";
             
-			a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
+            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
 			
-			// crea un enlace para volver a la pag anterior.
-			a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
-
-            //usuario
-            //lectura email usuario
-            a=a+"<h3> Email Usuario</h3><INPUT type=text SIZE=25 NAME=email>";
-            //lectura apellido
-            a=a+"<h3> Contraseña Usuario </h3><INPUT type=password SIZE=25 NAME=pass>";
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
       
             //vehiculo
             //lectura modelo vehiculo
@@ -301,61 +550,52 @@ public class App {
             return a; 	
         });
         
-        post("/InsertMotorcyle", (request, response) -> {
+        post("/ListUser/:id/motorcycle", (request, response) -> {
             String retornar;
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
-            user.set("email",request.queryParams("email"));
-            
-            //controlar existencia de usuario en base de datos
             User user2 = new User();
-            user2 = User.findFirst("email=?",user.get("email"));
-            if (user2 == null){
-                retornar=retornar +"No se encontro usuario";
-            }else{
-                Vehicle vehicle = new Vehicle();
-                //carga variable vehicle con datos tomados por pantalla
-                vehicle.set("model",request.queryParams("model"));
-                vehicle.set("patent",request.queryParams("patent"));
-                vehicle.set("color",request.queryParams("color"));
-                vehicle.set("km",request.queryParams("km"));
-                vehicle.set("mark",request.queryParams("mark"));
-                vehicle.set("year",request.queryParams("year"));
-                vehicle.saveIt();
-                user2.add(vehicle);    
-                    
-                Motorcycle moto = new Motorcycle();
-                //carga variable moto con datos tomados por pantalla
-                moto.set("type",request.queryParams("type"));
-                moto.set("type_motor",request.queryParams("type_motor"));
-                moto.set("boot_system",request.queryParams("boot_system"));
-                moto.set("displacement",request.queryParams("displacement"));
-                               
-                moto.saveIt();
-                vehicle.add(moto);
-                
-                retornar =retornar +"Carga Exitosa";
-            }
-			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
-            return retornar;
-         });   
+            user.set("id",request.params("id"));
+            
+            user2 = User.findFirst("id=?",user.get("id"));
+            
+            Vehicle vehicle = new Vehicle();
+            //carga variable vehicle con datos tomados por pantalla
+            vehicle.set("model",request.queryParams("model"));
+            vehicle.set("patent",request.queryParams("patent"));
+            vehicle.set("color",request.queryParams("color"));
+            vehicle.set("km",request.queryParams("km"));
+            vehicle.set("mark",request.queryParams("mark"));
+            vehicle.set("year",request.queryParams("year"));
+            vehicle.saveIt();
+            user2.add(vehicle);    
+
+            Motorcycle moto = new Motorcycle();
+            //carga variable moto con datos tomados por pantalla
+            moto.set("type",request.queryParams("type"));
+            moto.set("type_motor",request.queryParams("type_motor"));
+            moto.set("boot_system",request.queryParams("boot_system"));
+            moto.set("displacement",request.queryParams("displacement"));
+
+            moto.saveIt();
+            vehicle.add(moto);
+
+            retornar =retornar +"Carga Exitosa";
+        retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+        return retornar;
+     });   
         
          
-        get ("/app/InsertVehicle/InsertTruck", (req, res) -> {         
-            String a ="<html> <head> <title> cargarCamion </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/InsertTruck\" method=\"post\">";
+        get ("/ListUser/:id/newTruck", (request, response) -> {         
+            String a ="<html> <head> <title> cargarCamion </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/truck\" method=\"post\">";
             a= a + "<h1> Cargar Camion </h1> <FORM >";
-            
-			a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-			
-			// crea un enlace para volver a la pag anterior.
-			a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
-            //usuario
-            //lectura email usuario
-            a=a+"<h3> Email Usuario</h3><INPUT type=text SIZE=25 NAME=email>";
-            //lectura apellido
-            a=a+"<h3> Contraseña Usuario </h3><INPUT type=password SIZE=25 NAME=pass>";
-      
+
+            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
+
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+
             //vehiculo
             //lectura modelo vehiculo
             a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
@@ -385,61 +625,50 @@ public class App {
         });
         
         
-        post("/InsertTruck", (request, response) -> {
+        post("/ListUser/:id/truck" , (request, response) -> {
             String retornar;
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             //Cargar variable user con datos tomados por pantalla
-            user.set("email",request.queryParams("email"));
-            
-            //controlar existencia de usuario en base de datos
             User user2 = new User();
-            user2 = User.findFirst("email=?",user.get("email"));
-            if (user2 == null){
-                retornar=retornar +"No se encontro usuario";
-            }else{
-                Vehicle vehicle = new Vehicle();
-                //carga variable vehicle con datos tomados por pantalla
-                vehicle.set("model",request.queryParams("model"));
-                vehicle.set("patent",request.queryParams("patent"));
-                vehicle.set("color",request.queryParams("color"));
-                vehicle.set("km",request.queryParams("km"));
-                vehicle.set("mark",request.queryParams("mark"));
-                vehicle.set("year",request.queryParams("year"));
-                vehicle.saveIt();
-                user2.add(vehicle);    
-                    
-                Truck camion = new Truck();
-                //carga variable camion con datos tomados por pantalla
-                camion.set("brake_system",request.queryParams("brake_system"));
-                camion.set("direction",request.queryParams("direction"));
-                camion.set("capacity",request.queryParams("capacity"));                    
-                camion.saveIt();
-                vehicle.add(camion);
-                
-                
-				retornar =retornar +"Carga Exitosa";
-            }
-				retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            user.set("id",request.params("id"));
+            
+            user2 = User.findFirst("id=?",user.get("id"));
+            Vehicle vehicle = new Vehicle();
+            //carga variable vehicle con datos tomados por pantalla
+            vehicle.set("model",request.queryParams("model"));
+            vehicle.set("patent",request.queryParams("patent"));
+            vehicle.set("color",request.queryParams("color"));
+            vehicle.set("km",request.queryParams("km"));
+            vehicle.set("mark",request.queryParams("mark"));
+            vehicle.set("year",request.queryParams("year"));
+            vehicle.saveIt();
+            user2.add(vehicle);    
+
+            Truck camion = new Truck();
+            //carga variable camion con datos tomados por pantalla
+            camion.set("brake_system",request.queryParams("brake_system"));
+            camion.set("direction",request.queryParams("direction"));
+            camion.set("capacity",request.queryParams("capacity"));                    
+            camion.saveIt();
+            vehicle.add(camion);
+
+
+            retornar =retornar +"Carga Exitosa";
+            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });   
         
 
 
-        get ("/CreatePost", (req, res) -> {         
-            String a ="<html> <head> <title> Create Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/Post\" method=\"post\">";
+        get ("/ListUser/:id/vehicles/:idV/newPost", (request, response) -> {         
+            String a ="<html> <head> <title> Create Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/vehicles/"+request.params("idV")+"/post\" method=\"post\">";
             a= a + "<h1> Crear Post </h1> <FORM >";
             a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-			
-			// crea un enlace para volver a la pag anterior.
-			a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
-            //usaurio
-            //lectura email
-            a=a+"<h3> email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
-            //vehiculo
-            //lectura patente vehiculo
-            a=a+"<h3> Patente Vehiculo </h3><INPUT type=text SIZE=25 NAME=patent>";
-            
+
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+          
             //Post
             //lectura titulo
             a=a+"<h3> Titulo Post</h3><INPUT type=text SIZE=25 NAME=title>";
@@ -455,51 +684,44 @@ public class App {
         });
         
         
-        post("/Post", (request, response) -> {
+        post("/ListUser/:id/vehicles/:idV/post", (request, response) -> {
             String retornar;
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
-            user.set("email",request.queryParams("email"));
+            User user2 = new User();
+            user.set("id",request.params("id"));
             
-            //Cargar variable vehiculo con datos tomados por pantalla
-            Vehicle vehiculo = new Vehicle();
-            vehiculo.set("patent",request.queryParams("patent"));
+            user2 = User.findFirst("id=?",user.get("id"));
+            
+            Vehicle vehicle = new Vehicle();            //Cargar variable vehiculo con datos tomados por pantalla
+            vehicle.set("id",request.params("idV"));
             
             //controlar existencia de usuario y de vehiculo en base de datos
-            User user2 = new User();
-            user2 = User.findFirst("email=?",user.get("email"));
-            Vehicle vehiculo2 = new Vehicle();
-            vehiculo2 = vehiculo.findFirst("patent=?",vehiculo.get("patent"));
+            Vehicle vehicle2 = new Vehicle();
+            vehicle2 = Vehicle.findFirst("id=?",vehicle.get("id"));
             
-            if ((user2 == null) || (vehiculo2 == null)){
-                retornar=retornar +"No se encontro usuario o vehiculo";
-            }else{
-                Post post = new Post();
-                post.set("title",request.queryParams("title"));
-                post.set("description",request.queryParams("title"));
-                post.set("price",request.queryParams("price"));
-                post.saveIt();
-                user2.add(post);
-                vehiculo2.add(post);
-                retornar =retornar +"Carga Exitosa";
-            }
-			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+
+            Post post = new Post();
+            post.set("title",request.queryParams("title"));
+            post.set("description",request.queryParams("description"));
+            post.set("price",request.queryParams("price"));
+            post.saveIt();
+            user2.add(post);
+            vehicle2.add(post);
+            retornar =retornar +"Carga Exitosa";
+            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
             return retornar;
          });
         
         
-   
-        get ("/Pregunta/cargarPregunta/", (req, res) -> {         
-            String a ="<html> <head> <title> cargarPregunta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/Pregunta\" method=\"post\">";
+         get("/ListUser/:id/posts/:idQ/question", (request, response) -> {        
+            String a ="<html> <head> <title> cargarPregunta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListPost/"+request.params("id")+"/question\" method=\"post\">";
             a= a + "<h1> Cargar Pregunta </h1> <FORM >";       
 
             //usaurio
-            //lectura email
+            //lectura email111111
             a=a+"<h3> email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
-            //Post
-            //lectura titulo post
-            a=a+"<h3> Titulo Post </h3><INPUT type=text SIZE=25 NAME=title>";
             
             //Post
             //lectura texto
@@ -507,55 +729,65 @@ public class App {
             
             a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
+            
+            
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	
         });
         
+         
         
-        post("/Pregunta", (request, response) -> {
+         
+          
+                       
+         
+         
+        post("/ListPost/:id/question", (request, response) -> {
             String retornar;
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
             User user = new User();
+            Post post = new Post();
+            
             //Cargar variable user con datos tomados por pantalla
             user.set("email",request.queryParams("email"));
-                       
-            //Cargar variable post con datos tomados por pantalla
-            Post post = new Post();
-            post.set("title",request.queryParams("title"));
+            post.set ("id",request.params("id"));
             
             //controlar existencia de usuario y de post en base de datos
             User user2 = new User();
-            user2 = User.findFirst("email=?",user.get("email"));
             Post post2 = new Post();
-            post2 = post.findFirst("title=?",post.get("title"));
             
-            if ((user2 == null) || (post2 == null)){
-                retornar=retornar +"No se encontro usuario o post";
+            user2 = User.findFirst("email=?",user.get("email"));
+            
+            
+            post2 = post.findFirst("id=?",post.get("id"));
+            
+            if (user2 == null){
+                retornar=retornar +"No se encontro usuario ";
             }else{
                 Question question = new Question();
                 question.set("textQ",request.queryParams("textQ"));
                 question.saveIt();
-                post2.add(question);
                 user2.add(question);
+                post2.add(question);
+                 
+                
                 retornar =retornar +"Carga Exitosa";
-            }
-			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
-            return retornar;
+              }
+            
+             
+		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            
+                return retornar; 
          });
-                   
-        
-        
-        get ("/Respuesta/cargarRespuesta/", (req, res) -> {         
-            String a ="<html> <head> <title> cargarRespuesta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/Respuesta\" method=\"post\">";
+                 
+                                                                                    
+        get ("/ListUser/:id/posts/:idP/questions/:idQ/newAnswer", (request, response) -> {         
+            String a ="<html> <head> <title> cargarRespuesta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\" /ListUser/"+request.params("id")+"/posts/"+request.params("idP")+"/questions/"+request.params("idQ")+"/answer\" method=\"post\">";
             a= a + "<h1> Cargar Respuesta </h1> <FORM >";       
 
             //Usaurio
             //Lectura Email
             a=a+"<h3> Email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
-            
-            //Pregunta
-            //Lectura texto
-            a=a+"<h3> Texto Pregunta </h3><INPUT type=text SIZE=25 NAME=textQ>";
             
             //Respuesta
             //lectura texto Respuesta
@@ -568,136 +800,49 @@ public class App {
             return a; 	
         });
         
-        // ------------------------------------------------------------------------------------------
-        // ----------------------------ELIMINAAAR--------------------------------------------------------------
-        
- 		get ("app/Delete/User",(request,response) -> {
-        String a ="";
-        a ="<html> <head> <title> Usuarios </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/dUser\" method=\"post\">";
-		a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-		a =a + "<h1> Eliminar Usuario </h1>";        
-
-		//lectura email
-        a=a+"<h3> Email </h3><INPUT type=text SIZE=25 NAME=email>";
-		//creacion de botones
-        a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM>";
-        a= a + "<a href="+"http://localhost:4567/Delete"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></BODY></HTML>";   
-        return a;
-    }); 
-     
-   		post("/dUser",(request,response)->{
-        User user = new User();
-        String retornar;
-		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
-        //Cargar variable user con datos tomados por pantalla
-        user.set("email",request.queryParams("email"));
-
-        //controlar existencia de usuario en base de datos
-        User user2 = new User();
-        user2 = User.findFirst("email=?",user.get("email"));
-        if (user2 == null){
-           retornar=retornar +"No se encontro usuario";
-        }else{
-             user2.deleteCascade();
-             retornar = retornar +"Usuario Eliminado correctamete";
-        }
+        post("/ListUser/:id/posts/:idP/questions/:idQ/answer", (request, response) -> {
+            String retornar;
+            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            User user = new User();
+            Question question = new Question();
+            
+            //Cargar variable user con datos tomados por pantalla
+            user.set("email",request.queryParams("email"));
+            question.set ("id",request.params("idQ"));
+            
+            //controlar existencia de usuario y de post en base de datos
+            User user2 = new User();
+            Question question2 = new Question();
+            
+            user2 = User.findFirst("email=?",user.get("email"));
+            
+            
+            question2 = question.findFirst("id=?",question.get("id"));
+            
+            if (user2 == null){
+                retornar=retornar +"No se encontro usuario ";
+            }else{
+                Answer answer = new Answer();
+                answer.set("textA",request.queryParams("textA"));
+                question2.saveIt();
+                answer.saveIt();
+                question2.add(answer);
+                retornar =retornar +"Carga Exitosa";
+              }
+            
+             
 		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
-        return retornar;
-    });   
-    
-    get ("/app/Delete/Vehicle",(request,response) -> {
-        String a ="";
-        a ="<html> <head> <title> Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/dVehicle\" method=\"post\">";
-        a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-        
-		a = a+ "<h1> Eliminar Vehiculo </h1>";
-		//Usuario
-        //lectura email
-        a=a+"<h3> Email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
-        
-        //Vehiculo
-        //lectura patente
-        a=a+"<h3> Patente Vehiculo </h3><INPUT type=text SIZE=25 NAME=patent>";
-        
-        //creacion de botones
-        a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM>";
-		a= a + "<a href="+"http://localhost:4567/Delete"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></BODY></HTML>";  
-        return a;
-    }); 
-     
-    post("/dVehicle",(request,response)->{
-        User user = new User();
-        String retornar;
-		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
-        //Cargar variable user con datos tomados por pantalla
-        user.set("email",request.queryParams("email"));
-
-        Vehicle vehiculo = new Vehicle();
-        vehiculo.set("patent",request.queryParams("patent"));
-
-        
-        //controlar existencia de usuario en base de datos
-        User user2 = new User();
-        user2 = User.findFirst("email=?",user.get("email"));
-        Vehicle vehiculo2 = new Vehicle();
-        vehiculo2 = Vehicle.findFirst("patent=?",vehiculo.get("patent"));
-       
-        
-        if ((user2 == null) || (vehiculo2 == null) ){
-           retornar=retornar +"No se encontro usuario o vehiculo";
-        }else{
-             vehiculo2.deleteCascade();
-             retornar =retornar + "Vehiculo Eliminado correctamete";
-        }
-		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
-        return retornar;
-    });   
-    
-    
-    
-    get ("/app/Delete/Post",(request,response) -> {
-        String a ="";
-        a ="<html> <head> <title> Eliminar Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/dPost\" method=\"post\">";
-		a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";        
-		
-		a = a + "<h1> Eliminar Post </h1>";
-		//Usuario
-        //lectura email
-        a = a + "<h3> Email </h3><INPUT type=text SIZE=25 NAME=email>";
-        //Post
-        //titulo del post
-        a = a + "<h3> Titulo Post </h3><INPUT type=text SIZE=25 NAME=title>"; 
-        //creacion de botones
-        a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM>";
-		a= a + "<a href="+"http://localhost:4567/Delete"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></BODY></HTML>";  
-
-        return a;
-    });
-    
-    post("/dPost",(request,response)->{
-        User user = new User();
-        Post post = new Post();
-        String retornar;
-		retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
-        //Cargar variable user con datos tomados por pantalla
-        user.set("email",request.queryParams("email"));
-        post.set("title",request.queryParams("title"));
-        //controlar existencia de usuario en base de datos
-        User user2 = new User();
-        Post post2 = new Post();
-        user2 = User.findFirst("email=?",user.get("email"));
-        post2 = Post.findFirst("title=?",post.get("title"));
-        if ((user2 == null) || (post2 == null)) {
-           retornar=retornar +"No se encontro usuario o post ha eliminar";
-        }else{
-             post2.delete();
-             retornar = "Post Eliminado correctamete";
-        }
-		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
-        return retornar;
-    });          
+            
+                return retornar; 
+         });
         
         
+  
+        
+     get("/cerrar", (request, response) -> {
+            node.close();
+            return "servidor cerrado!";
+        });    
         
         
         //cierra la base de datos
@@ -705,7 +850,10 @@ public class App {
             Base.close();    
         });
         
-    
-       
+        
     }
+    
+    
+    
+   
 }

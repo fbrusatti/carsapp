@@ -20,7 +20,7 @@
 			</tr>
 			{{#users}}
 			<tr>
-				<td> {{getFirstName}} </td>
+				<td> <a href="ListUser/{{id}}">{{getFirstName}} </a></td>
 				<td> {{getLastName}} </td>	
 				<td>{{getEmail}}</td></br>
 			</tr>

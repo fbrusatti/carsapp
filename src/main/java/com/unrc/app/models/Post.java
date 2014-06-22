@@ -34,6 +34,10 @@ public class Post extends Model {
 
                 node.close();
         }
+          
+        public String id() {
+            return this.getString("id");
+	}
 	  
 	  //get title
 	  public String getTitle (){
@@ -49,5 +53,13 @@ public class Post extends Model {
 	  public String getPrice(){
 		  return (this.getString("price"));
 	  }
+          
+          public String creatorPost (){
+              return (this.getString("user_id"));
+          }
+          
+          public Integer getVehicle(){
+              return (this.getInteger("vehicle_id"));
+          }
 	  
 }

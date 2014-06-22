@@ -8,8 +8,12 @@ public class Car extends Model {
   }
 
   //get doors
-  public Integer getDoors(){
-	  return (this.getInteger("doors"));
+  public String getDoors(){
+	  return (this.getString("doors"));
+  }
+  
+  public Integer getIdVehicle(){
+      return (this.getInteger("vehicle_id"));
   }
   
   //get version

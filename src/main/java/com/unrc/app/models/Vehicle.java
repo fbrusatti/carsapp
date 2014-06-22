@@ -35,4 +35,8 @@ public class Vehicle extends Model {
   public String getYear(){
 	  return (this.getString("year"));
   }
+  
+  public int getOwner (){
+      return (this.getInteger("user_id"));
+  }
 }

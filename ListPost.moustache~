@@ -14,17 +14,17 @@
 
 		<table width="100%" border="1" cellspacing="0" cellpadding="3">
 			<tr>
-				<th style="color:#4000FF"> Nombre </th>
-				<th style="color:#4000FF"> Apellido </th>	
-				<th style="color:#4000FF"> E-mail </th>
+				<th style="color:#4000FF"> Titulo </th>
+				<th style="color:#4000FF"> Descripcion </th>	
+				<th style="color:#4000FF"> Precio </th>
 			</tr>
-			{{#users}}
+			{{#post}}
 			<tr>
-				<td> {{getFirstName}} </td>
-				<td> {{getLastName}} </td>	
-				<td>{{getEmail}}</td></br>
-			</tr>
-			{{/users}}
+        <td> <a href="ListPost/{{id}}">{{getTitle}} </a></td>
+				<td> {{getDescription}} </td>	
+				<td>{{getPrice}}</td></br>
+	  </tr>
+			{{/post}}
 	</table>
 	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 
 	</body>

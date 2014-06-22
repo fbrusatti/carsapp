@@ -4,10 +4,14 @@ import org.javalite.activejdbc.Model;
 
 public class Question extends Model {
   static {
-      validatePresenceOf("text");
+      validatePresenceOf("textQ");
+  }
+  
+  public Integer getId(){
+      return (this.getInteger("id"));
   }
   
   public String getText(){
-	  return (this.getString("text"));
+	  return (this.getString("textQ"));
   }
 }

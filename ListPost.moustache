@@ -20,10 +20,10 @@
 			</tr>
 			{{#post}}
 			<tr>
-				<td> {{getTitle}} </td>
+        <td> <a href="ListPost/{{id}}">{{getTitle}} </a></td>
 				<td> {{getDescription}} </td>	
 				<td>{{getPrice}}</td></br>
-			</tr>
+	  </tr>
 			{{/post}}
 	</table>
 	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 

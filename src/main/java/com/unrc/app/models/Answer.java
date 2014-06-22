@@ -4,10 +4,10 @@ import org.javalite.activejdbc.Model;
 
 public class Answer extends Model {
   static {
-      validatePresenceOf("text");
+      validatePresenceOf("textA");
   }
   
   public String getText(){
-	  return (this.getString("text"));
+	  return (this.getString("textA"));
   }
 }

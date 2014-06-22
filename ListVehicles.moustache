@@ -22,11 +22,12 @@
 			</tr>
 			{{#vehicles}}
 			<tr>
-				<td> {{getPatent}} </td>
+        <td> <a href="/ListVehicles/{{id}}"> {{getPatent}} </a></td>
 				<td> {{getModel}} </td>	
 				<td>{{getMark}}</td>
 				<td>{{getKm}}</td>
 				<td>{{getColor}}</td></br>
+        <td> <a href="/ListVehicles/{{id}}/delete"> Eliminar </a></td>	
 			</tr>
 			{{/vehicles}}
 	</table>

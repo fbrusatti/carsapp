@@ -1,4 +1,5 @@
 package com.unrc.app.models;
+import com.unrc.app.App;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,28 +15,24 @@ public class User extends Model {
       validatePresenceOf("first_name", "last_name","email","pass");
   	}
 
-	
-	public void afterSave() {
-            Node node = org.elasticsearch.node
-                                      .NodeBuilder
-                                      .nodeBuilder()
-                                      .clusterName("carsapp")
-                                      .local(true)
-                                      .node();
-
-            Client client = node.client();
-
-            Map<String, Object> json = new HashMap<String, Object>();
+	@Override
+	public void afterCreate() {
+            Map<String, Object> json = new HashMap<>();
             json.put("name", this.getFirstName() +" "+ this.getLastName());
             json.put("email", this.getEmail());
 
-            client.prepareIndex("users", "user")
+            App.client().prepareIndex("users", "user")
                         .setSource(json)
                         .execute()
                         .actionGet();
 
-            node.close();
+       //     node.close();
       }
+        
+        
+        public String id() {
+		return this.getString("id");
+	}
 	
 	//get First Name
 	public String getFirstName(){

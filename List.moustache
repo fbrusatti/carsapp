@@ -15,26 +15,12 @@
 	    			<a href="http://localhost:4567/app/RegisterUser"> Registrarse </a> </br>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<a href="http://localhost:4567/InsertVehicle"> (+) Cargar Vehiculo </a> </br>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<a href="http://localhost:4567/CreatePost"> Crear Post </a> </br>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<a href="http://localhost:4567/Delete"> (+) Elminar</a> </br>
-				</td>
-			</tr>
+		
 			<tr>
 				<td>
 					<a href="http://localhost:4567/app"> (-) Listar </a> </br>
 					
-					<a href="http://localhost:4567/ListUsers" style="color:#B40404" > -> Listar Usuarios </a> </br>
+					<a href="http://localhost:4567/ListUser" style="color:#B40404" > -> Listar Usuarios </a> </br>
 
 					<a href="http://localhost:4567/ListVehicles" style="color:#B40404" > -> Listar Vehiculos </a> </br>
 

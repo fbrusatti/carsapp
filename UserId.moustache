@@ -1,0 +1,40 @@
+<html>
+	<head > 
+		<title> Users </title>
+	</head>
+
+	<body bgcolor="#BDBDBD">
+	<body link="#4000FF">
+	<body alink="#4000FF">
+	<body vlink="#4000FF">
+
+	<h1 style="color:#0000FF">Ficha de usuario</h1>
+
+		<table width="100%" border="1" cellspacing="0" cellpadding="3">
+			<tr>
+				<th style="color:#4000FF"> Nombre </th>
+				<th style="color:#4000FF"> Apellido </th>	
+				<th style="color:#4000FF"> E-mail </th>
+			</tr>
+			{{#user}}
+			<tr>
+				<td> {{getFirstName}} </td>
+				<td> {{getLastName}} </td>	
+				<td>{{getEmail}}</td></br>
+        <td> <a href="{{id}}/posts"> Ver Post </a></td>
+        <td> <a href="{{id}}/delete"> eliminar </a></td>
+        <td> <a href="{{id}}/vehicles"> Ver Vehiculos </a></td>
+	<td> <a href="{{id}}/newCar"> Cargar auto </a></td>
+      	<td> <a href="{{id}}/newMotorcycle"> Cargar moto </a></td>
+	<td> <a href="{{id}}/newTruck"> Cargar camion </a></td>
+
+        
+/ListUser/:id/newCar
+			</tr>
+			{{/user}}
+	</table>
+	
+	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 
+	</body>
+
+</html>
