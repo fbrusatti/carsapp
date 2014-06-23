@@ -12,6 +12,7 @@
 	</span>
 	<br>
 	<b>Post creado el: </b> {{createdAt}}<br>
+	<br>
 	{{description}} 
 	<br>
 	<br>
@@ -38,17 +39,14 @@
 <input type="submit" value="Enviar">
 </form>
 
-
-
-
-
     {{#questions}}
-      <b>{{ownerName}}:  </b> {{description}} {{createdAt}} <a href="/users/{{ownerId}}/posts/{{postId}}/question/{{id}}"><button type="button">Ver repuestas/Responder</button></a><br>
+      <a href="/users/{{ownerQuestionId}}"><b>{{ownerName}}</b></a>: {{description}} {{createdAt}} 
+      <a href="/users/{{ownerId}}/posts/{{postId}}/question/{{id}}">
+      	<button type="button">Ver repuestas/Responder</button>
+      </a>
+      <br>
     {{/questions}}
 {{/post}}
-
-
-
 
 <script>
 <!--

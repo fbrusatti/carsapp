@@ -23,5 +23,9 @@ public class Answer extends Model {
 		User u = User.findById(this.get("user_id"));
 		return u.name();
 	}
+
+	public String ownerAnswerId() {
+		return this.getString("user_id");
+	}
 	
 }

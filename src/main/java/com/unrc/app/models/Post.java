@@ -15,6 +15,9 @@ import static org.elasticsearch.node.NodeBuilder.*;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.delete.DeleteRequestBuilder;
 
+import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.action.update.UpdateRequestBuilder;
+
 public class Post extends Model {
 	
 	static {
@@ -24,7 +27,7 @@ public class Post extends Model {
 	/**
 	 * Indexing a post
 	 */
-	public void afterCreate() {
+	protected void afterCreate() {
         
         Client client = new TransportClient()
         					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
@@ -43,9 +46,31 @@ public class Post extends Model {
     }
 
     /**
+     * Editing a post indexed
+     */
+    protected void afterSave() {
+    	Client client = new TransportClient()
+    					.addTransportAddress(new InetSocketTransportAddress("localhost",9300));
+
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put("title",this.title());
+        json.put("ownerName",this.ownerName());
+        json.put("ownerId",this.ownerId());
+
+    	UpdateResponse response = client.prepareUpdate("posts","post",this.id())
+    							.setDoc(json)
+    							.setRefresh(true)
+                				.execute()
+                				.actionGet();
+
+        client.close();
+    		
+    }
+
+    /**
 	 * Deleting a post indexed
 	 */
-    public void beforeDelete() {
+    protected void beforeDelete() {
 		
 		Client client = new TransportClient()
         					.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
