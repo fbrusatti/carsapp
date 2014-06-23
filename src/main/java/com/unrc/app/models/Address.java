@@ -46,6 +46,18 @@ public class Address extends Model {
     }
   }
 
+    public String dir(){
+        return this.getString("street");
+    }
+
+    public int num(){
+        return this.getInteger("num");
+    }  
+
+    public String city(){
+        return this.getString("city");
+    }
+
   public void afterCreate() {
   Map<String, Object> json = new HashMap<String, Object>();
   json.put("street", this.getString("street"));
