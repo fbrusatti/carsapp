@@ -66,7 +66,8 @@ CREATE TABLE questions(
     id INT(11) NOT NULL AUTO_INCREMENT,
     user_id INT(11),
     post_id INT(11),
-    description VARCHAR(200) NOT NULL, 
+    description VARCHAR(200) NOT NULL,
+    active TINYINT(1), 
   CONSTRAINT questions_pk PRIMARY KEY (id)
 );
 
@@ -89,5 +90,5 @@ INSERT INTO addresses (id,user_id,street,address_number) VALUES(2,2,"Street B",1
 INSERT INTO vehicles (user_id,name,model,km) VALUES(1,"Honda Accord","1999","32000");
 INSERT INTO cars (vehicle_id,type) VALUES(1,"sedan");
 INSERT INTO posts (user_id,vehicle_id,price,description) VALUES(1,1,"15000","hello world");
-INSERT INTO questions (user_id,post_id,description) VALUES (2,1,"hello question?");
+INSERT INTO questions (user_id,post_id,description,active) VALUES (2,1,"hello question?",0);
 INSERT INTO answers (question_id,user_id,post_id,description) VALUES (1,1,1,"bye answer");
