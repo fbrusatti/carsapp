@@ -302,7 +302,7 @@ public class App
             }
 
             Map<String,Object> attributes = new HashMap<String,Object>();
-            attributes.put("search",true);
+            
             attributes.put("results",false);
             if (!queryResult.isEmpty()) { 
                 attributes.put("results",true); 
