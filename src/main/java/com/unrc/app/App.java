@@ -127,9 +127,10 @@ public class App {
         
         Map<String,Object> attributes = new HashMap<String,Object>();
         attributes.put("userFirstName",u.getFirstName());
-        attributes.put("userFirstName",u.getLastName());
+        attributes.put("userLastName",u.getLastName());
         attributes.put("price",p.getPrice());
         attributes.put("title",p.getTitle());
+	attributes.put("description",p.getDescription());
         attributes.put("model",v.getModel());
         attributes.put("patent",v.getPatent());
        
@@ -181,6 +182,11 @@ public class App {
         attributes.put("userLastName",u.getLastName());
         attributes.put("model",v.getModel());
         attributes.put("patent",v.getPatent());
+	attributes.put("mark",v.getMark());
+	attributes.put("color",v.getColor());
+	attributes.put("km",v.getKm());
+
+
         
         if (!(listM.isEmpty())){
             attributes.put("type_motor",listM.get(0).getTypeMotor()); 
@@ -230,12 +236,14 @@ public class App {
         
         Map<String,Object> attributes = new HashMap<String,Object>();
         attributes.put("userFirstName",u.getFirstName());
-        attributes.put("userFirstName",u.getLastName());
+        attributes.put("userLastName",u.getLastName());
         attributes.put("price",p.getPrice());
         attributes.put("title",p.getTitle());
         attributes.put("model",v.getModel());
         attributes.put("patent",v.getPatent());
-        
+	attributes.put("mark",v.getMark());
+	attributes.put("color",v.getColor());
+	attributes.put("km",v.getKm());        
        
         
         if (!(listM.isEmpty())){
@@ -328,9 +336,12 @@ public class App {
         
         Map<String,Object> attributes = new HashMap<String,Object>();
         attributes.put("userFirstName",u.getFirstName());
-        attributes.put("userFirstName",u.getLastName());
+        attributes.put("userLastName",u.getLastName());
         attributes.put("model",v.getModel());
         attributes.put("patent",v.getPatent());
+	attributes.put("mark",v.getMark());
+	attributes.put("color",v.getColor());
+	attributes.put("km",v.getKm());
        
         if (!(listM.isEmpty())){
             attributes.put("type_motor",listM.get(0).getTypeMotor()); 
@@ -345,7 +356,7 @@ public class App {
         } 
             
            
-        return new ModelAndView(attributes,"vehicleId.mustache");
+        return new ModelAndView(attributes,"VehicleId.moustache");
         },
         new MustacheTemplateEngine()
             );
@@ -365,40 +376,39 @@ public class App {
   //--------------------------------------Insert---------------------------------- 
      
          get ("/app/RegisterUser", (req, res) -> {                           
-            String a ="<html> <head> <title> Registrarse </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/User\" method=\"post\">"; 
-            a=a+      " <h1> Registrarse </h1> <FORM >";
+            String a ="<html> <head> <title> Registrarse </title> </head> <body> <form action=\"/User\" method=\"post\">"; 
+ 
+		 // crea un enlace para volver a la pag anterior.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+	    a=a+ " <h1 style="+"color:#DF3A01"+" align="+"center"+"> Registrarse </h1> <FORM >";
             
-            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a> </td></table>";
             //usuario
             //lectura nombre
-            a=a+"<h3> Nombre</h3><INPUT type=text SIZE=25 NAME=first_name>";
+            a=a+" <table align="+"center"+"><tr><td style="+"color:#DF3A01"+">Nombre </td><td><INPUT type=text SIZE=25 NAME=first_name></td></tr> ";
             //lectura apellido
-            a=a+"<h3> Apellido </h3><INPUT type=text SIZE=25 NAME=last_name>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Apellido</td><td> <INPUT type=text SIZE=25 NAME=last_name></td></tr> ";
             //lectura email
-            a=a+"<h3> Email </h3><INPUT type=text SIZE=25 NAME=email>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Email</td><td> <INPUT type=text SIZE=25 NAME=email></td></tr> ";
             //lectura contraseña
-            a=a+"<h3> Contraseña </h3><INPUT type=password SIZE=25 NAME=pass>";
+            a=a +"<tr><td style="+"color:#DF3A01"+">Contraseña</td><td><INPUT type=password SIZE=25 NAME=pass></td></tr>";
             
             //ciudad
             //lectura pais
-            a=a+"<h3> Pais </h3><INPUT type=text SIZE=25 NAME=country>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Pais </td><td><INPUT type=text SIZE=25 NAME=country></td></tr>";
             //lectura provincia
-            a=a+"<h3> Provincia </h3><INPUT type=text SIZE=25 NAME=state>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Provincia </td><td><INPUT type=text SIZE=25 NAME=state></td></tr>";
             //lectura ciudad
-            a=a+"<h3> Ciudad </h3><INPUT type=text SIZE=25 NAME=name>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+"> Ciudad </td><td><INPUT type=text SIZE=25 NAME=name></td></tr></table>";					
 
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<table align="+"center"+"><td valign=top></td><td>";
             //creacion de botones
-            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
+            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></table></FORM></BODY></HTML>";
             return a; 	
         });
  
         post("/User", (request, response) -> {
             String retornar;
-			retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+			retornar=" <body>";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             user.set("first_name", request.queryParams("first_name"));
@@ -417,48 +427,48 @@ public class App {
             user.saveIt();
             city.add(user);
 			retornar = retornar + "Usuario Cargado Correctamente";
-			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+			retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#DF3A01"+"> Volver </h3></a>";
             return retornar;
             
          });   
                                                                                                            
          
         get ("/ListUser/:id/newCar", (request, response) -> {         
-            String a ="<html> <head> <title> cargarAuto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/car\" method=\"post\">";
-            a= a + "<h1> Cargar Auto </h1> <FORM >";
-
-			a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-			
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+            String a ="<html> <head> <title> cargarAuto </title> </head> <body> <form action=\"/ListUser/"+request.params("id")+"/car\" method=\"post\">";
             
+		 // crea un enlace para volver a la pag anterior.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+	
+	    a= a + "<h1 align="+"center"+" style="+"color:#DF3A01"+" > Cargar Auto  </h1> <FORM >";
+
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+" <table align="+"center"+"><tr><td style="+"color:#DF3A01"+">Modelo Vehiculo</td><td> </h3><INPUT type=text SIZE=25 NAME=model>";
             //lectura modelo vehiculo
-            a=a+"<h3> Patente Vehiculo </h3><INPUT type=text SIZE=25 NAME=patent>";           
+            a=a+"<tr><td style="+"color:#DF3A01"+"> Patente Vehiculo</td><td><INPUT type=text SIZE=25 NAME=patent></td></tr>";           
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Color Vehiculo</td><td><INPUT type=text SIZE=25 NAME=color></td></tr>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Km Vehiculo </td><td><INPUT type=text SIZE=25 NAME=km></td></tr>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Marca Vehiculo</td><td><INPUT type=text SIZE=25 NAME=mark></td></tr>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";          
+            a=a+"<tr><td style="+"color:#DF3A01"+">Año Vehiculo</td><td><INPUT type=text SIZE=25 NAME=year></td></tr>";          
             
             //auto
             //lectura puertas auto
-            a=a+"<h3> Puertas Auto </h3><INPUT type=text SIZE=25 NAME=doors>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">Puertas Auto</td><td><INPUT type=text SIZE=25 NAME=doors></td></tr>"; 					
             //lectura version auto
-            a=a+"<h3> Version Auto </h3><INPUT type=text SIZE=25 NAME=version>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">Version Auto</td><td><INPUT type=text SIZE=25 NAME=version></td></tr>"; 					
             //lectura transmision Auto
-            a=a+"<h3> Transmision (Manual,Automatica)</h3><INPUT type=text SIZE=25 NAME=transmission>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Transmision (Manual,Automatica)</td><td><INPUT type=text SIZE=25 NAME=transmission></td></tr>";  
             //lectura direccion auto
-            a=a+"<h3> Direccion Auto (Hidraulica,Asistida,Mecanica) </h3><INPUT type=text SIZE=25 NAME=direction>";       
+            a=a+"<tr><td style="+"color:#DF3A01"+">Direccion Auto (Hidraulica,Asistida,Mecanica) </td><td><INPUT type=text SIZE=25 NAME=direction></td></tr></table>";       
             
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<table align="+"center"+"><td align=right valign=top></td><td>";
             //creacion de botones
-            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
+            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></table></FORM></BODY></HTML>";
+	    a= a+ "<table align="+"center"+"><td><a href="+"http://localhost:4567/ListUser/"+request.params("id")+"> <h3 style="+"color:#DF3A01"+">Volver </h3> </a></td></table>" ;
             return a; 	
         });
  
@@ -466,7 +476,7 @@ public class App {
         
         post("/ListUser/:id/car", (request, response) -> {
             String retornar;
-            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body>";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             User user2 = new User();
@@ -498,7 +508,7 @@ public class App {
             vehicle.add(car);
             retornar =retornar +"Carga Exitosa";
            
-            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#DF3A01"+"> Volver </h3></a>";
             return retornar;
          });   
         
@@ -506,47 +516,46 @@ public class App {
         
         
         get ("/ListUser/:id/newMotorcycle", (request, response) -> {         
-            String a ="<html> <head> <title> cargarAuto </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/motorcycle\" method=\"post\">";
-            a= a + "<BODY> <h1> Cargar Moto </h1> <FORM >";
-            
-            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-			
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
-      
+            String a ="<html> <head> <title> cargarAuto </title> </head> <body> <form action=\"/ListUser/"+request.params("id")+"/motorcycle\" method=\"post\">";
+
+		 // crea un enlace para volver a la pag anterior.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+            a= a + "<BODY> <h1 align="+"center"+" style="+"color:#DF3A01"+"> Cargar Moto </h1> <FORM >";
+
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+" <table align="+"center"+"><tr><td style="+"color:#DF3A01"+">Modelo Vehiculo </td><td><INPUT type=text SIZE=25 NAME=model></td></tr>";
             //lectura modelo vehiculo
-            a=a+"<h3> Patente Vehiculo </h3><INPUT type=text SIZE=25 NAME=patent>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Patente Vehiculo </td><td><INPUT type=text SIZE=25 NAME=patent></td></tr>";
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Color Vehiculo </td><td><INPUT type=text SIZE=25 NAME=color></td></tr>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<tr><td style="+"color:#DF3A01"+"> Km Vehiculo </td><td><INPUT type=text SIZE=25 NAME=km></td></tr>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Marca Vehiculo </td><td><INPUT type=text SIZE=25 NAME=mark></td></tr>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";  				
+            a=a+"<tr><td style="+"color:#DF3A01"+">Año Vehiculo </td><td><INPUT type=text SIZE=25 NAME=year></td></tr>";  				
          
             //moto
             //lectura tipo
-            a=a+"<h3> Tipo Moto (Street,Chopper,Standard,Sport,Touring,Scooters)</h3><INPUT type=text SIZE=25 NAME=type>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">Tipo Moto (Street,Chopper,Standard,Sport,Touring,Scooters)</td><td><INPUT type=text SIZE=25 NAME=type></td></tr>"; 		  			
             //lectura tipo motor
-            a=a+"<h3> Tipo Motor Moto </h3><INPUT type=text SIZE=25 NAME=type_motor>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">Tipo Motor Moto </td><td><INPUT type=text SIZE=25 NAME=type_motor></td></tr>";	 				
             //lectura boot_system
-            a=a+"<h3> Sistemas De Arranque Moto (Pedal,Electrico,Pedal y Electrico)</h3><INPUT type=text SIZE=25 NAME=boot_system>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Sistemas De Arranque Moto (Pedal,Electrico,Pedal y Electrico)</td><td><INPUT type=text SIZE=25 NAME=boot_system></td></tr>"; 
             //lectura cilindrada
-            a=a+"<h3> Cilindrada Moto <h3><INPUT type=text SIZE=25 NAME=displacement>";       
+            a=a+"<tr><td style="+"color:#DF3A01"+">Cilindrada Moto </td><td><INPUT type=text SIZE=25 NAME=displacement></td></tr>";       
                     
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<table align="+"center"+"><td align=right valign=top></td><td>";
             //creacion de botones
-            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
-            return a; 	
+            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></table></FORM></BODY></HTML>";
+	    a= a+ "<table align="+"center"+"><td><a href="+"http://localhost:4567/ListUser/"+request.params("id")+"> <h3 style="+"color:#DF3A01"+">Volver </h3> </a></td></table>" ;
+            return a; 
         });
         
         post("/ListUser/:id/motorcycle", (request, response) -> {
             String retornar;
-            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body>";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             User user2 = new User();
@@ -576,52 +585,51 @@ public class App {
             vehicle.add(moto);
 
             retornar =retornar +"Carga Exitosa";
-        retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+        retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#DF3A01"+"> Volver </h3></a>";
         return retornar;
      });   
         
          
         get ("/ListUser/:id/newTruck", (request, response) -> {         
-            String a ="<html> <head> <title> cargarCamion </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/truck\" method=\"post\">";
-            a= a + "<h1> Cargar Camion </h1> <FORM >";
+            String a ="<html> <head> <title> cargarCamion </title> </head> <body> <form action=\"/ListUser/"+request.params("id")+"/truck\" method=\"post\">";
 
-            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/InsertVehicle"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+		 // crea un enlace para volver a la pag principal.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+            a= a + "<h1 align="+"center"+" style="+"color:#DF3A01"+"> Cargar Camion </h1> <FORM >";
 
             //vehiculo
             //lectura modelo vehiculo
-            a=a+"<h3> Modelo Vehiculo </h3><INPUT type=text SIZE=25 NAME=model>";
+            a=a+" <table align="+"center"+"><tr><td style="+"color:#DF3A01"+"> Modelo Vehiculo </td><td><INPUT type=text SIZE=25 NAME=model></td></tr>";
             //lectura modelo vehiculo
-            a=a+"<h3> Patente Vehiculo </h3><INPUT type=text SIZE=25 NAME=patent>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Patente Vehiculo </td><td><INPUT type=text SIZE=25 NAME=patent></td></tr>";
             //lectura contraseña
-            a=a+"<h3> Color Vehiculo </h3><INPUT type=text SIZE=25 NAME=color>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Color Vehiculo </td><td><INPUT type=text SIZE=25 NAME=color></td></tr>";
             //lectura km vehiculo
-            a=a+"<h3> Km Vehiculo </h3><INPUT type=text SIZE=25 NAME=km>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Km Vehiculo </td><td><INPUT type=text SIZE=25 NAME=km></td></tr>";
             //lectura marcas vehiculo
-            a=a+"<h3> Marca Vehiculo </h3><INPUT type=text SIZE=25 NAME=mark>";
+            a=a+"<tr><td style="+"color:#DF3A01"+">Marca Vehiculo </td><td><INPUT type=text SIZE=25 NAME=mark></td></tr>";
             //lectura año vehiculo
-            a=a+"<h3> Año Vehiculo </h3><INPUT type=text SIZE=25 NAME=year>";  				
+            a=a+"<tr><td style="+"color:#DF3A01"+">Año Vehiculo</td><td><INPUT type=text SIZE=25 NAME=year></td></tr>";  				
          
             //camion
             //lectura sistema de frenos
-            a=a+"<h3> Sistema de frenos Camion </h3><INPUT type=text SIZE=25 NAME=brake_system>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">Sistema de frenos Camion</td><td><INPUT type=text SIZE=25 NAME=brake_system></td></tr>"; 	 				
             //lectura direction 
-            a=a+"<h3> direccion Camion (Hidraulica,Asistida,Mecanica) </h3><INPUT type=text SIZE=25 NAME=direction>";					
+            a=a+"<tr><td style="+"color:#DF3A01"+">direccion Camion (Hidraulica,Asistida,Mecanica)</td><td><INPUT type=text SIZE=25 NAME=direction></td></tr>";					
             //lectura capacidad
-            a=a+"<h3> Capacidad Camion </h3><INPUT type=text SIZE=25 NAME=capacity>"; 
+            a=a+"<tr><td style="+"color:#DF3A01"+">Capacidad Camion </td><td><INPUT type=text SIZE=25 NAME=capacity></td></tr></table>"; 
                                
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<table align="+"center"+"><td align=right valign=top></td><td>";
             //creacion de botones
-            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
-            return a; 	
+            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></table></FORM></BODY></HTML>";
+	    
+            return a;  	
         });
         
         
         post("/ListUser/:id/truck" , (request, response) -> {
             String retornar;
-            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body>";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             User user2 = new User();
@@ -649,7 +657,7 @@ public class App {
 
 
             retornar =retornar +"Carga Exitosa";
-            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#DF3A01"+"> Volver </h3></a>";
             return retornar;
          });   
         
@@ -658,7 +666,7 @@ public class App {
         get ("/ListUser/:id/vehicles/:idV/newPost", (request, response) -> {         
             String a ="<html> <head> <title> Create Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/vehicles/"+request.params("idV")+"/post\" method=\"post\">";
             a= a + "<h1> Crear Post </h1> <FORM >";
-            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
+
 
             // crea un enlace para volver a la pag anterior.
             a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
@@ -710,7 +718,7 @@ public class App {
         
         
          get("/ListUser/:id/posts/:idQ/question", (request, response) -> {        
-            String a ="<html> <head> <title> cargarPregunta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListPost/"+request.params("id")+"/question\" method=\"post\">";
+            String a ="<html> <head> <title> cargarPregunta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListPost/"+request.params("idQ")+"/question\" method=\"post\">";
             a= a + "<h1> Cargar Pregunta </h1> <FORM >";       
 
             //usaurio
@@ -738,7 +746,7 @@ public class App {
          
         post("/ListPost/:id/question", (request, response) -> {
             String retornar;
-            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body>";
             User user = new User();
             Post post = new Post();
             
@@ -776,21 +784,27 @@ public class App {
                  
                                                                                     
         get ("/ListUser/:id/posts/:idP/questions/:idQ/newAnswer", (request, response) -> {         
-            String a ="<html> <head> <title> cargarRespuesta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\" /ListUser/"+request.params("id")+"/posts/"+request.params("idP")+"/questions/"+request.params("idQ")+"/answer\" method=\"post\">";
-            a= a + "<h1> Cargar Respuesta </h1> <FORM >";       
+            String a ="<html> <head> <title> cargarRespuesta </title> </head> <body> <form action=\" /ListUser/"+request.params("id")+"/posts/"+request.params("idP")+"/questions/"+request.params("idQ")+"/answer\" method=\"post\">";
+
+	    // crea un enlace para volver a la pag principal.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+
+            a= a + "<h1 style="+"color:#DF3A01"+"> Respuesta </h1> <FORM >";
 
             //Usaurio
             //Lectura Email
-            a=a+"<h3> Email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
+            a=a+"<p> Email Usuario </p><INPUT type=text SIZE=25 NAME=email>";
             
             //Respuesta
             //lectura texto Respuesta
-            a=a+"<h3> Texto Respuesta </h3><INPUT type=text SIZE=25 NAME=textA>";
+            a=a+"<p> Texto Respuesta </p><INPUT type=text SIZE=25 NAME=textA>";
             
        
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<td align=right valign=top></td><td align=center>";
             //creacion de botones
             a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
+
+	    a= a+ "<a href="+"http://localhost:4567/ListUser/"+request.params("idP")+"/posts/"+request.params("idQ")+"/questions"+"> <h3 style="+"color:#DF3A01"+">Volver </h3> </a>" ;
             return a; 	
         });
         
@@ -832,18 +846,17 @@ public class App {
         
     /*----------------------------------------------BUSQUEDAS----------------------------------------------------*/    
         get ("/Search/User", (request, response) -> {         
-            String a ="<html> <head> <title> Busqueda </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/Search\" method=\"post\">";
-            a= a + "<h1> Buscar Usuario </h1> <FORM >";
+            String a ="<html> <head> <title> Busqueda </title> </head> <body> <form action=\"/Search\" method=\"post\">";
 
-            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+		 // crea un enlace para volver a la pag principal.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+             a= a + "<h1 style="+"color:#DF3A01"+"> Buscar Usuario </h1> <FORM >";          
             
             //Usuario
             //lectura 
-            a=a+"<h3> Email  </h3><INPUT type=text SIZE=25 NAME=firstName>";
+            a=a+"<p>Nombre  </p><INPUT type=text SIZE=25 NAME=firstName>";
                       
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<td align=right valign=top></td><td align=center>";
             //creacion de botones
             a = a + "<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
             return a; 	

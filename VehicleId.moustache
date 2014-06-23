@@ -26,7 +26,7 @@
 	</tr>
 	<tr>
 		<td style="color:#DF3A01">Marca</td>
-		<td>{{Mark}}</td>
+		<td>{{mark}}</td>
 	</tr>   
         <tr>
 		<td style="color:#DF3A01">Kilometros</td>
