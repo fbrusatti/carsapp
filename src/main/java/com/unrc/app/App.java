@@ -270,7 +270,9 @@ public class App
             List<Question> questions = Question.where("post_id = ?", post.id());
             attributes.put("vehicle_name", post.vehicle().name());
             attributes.put("post", post);
-            attributes.put("questions", questions);
+            if (questions != null) {
+                attributes.put("questions", questions);
+            }
             return new ModelAndView(attributes, "postId.mustache");
         },
             new MustacheTemplateEngine()
@@ -485,7 +487,7 @@ public class App
             SearchResponse res = new SearchResponse();
 
             if (minPrice.equals("") && maxPrice.equals("")) {
-                //Executes the search without the price range
+                //Executes the search only with the description
                 res = client.prepareSearch("posts")
                             .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                             .setQuery(QueryBuilders.matchQuery("description",description))
@@ -493,32 +495,38 @@ public class App
                             .actionGet();
             } else {
                 if (minPrice.equals("") && !(maxPrice.equals(""))) {
-                    //Executes the search only with minimun price range
+                    //Executes the search with minimun price range and description
                     res = client.prepareSearch("posts")
                                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                .setQuery(QueryBuilders.rangeQuery("price")
-                                                        .lte(maxPrice))
+                                .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .lte(maxPrice)))
                                 .execute()
                                 .actionGet();
                 } else {
                     if (!(minPrice.equals("")) && maxPrice.equals("")) {
-                        //Executes the search only with maximun price range
+                        //Executes the search with maximun price range and description
                         res = client.prepareSearch("posts")
                                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                    .setQuery(QueryBuilders.rangeQuery("price")
-                                                            .gte(minPrice))
+                                    .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .gte(minPrice)))
                                     .execute()
                                     .actionGet();
                     } else {
                         if (!(minPrice.equals("")) && !(maxPrice.equals(""))) {
-                            //Executes the search with both price ranges
+                            //Executes the search with both price ranges and description
                             res = client.prepareSearch("posts")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                        .setQuery(QueryBuilders.rangeQuery("price")
-                                                                .from(minPrice)
-                                                                .to(maxPrice)
-                                                                .includeLower(true)
-                                                                .includeUpper(true))
+                                        .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .from(minPrice)
+                                                                          .to(maxPrice)
+                                                                          .includeLower(true)
+                                                                          .includeUpper(true)))
                                         .execute()
                                         .actionGet();
                         }
