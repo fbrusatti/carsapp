@@ -59,13 +59,7 @@ public class App {
             new MustacheTemplateEngine()
         );
 		
-		get ("/Delete", (request, response) -> {
-			Map<String, Object> attributes = new HashMap<>();
-			return new ModelAndView(attributes, "Delete.moustache");
 
-			 },
-            new MustacheTemplateEngine()
-        );
 
 		get ("/List", (request, response) -> {
 			Map<String, Object> attributes = new HashMap<>();
@@ -75,13 +69,7 @@ public class App {
             new MustacheTemplateEngine()
         );
 
-		get ("/Search", (request, response) -> {
-			Map<String, Object> attributes = new HashMap<>();
-			return new ModelAndView(attributes, "Search.moustache");
 
-			 },
-            new MustacheTemplateEngine()
-        );
 	
 
 
@@ -190,7 +178,7 @@ public class App {
         
         Map<String,Object> attributes = new HashMap<String,Object>();
         attributes.put("userFirstName",u.getFirstName());
-        attributes.put("userFirstName",u.getLastName());
+        attributes.put("userLastName",u.getLastName());
         attributes.put("model",v.getModel());
         attributes.put("patent",v.getPatent());
         
@@ -207,7 +195,7 @@ public class App {
         } 
             
            
-        return new ModelAndView(attributes,"vehicleId.mustache");
+        return new ModelAndView(attributes,"VehicleId.moustache");
         },
         new MustacheTemplateEngine()
             );

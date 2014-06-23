@@ -2,31 +2,27 @@
 	<head > 
 		<title> List Users </title>
 	</head>
-
-	<body bgcolor="#BDBDBD">
-	<body link="#4000FF">
-	<body alink="#4000FF">
-	<body vlink="#4000FF">
-
-	<h1 style="color:#0000FF">Lista de Usuarios</h1>
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
+	<h1 style="color:#DF3A01">Lista de Usuarios</h1>
 
 		<p> Cantidad de Usuarios: {{users_count}}</p>
 
 		<table width="100%" border="1" cellspacing="0" cellpadding="3">
 			<tr>
-				<th style="color:#4000FF"> Nombre </th>
-				<th style="color:#4000FF"> Apellido </th>	
-				<th style="color:#4000FF"> E-mail </th>
+				<th style="color:#DF3A01"> Nombre </th>
+				<th style="color:#DF3A01"> Apellido </th>	
+				<th style="color:#DF3A01"> E-mail </th>
 			</tr>
 			{{#users}}
 			<tr>
-				<td> <a href="ListUser/{{id}}">{{getFirstName}} </a></td>
-				<td> {{getLastName}} </td>	
+				<td> <a href="ListUser/{{id}}" style="color:#DF3A01">{{getFirstName}} </a></td>
+				<td> {{getLastName}} </td>	 
 				<td>{{getEmail}}</td></br>
 			</tr>
 			{{/users}}
 	</table>
-	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 
+	<a href="http://localhost:4567/List" style="color:#DF3A01" align="right"> <h3>Volver </h3> </a> 
 	</body>
 
 </html>

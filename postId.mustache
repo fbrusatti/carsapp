@@ -3,33 +3,55 @@
 		<title> List Posts </title>
 	</head>
 
-	<body bgcolor="#BDBDBD">
-	<body link="#4000FF">
-	<body alink="#4000FF">
-	<body vlink="#4000FF">
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
 
-	<h1 style="color:#0000FF">Post</h1>
+	<h1 style="color:#DF3A01" align="center">Anuncios</h1>
+	<table width="100%" border="1">
+	<tr>
+		<td style="color:#DF3A01">Nombre del Usuarios</td>
+		<td>{{userFirstName}}</td>
+	</tr>
+        <tr>
+		<td style="color:#DF3A01">Apellido del Usuarios</td>
+		<td>{{userLastName}}</td>
+	</tr>
+        <tr>
+		<td style="color:#DF3A01">Titulo del Anuncio</td>
+		<td> {{title}}</td>
+	</tr> 
+	<tr>
+		<td style="color:#DF3A01">Descripcion</td>
+		<td>{{description}}</td>
+	</tr>  
+        <tr>
+		<td style="color:#DF3A01">Precio</td>
+		<td>{{price}}</td>
+	</tr>
+        <tr>
+		<td style="color:#DF3A01">Modelo del Vehiculo</td>
+		<td>{{model}}</td>
+	</tr>
+        <tr>
+		<td style="color:#DF3A01"> Patente del Vehiculo</td>
+		<td>{{patent}}</td>
+	</tr>
+	<tr>
+		<td style="color:#DF3A01">Tipo Motor Moto</td>
+		<td>{{type_motor}}</td>
+	</tr>   
+        <tr>
+		<td style="color:#DF3A01">Puertas Auto</td>
+		<td>{{version}}</td>
+	</tr>
+        <tr>
+		<td style="color:#DF3A01"> Sistema de Freno Camion</td>
+		<td>{{brake_system}}</td>
+	</tr>
 
-    <p> Nombre del Usuarios: {{userFirstName}}</p>
-		<p> Apellido del Usuarios: {{userFirstName}}</p>
-		<p> Titulo del Post: {{price}}</p>
-		<p> Precio: {{title}}</p>
-    <p> Modelo del vehiculo: {{model}}</p>
-    <p> Patente del vehiculo: {{patent}}</p>
-
-    <p> tipo motor moto: {{type_motor}}</p>
-    <p> puertas auto: {{version}}</p>
-    <p> sistema de arranque camion: {{brake_system}}</p>
-
-
-		<table width="100%" border="1" cellspacing="0" cellpadding="3">
-			<tr>
-				<th style="color:#4000FF"> Titulo </th>
-				<th style="color:#4000FF"> Price </th>	
-			</tr>
-			
 	</table>
-	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 
+
+	<a href="http://localhost:4567/ListUser" style="color:#DF3A01"><h3>Volver </h3> </a> 
 	</body>
 
 </html>

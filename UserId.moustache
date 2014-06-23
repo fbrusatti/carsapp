@@ -2,26 +2,39 @@
 	<head > 
 		<title> Users </title>
 	</head>
-	{{#user}}	
-		
-        			
-				<a href="{{id}}/posts"> <img src="http://localhost:4567/ButtonPost.png"/> </a>
-        			<a href="{{id}}/delete"> <img src="http://localhost:4567/ButtonDelete.png"/> </a>
-        			<a href="{{id}}/vehicles"> <img src="http://localhost:4567/ButtonVehicle.png"/> </a>
-				<select name="entradaselect">
-				<optgroup label="Cargar"><img src="http://localhost:4567/ButtonVehicle.png"/>
-					<option><a href="{{id}}/newCar"><img src="http://localhost:4567/ButtonCar.png"/> </a></option>
-					<option value="{{id}}/newMotorcycle"><img src="http://localhost:4567/ButtonMotorcycle.png"/></option>
-					<option value="{{id}}/newTruck"><img src="http://localhost:4567/ButtonTruck.png"/></option>
-				</optgroup>				
-				</select>
-				
-
-	<h3 style="color:#DF3A01">Usuario: </h3><p>{{getFirstName}} {{getLastName}}</p>
-			
-{{/user}}			
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
 	
+	{{#user}}
+	<h1 style="color:#DF3A01" align="center">Usuario {{getFirstName}} {{getLastName}}</h1>	
+
+	<table align="center" border="1">
+		<tr>
+			<td>
+				<a href="{{id}}/posts"> <img src="http://localhost:4567/ButtonPost.png"/> </a>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				<a href="{{id}}/delete"> <img src="http://localhost:4567/ButtonDelete.png"/> </a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="{{id}}/vehicles"> <img src="http://localhost:4567/ButtonVehicle.png"/> </a>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<img src="http://localhost:4567/ButtonInsert.png"/></br>
+				<a href="{{id}}/newCar"><img src="http://localhost:4567/ButtonCar.png"/> </a></br>
+				<a href="{{id}}/newMotorcycle"><img src="http://localhost:4567/ButtonMotorcycle.png"/></a></br>
+				<a href="{{id}}/newTruck"><img src="http://localhost:4567/ButtonTruck.png"/></a>
+			</td>
+		</tr>
+ 	</table>
 	<a href="http://localhost:4567/ListUser"> <h3 style="color:#DF3A01">Volver </h3> </a>
+	{{/user}}
 	</body>
 
 </html>

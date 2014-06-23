@@ -1,6 +1,6 @@
 <html>
 	<head > 
-		<title> List Vehicle </title>
+		<title> List Posts </title>
 	</head>
 
 	<body bgcolor="#BDBDBD">
@@ -8,27 +8,18 @@
 	<body alink="#4000FF">
 	<body vlink="#4000FF">
 
-	<h1 style="color:#0000FF">Lista de Vehiculos</h1>
+	<h1 style="color:#0000FF">Lista de los posts del usuario</h1>
 
-		<p> Cantidad de Vehiculos: {{users_count}}</p>
-
+		
 		<table width="100%" border="1" cellspacing="0" cellpadding="3">
+			
+			{{#UserPosts}}
 			<tr>
-				<th style="color:#4000FF"> Patente </th>
-				<th style="color:#4000FF"> Modelo </th>	
-				<th style="color:#4000FF"> Marca </th>
-				<th style="color:#4000FF"> Kilometros </th>
-				<th style="color:#4000FF"> Año </th>
+
+        <td> <a href="posts/{{id}}"> {{getTitle}} </a></td>				
+
 			</tr>
-			{{#vehicles}}
-			<tr>
-				<td> {{getPatent}} </td>
-				<td> {{getModel}} </td>	
-				<td>{{getMark}}</td>
-				<td>{{getKm}}</td>
-				<td>{{getColor}}</td></br>
-			</tr>
-			{{/vehicles}}
+			{{/UserPosts}}
 	</table>
 	<a href="http://localhost:4567/app"> <h3>Volver </h3> </a> 
 	</body>
