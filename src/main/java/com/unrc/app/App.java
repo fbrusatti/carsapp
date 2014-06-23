@@ -124,13 +124,56 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        // Form Add Question
-        get("/users/add/question" , (request,response) -> {
+        // Form Add Answer
+        get("/users/add/answers" , (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "questionAdd.mustache");
+            return new ModelAndView(attributes, "answersAdd.mustache");
         },
             new MustacheTemplateEngine()
         );
+
+        post("/users/add/answers" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+
+            String email = request.queryParams("login");
+            User user = User.findFirst("email = ?",email);
+            List<Post> posts = Post.where("user_id = ?", user.id());
+
+            attributes.put("user_Id",user.id());
+            attributes.put("posts",posts);
+
+            return new ModelAndView(attributes, "answersAdd.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+         get("/questions/post/:id" , (request,response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            Post post = Post.findById(Integer.parseInt(request.params(":id")));
+            List<Question> question = Question.where("post_id = ?", post.id());
+            List<Question> questionActive = Question.where("active = ?", true);
+
+            attributes.put("questions_count",questionActive.size());
+            attributes.put("user_Id",post.user().id());
+            attributes.put("post_Id",post.id());
+            attributes.put("questions",questionActive);
+
+            return new ModelAndView(attributes, "answerPost.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+        post("/answer/post" , (request,response) -> {
+            User u = User.findById(request.queryParams("user"));
+            Post p = Post.findById(request.queryParams("post"));
+            Question q = Question.findById(request.queryParams("question"));
+            u.addAnswer(request.queryParams("description"),p,q);
+
+            String id = p.getString("id");
+            String url = "/questions/post/"+id;
+            response.redirect(url);
+            return "success";
+        });
 
         //From to create a Post
         get("/users/add/post" , (request,response) -> {
@@ -339,6 +382,17 @@ public class App
             Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
             return "Answer: " + a.toString();
         });
+
+        get("/answers/user/:id", (request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            User user = User.findById(Integer.parseInt(request.params(":id")));
+            List<Answer> answers = Answer.where("user_id = ?", user.id());
+            attributes.put("user_name", user.name());
+            attributes.put("answers", answers);
+            return new ModelAndView(attributes, "answersUser.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
         
         /*----------------------SEARCH STUFF----------------*/
         //Show a search bar
