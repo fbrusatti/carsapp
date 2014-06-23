@@ -1,0 +1,45 @@
+<title>
+    Create Answer
+</title>
+
+    <head>
+    <style>
+    table,th,td
+    {
+    border:1px solid black;
+    border-collapse:collapse;
+    }
+    th,td
+    {
+    padding:5px;
+    }
+    </style>
+    </head>
+
+<body>
+    {{^users}}
+    <form name="login" action="/users/add/answers" method="post">
+    Login (email): <input type="email" name="login" autofocus required>
+                   <input type="submit" value="Login">
+    </form>
+    {{/users}}
+
+    {{#user_Id}}
+        <h2>My posts: </h2><br>
+        <table style type="text/css">
+        {{#posts}}
+                <tr>
+                    {{#vehicle}}
+                    <td>{{name}}</td>
+                    {{/vehicle}}
+                    <td>${{price}}</td> 
+                    <td><a href="http://localhost:4567/questions/post/{{id}}"> New message</a></td>
+                </tr>
+        {{/posts}}
+        </style>
+        </table>
+    {{/user_Id}}
+</body>
+
+
+   

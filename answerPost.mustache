@@ -1,0 +1,38 @@
+<title>
+    Questions Post
+</title>
+    <h2>Questions count: {{questions_count}}</h2>
+    <head>
+    <style>
+    table,th,td
+    {
+    border:1px solid black;
+    border-collapse:collapse;
+    }
+    th,td
+    {
+    padding:5px;
+    }
+    </style>
+    </head>
+
+<body>
+    {{#user_Id}}
+         <form name="post" action="/answer/post" method="post">
+        {{#post_Id}}
+        <input type="hidden" name="user" value="{{user_Id}}">
+         <input type="hidden" name="post" value="{{post_Id}}">
+            {{#questions}}
+                <input type="hidden" name="question" value="{{id}}">
+                {{#user}}
+                    {{name}}<br>
+                {{/user}}
+                {{description}}<br>
+                <textarea name="description" style="width:400px;height:50px;"></textarea>
+                <input type="submit" value="Answer">
+                <br>
+            {{/questions}}
+        {{/post_Id}}         
+        </form>
+    {{/user_Id}}
+</body>

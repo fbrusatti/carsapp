@@ -1,0 +1,32 @@
+<h1>My Answers</h1>
+
+ 	<h2>Users: {{user_name}}</h2>
+
+ 	<style>
+ 	table,th,td
+ 	{
+ 	border:1px solid black;
+ 	border-collapse:collapse;
+ 	}
+ 	th,td
+ 	{
+ 	padding:5px;
+ 	}
+ 	</style>
+ 	</head>
+ 	<body>
+	 	<table style= type="text/css">
+			<tr><th> Question </th>
+				<th> Answer </th>
+			</tr>
+			{{#answers}}
+				<tr>
+					{{#question}}
+					<td>{{description}}</td>
+					{{/question}}
+					<td>{{description}}</td>
+	        	</tr>
+	    	{{/answers}}
+	  	</table>
+	</style>
+	</body>
