@@ -1,0 +1,12 @@
+<body>
+	<p> {{cantidad}}</p>
+
+	<br>
+	
+	{{#list}}
+	<tr>
+		<p>{{name}}</p>
+		<p>{{email}}</p>
+	</tr>
+	{{/list}}
+</body>

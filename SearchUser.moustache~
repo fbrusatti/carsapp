@@ -1,0 +1,12 @@
+<body>
+	<p> {{result_count}}</p>
+
+	<br>
+	
+	{{#result}}
+	<tr>
+		<p>{{name}}</p>
+		<p>{{email}}</p>
+	</tr>
+	{{/result}}
+</body>

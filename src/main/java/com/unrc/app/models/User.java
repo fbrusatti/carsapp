@@ -18,8 +18,9 @@ public class User extends Model {
 	@Override
 	public void afterCreate() {
             Map<String, Object> json = new HashMap<>();
-            json.put("name", this.getFirstName() +" "+ this.getLastName());
+            json.put("name", this.getFirstName());
             json.put("email", this.getEmail());
+            json.put("id",this.id());
 
             App.client().prepareIndex("users", "user")
                         .setSource(json)
@@ -28,6 +29,10 @@ public class User extends Model {
 
        //     node.close();
       }
+       
+        public String name() {
+            return this.getString("first_name") +" "+ this.getString("last_name");
+        }
         
         
         public String id() {

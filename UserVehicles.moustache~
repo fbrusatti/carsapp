@@ -17,6 +17,7 @@
 			<tr>
 
         <td> <a href="vehicles/{{id}}"> {{getPatent}} </a></td>				
+	<td> <a href="vehicles/{{id}}/newPost"> Cargar post </a></td>
 
 			</tr>
 			{{/UserVehicles}}

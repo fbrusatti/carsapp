@@ -1,16 +1,27 @@
 package com.unrc.app;
 
-import org.javalite.activejdbc.Base;
 import com.unrc.app.models.*;
-import static spark.Spark.*;
-import spark.ModelAndView;
 import java.util.*;
-import org.elasticsearch.node.Node;
+import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.node.Node;
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.javalite.activejdbc.Base;
+import spark.ModelAndView;
+import static spark.Spark.*;
 /**
  * Hello world!
  *
  */
+
+
+        
+
+
 public class App {
     public static final Node node = org.elasticsearch.node
                                         .NodeBuilder
@@ -25,6 +36,7 @@ public class App {
     public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
+	externalStaticFileLocation("./Images");
    
 	before((request, response) -> {                                 //OJO CON LA CONTRASEÑA
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
@@ -202,11 +214,6 @@ public class App {
     
                 
 
-     
-
-
-
-
 // Listar Post
         get("/ListPost", (request, response) -> {
           Map<String, Object> attributes = new HashMap<>();
@@ -275,7 +282,6 @@ public class App {
    );
 
   
-  ///////////////////////////////////////
    get("/ListUser/:id/posts/:idP/questions/:idQ/answerInd", (request, response) -> {
        
         Question q = Question.findById(request.params("idQ")); 
@@ -836,8 +842,58 @@ public class App {
                 return retornar; 
          });
         
+    /*----------------------------------------------BUSQUEDAS----------------------------------------------------*/    
+        get ("/Search/User", (request, response) -> {         
+            String a ="<html> <head> <title> Busqueda </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/Search\" method=\"post\">";
+            a= a + "<h1> Buscar Usuario </h1> <FORM >";
+
+            a= a +" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+">";
+            // crea un enlace para volver a la pag anterior.
+            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
+            
+            //Usuario
+            //lectura 
+            a=a+"<h3> Email  </h3><INPUT type=text SIZE=25 NAME=firstName>";
+                      
+            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            //creacion de botones
+            a = a + "<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
+            return a; 	
+        });
         
+        post("/Search",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            Client client = node.client();
   
+            SearchResponse response_elastic = client.prepareSearch("users")
+                                        .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                                        .setQuery(QueryBuilders.matchQuery("name",request.queryParams("firstName")))
+                                        .execute()
+                                        .actionGet();
+
+            SearchHit[] docs = response_elastic.getHits().getHits();
+
+            node.close();
+
+          
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<Map<String,Object>> lista = new LinkedList<Map<String,Object>>();
+            for (SearchHit sh : docs) {
+                map = sh.getSource();
+                lista.add(map);
+
+            } 
+            long cant = response_elastic.getHits().getTotalHits();
+
+            attributes.put("list",lista);
+            attributes.put("cantidad",cant);
+            
+            return new ModelAndView(attributes,"SearchUser.moustache");
+        },
+            new MustacheTemplateEngine()
+       
+     );
+
         
      get("/cerrar", (request, response) -> {
             node.close();

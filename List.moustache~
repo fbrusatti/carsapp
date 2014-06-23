@@ -12,24 +12,24 @@
 		<table border=1 align="center"> 
 			<tr>
 				<td>
-	    			<a href="http://localhost:4567/app/RegisterUser"> Registrarse </a> </br>
+	    			<a href="http://localhost:4567/app/RegisterUser"> <img src="Images/ButtonNewUser.png"/> </a> </br>
 				</td>
 			</tr>
 		
 			<tr>
 				<td>
-					<a href="http://localhost:4567/app"> (-) Listar </a> </br>
+					<a href="http://localhost:4567/app"> <img src="Images/ButtonList.png"/> </a> </br>
 					
-					<a href="http://localhost:4567/ListUsers" style="color:#B40404" > -> Listar Usuarios </a> </br>
+					<a href="http://localhost:4567/ListUser" style="color:#B40404" > <img src="Images/ButtonUser2.png"/> </a> </br>
 
-					<a href="http://localhost:4567/ListVehicles" style="color:#B40404" > -> Listar Vehiculos </a> </br>
+					<a href="http://localhost:4567/ListVehicles" style="color:#B40404" > <img src="Images/ButtonVehicle2.png"/> </a> </br>
 
-					<a href="http://localhost:4567/ListPost" style="color:#B40404" > -> Listar Posts </a> </br>
+					<a href="http://localhost:4567/ListPost" style="color:#B40404" > <img src="Images/ButtonPost2.png"/> </a> </br>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<a href="http://localhost:4567/Search"> (+) Buscar </a> </br>
+					<a href="http://localhost:4567/Search"> <img src="Images/ButtonSearch.png"/> </a> </br>
 				</td>
 			</tr>
 		</table>

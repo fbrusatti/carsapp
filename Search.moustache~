@@ -12,18 +12,17 @@
 		<table border=1 align="center"> 
 			<tr>
 				<td>
-	    			<a href="http://localhost:4567/app/RegisterUser"> Registrarse </a> </br>
+	    				<a href="http://localhost:4567/app/RegisterUser"> <img src="Images/ButtonNewUser.png"/> </a> </br>
 				</td>
-			</tr>
-		
+			</tr>			
 			<tr>
 				<td>
-					<a href="http://localhost:4567/List"> (+) Listar </a> </br>
+					<a href="http://localhost:4567/List"><img src="Images/ButtonList.png"/> </a> </br>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<a href="http://localhost:4567/app"> (-) Buscar </a> </br>
+					<a href="http://localhost:4567/Search"> <img src="Images/ButtonSearch.png"/> </a> </br>
 				</td>
 			</tr>
 		</table>
