@@ -54,6 +54,16 @@
             <font color = "red">Answer: </font>{{description}}<br>
             {{/answer}}
             <br>
+
+            {{#active}}
+                <form action="/posts/answer" method="post">
+                    <input type="hidden" name="questionId" value="{{id}}">
+                    Login:
+                    <input type="email" name="login">
+                    <input type="submit" value="Answer">
+                </form>
+            {{/active}}
+
         {{/questions}}
         <br>
         <form action="/questions" method="post">

@@ -40,15 +40,10 @@ import com.unrc.app.models.Question;
 import com.unrc.app.models.Answer;
 import com.unrc.app.models.Address;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        try {                           //code to open browser in hello url. problem, it loads without the content of spark
+
+public class App {
+    public static void main( String[] args ) {
+        /*try {                           //code to open browser in hello url. problem, it loads without the content of spark
             URI uri = new URI("http://localhost:4567/hello");
             Desktop desktop = null;
             if (Desktop.isDesktopSupported()) {
@@ -61,7 +56,7 @@ public class App
                 ioe.printStackTrace();
             } catch (URISyntaxException use) {
                 use.printStackTrace();
-            }
+            }*/
 
 
         before((request, response) -> {
@@ -73,6 +68,10 @@ public class App
             return "Welcome";
         }); 
         
+        get("/whoops", (request, response) -> {
+            return "not found";
+        });
+
         get("/hello",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "hello.mustache");
@@ -80,7 +79,9 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        /*------------------------USER STUFF----------------------------*/
+        /*------------------------ USER ROUTES ----------------------------*/
+
+        //Form to create a user
         get("/users/new" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "usersNew.moustache");
@@ -88,6 +89,25 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        post ("/users",(request, response) ->{ 
+            User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
+            String message = new String();
+            if (!(admin.getBoolean("is_admin"))) {
+                message = "fail";
+            } else {
+                String name = request.queryParams("name");
+                String lastname = request.queryParams("lastname");
+                String email = request.queryParams("email");
+                String street = request.queryParams("street");
+                String address_number = request.queryParams("address_number");
+                admin.createUser(name,lastname,email,street,address_number); 
+                message = "success"; 
+            }
+            response.redirect("/hello");
+            return message;
+        });
+
+        //Form to add a vehicle
         get("/users/add/vehicles" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("selectType",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
@@ -99,7 +119,6 @@ public class App
         post("/user/add/vehicles" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
             String type = request.queryParams("vehicleType");
-            System.out.println(type);
             if (type.equals("car")) {
                 attributes.put("car",true);
             }if (type.equals("truck")) {
@@ -116,7 +135,7 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        // Form Add Address
+        // Form to add Addresses
         get("/users/add/addresses" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "addressAdd.moustache");
@@ -124,7 +143,7 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        // Form Add Answer
+        // Form to see posts and attempt to answer them
         get("/users/add/answers" , (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "answersAdd.mustache");
@@ -147,33 +166,26 @@ public class App
             new MustacheTemplateEngine()
         );
 
-         get("/questions/post/:id" , (request,response) -> {
+        // Form to write the answer to a question
+        get("/questions/post/:id" , (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Post post = Post.findById(Integer.parseInt(request.params(":id")));
-            List<Question> question = Question.where("post_id = ?", post.id());
-            List<Question> questionActive = Question.where("active = ?", true);
+            List<Question> activeQuestions = Question.where("post_id = ? AND active = true",post.id());
 
-            attributes.put("questions_count",questionActive.size());
-            attributes.put("user_Id",post.user().id());
-            attributes.put("post_Id",post.id());
-            attributes.put("questions",questionActive);
-
+            if (post == null || activeQuestions == null) {
+                response.redirect("/whoops", 404);
+                return new ModelAndView(attributes, "answerPost.mustache"); //only for compiling purposes
+            } else {
+                attributes.put("questions_count",activeQuestions.size());
+                attributes.put("userId",post.userId());
+                attributes.put("postId",post.id());
+                attributes.put("questions",activeQuestions);
+            }
             return new ModelAndView(attributes, "answerPost.mustache");
         },
             new MustacheTemplateEngine()
         );
 
-        post("/answer/post" , (request,response) -> {
-            User u = User.findById(request.queryParams("user"));
-            Post p = Post.findById(request.queryParams("post"));
-            Question q = Question.findById(request.queryParams("question"));
-            u.addAnswer(request.queryParams("description"),p,q);
-
-            String id = p.getString("id");
-            String url = "/questions/post/"+id;
-            response.redirect(url);
-            return "success";
-        });
 
         //From to create a Post
         get("/users/add/post" , (request,response) -> {
@@ -206,27 +218,6 @@ public class App
             return "success";
         });
 
-
-
-        /** **** **/
-        post ("/users",(request, response) ->{ 
-            User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
-            String message = new String();
-            if (!(admin.getBoolean("is_admin"))) {
-                message = "fail";
-            } else {
-                String name = request.queryParams("name");
-                String lastname = request.queryParams("lastname");
-                String email = request.queryParams("email");
-                String street = request.queryParams("street");
-                String address_number = request.queryParams("address_number");
-                admin.createUser(name,lastname,email,street,address_number); 
-                message = "success"; 
-            }
-            response.redirect("/hello");
-            return message;
-        });
-
         //List of users
         get("/users",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -239,7 +230,7 @@ public class App
         );
 
         
-        //Show Users 
+        //Show User by the id
         get("/users/:id", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             User user = User.findById(Integer.parseInt(request.params(":id")));
@@ -257,21 +248,25 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        get("/whoops", (request, response) -> {
-            return "not found";
-        });
 
-        /*----------------------POST STUFF-----------------*/
+        /*---------------------- POST ROUTES -----------------*/
 
-        //Show Posts
+        //Show Post by id
         get("/posts/:id", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Post post = Post.findById(Integer.parseInt(request.params(":id")));
-            List<Question> questions = Question.where("post_id = ?", post.id());
-            attributes.put("vehicle_name", post.vehicle().name());
-            attributes.put("post", post);
-            attributes.put("questions", questions);
-            return new ModelAndView(attributes, "postId.mustache");
+            if (post == null) {
+                response.redirect("/whoops",404);
+                return new ModelAndView(attributes, "postId.mustache");
+            } else {
+                List<Question> questions = Question.where("post_id = ?", post.id());
+                attributes.put("vehicle_name", post.vehicle().name());
+                attributes.put("post", post);
+                if (questions != null) {
+                    attributes.put("questions", questions);
+                }
+                return new ModelAndView(attributes, "postId.mustache");
+            }
         },
             new MustacheTemplateEngine()
         );
@@ -287,9 +282,22 @@ public class App
             new MustacheTemplateEngine()
         );
 
-        /*----------------------VEHICLE STUFF----------------*/
+        post("/posts/answer",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            Question question = Question.findById(request.queryParams("questionId"));
+            User user = User.findFirst("email = ?",request.queryParams("login"));
+            attributes.put("question",question);
+            attributes.put("user",user);
 
-        post ("/vehicles",(request, response) ->{ 
+            return new ModelAndView(attributes, "postAnswer.mustache");
+        }, 
+            new MustacheTemplateEngine()
+        );
+
+        /*---------------------- VEHICLE ROUTES ----------------*/
+
+        // /users/add/vehicle does a POST to this route
+        post("/vehicles",(request, response) -> { 
             String name = request.queryParams("name");
             String model = request.queryParams("model");
             String km = request.queryParams("km"); //should take integers in the form
@@ -302,7 +310,7 @@ public class App
                 u.addTruck(name,model,km,request.queryParams("truckType"));
             }if (type.equals("moto")) {
                 u.addMoto(name,model,km,request.queryParams("motoType"));
-            }if (type.equals("car")) {
+            }if (type.equals("other")) {
                 u.addVehicle(name,model,km);
             }
             response.redirect("/vehicles");
@@ -324,17 +332,22 @@ public class App
         //Show Vehicles 
         get("/vehicles/:id", (request, response) -> {
             Vehicle v = Vehicle.findById(Integer.parseInt(request.params(":id")));
-            String vehicleName = v.getString("name") +" "+ v.getString("model");
-            String km = v.getString("km");
-            User u1 = User.findById(v.getInteger("user_id"));
-            String userName = u1.getString("first_name");
-            return "Vehicle: " + vehicleName+"\n"+"Belongs to: "+userName;
+            if (v == null) {
+                response.redirect("/whoops", 404);
+                return "not found";
+            } else {
+                String vehicleName = v.getString("name") +" "+ v.getString("model");
+                String km = v.getString("km");
+                User u1 = User.findById(v.getInteger("user_id"));
+                String userName = u1.getString("first_name");
+                return "Vehicle: " + vehicleName+"\n"+"Belongs to: "+userName;
+            }
         });
 
-        /*----------------------QUESTION STUFF----------------*/
+        /*---------------------- QUESTION ROUTES ----------------*/
 
         
-        //List of Questions
+        /*//List of Questions
         get("/questions", (request,response) -> {
             List<Question> questionList = Question.findAll();
             String list = new String();
@@ -344,9 +357,10 @@ public class App
                 list = list+q.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Question: "+q.getString("description")+"\n";
             }
             return list;
-        });
+        });*/
 
-        post ("/questions",(request, response) ->{ 
+        // The form shown in the post details POSTs to this route
+        post ("/questions",(request, response) -> { 
             String description = request.queryParams("description");
             String post = request.queryParams("postId");
             String user = request.queryParams("user"); //later we should use the id of the user logged
@@ -356,13 +370,13 @@ public class App
             return "success"; 
         });
 
-        //Show Questions 
+        /*//Show Question by id
         get("/questions/:id", (request, response) -> {
             Question q = Question.findById(Integer.parseInt(request.params(":id")));
             return "Question: " + q.toString();
-        });
+        });*/
 
-        /*----------------------ANSWER STUFF----------------*/
+        /*---------------------- ANSWERS ROUTES ----------------*/
 
         //List of Answers
         get("/answers", (request,response) -> {
@@ -376,13 +390,23 @@ public class App
             return list;
         });
 
-
-        //Show Answers
-        get("/answers/:id", (request, response) -> {
-            Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
-            return "Answer: " + a.toString();
+        post("/answers", (request,response) -> {
+            Question question = Question.findById(request.queryParams("questionId"));
+            User user = User.findById(request.queryParams("userId"));
+            Post post = Post.findById(question.getString("post_id"));
+            String description = request.queryParams("description");
+            user.addAnswer(description,post,question);
+            response.redirect("/posts/"+post.id());
+            return "success";
         });
 
+        // //Show Answer by id
+        // get("/answers/:id", (request, response) -> {
+        //     Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
+        //     return "Answer: " + a.toString();
+        // });
+
+        /*// form 
         get("/answers/user/:id", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             User user = User.findById(Integer.parseInt(request.params(":id")));
@@ -392,10 +416,14 @@ public class App
             return new ModelAndView(attributes, "answersUser.mustache");
         },
             new MustacheTemplateEngine()
-        );
+        );*/
+
+
         
-        /*----------------------SEARCH STUFF----------------*/
-        //Show a search bar
+        
+        /*---------------------- SEARCH ROUTES ----------------*/
+
+        // Show a search bar
         get("/search/users",(request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("found?",false);
@@ -404,6 +432,7 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        // Search for users
         post("/search/users", (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
@@ -454,7 +483,7 @@ public class App
         );
 
 
-        //Show a search bar for posts
+        // Show a search bar for posts
         get("/search/posts",(request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("found?",false);
@@ -463,6 +492,8 @@ public class App
             new MustacheTemplateEngine()
         );
 
+
+        // Search for posts
         post("/search/posts", (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
 
@@ -485,7 +516,7 @@ public class App
             SearchResponse res = new SearchResponse();
 
             if (minPrice.equals("") && maxPrice.equals("")) {
-                //Executes the search without the price range
+                //Executes the search only with the description
                 res = client.prepareSearch("posts")
                             .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                             .setQuery(QueryBuilders.matchQuery("description",description))
@@ -493,32 +524,38 @@ public class App
                             .actionGet();
             } else {
                 if (minPrice.equals("") && !(maxPrice.equals(""))) {
-                    //Executes the search only with minimun price range
+                    //Executes the search with minimun price range and description
                     res = client.prepareSearch("posts")
                                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                .setQuery(QueryBuilders.rangeQuery("price")
-                                                        .lte(maxPrice))
+                                .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .lte(maxPrice)))
                                 .execute()
                                 .actionGet();
                 } else {
                     if (!(minPrice.equals("")) && maxPrice.equals("")) {
-                        //Executes the search only with maximun price range
+                        //Executes the search with maximun price range and description
                         res = client.prepareSearch("posts")
                                     .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                    .setQuery(QueryBuilders.rangeQuery("price")
-                                                            .gte(minPrice))
+                                    .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .gte(minPrice)))
                                     .execute()
                                     .actionGet();
                     } else {
                         if (!(minPrice.equals("")) && !(maxPrice.equals(""))) {
-                            //Executes the search with both price ranges
+                            //Executes the search with both price ranges and description
                             res = client.prepareSearch("posts")
                                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                                        .setQuery(QueryBuilders.rangeQuery("price")
-                                                                .from(minPrice)
-                                                                .to(maxPrice)
-                                                                .includeLower(true)
-                                                                .includeUpper(true))
+                                        .setQuery(QueryBuilders.boolQuery()
+                                                       .must(QueryBuilders.matchQuery("description",description))
+                                                       .must(QueryBuilders.rangeQuery("price")
+                                                                          .from(minPrice)
+                                                                          .to(maxPrice)
+                                                                          .includeLower(true)
+                                                                          .includeUpper(true)))
                                         .execute()
                                         .actionGet();
                         }
