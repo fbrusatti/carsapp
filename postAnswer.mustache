@@ -1,0 +1,17 @@
+<title>Answer question</title>
+<h1> Answer Question: </h1>
+{{#question}}
+<h3> {{description}} </h3>
+{{/question}}
+
+<form action="/answers" method="post">
+    {{#question}}
+        <input type="hidden" name="questionId" value="{{id}}">
+    {{/question}}
+    {{#user}}
+        <input type="hidden" name="userId" value="{{id}}">
+    {{/user}}
+    <textarea name="description" style="width:400px;height:50px;"></textarea>
+    <input type="submit" value="Answer">
+
+</form>
