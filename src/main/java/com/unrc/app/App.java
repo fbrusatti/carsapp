@@ -69,7 +69,7 @@ public class App {
         }); 
         
         get("/whoops", (request, response) -> {
-            return "not found";
+            return "error";
         });
 
         get("/hello",(request, response) -> {
@@ -84,7 +84,7 @@ public class App {
         //Form to create a user
         get("/users/new" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "usersNew.moustache");
+            return new ModelAndView(attributes, "usersNew.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -93,7 +93,9 @@ public class App {
             User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
             String message = new String();
             if (!(admin.getBoolean("is_admin"))) {
+                response.redirect("/whoops",403);
                 message = "fail";
+                return message;
             } else {
                 String name = request.queryParams("name");
                 String lastname = request.queryParams("lastname");
@@ -102,16 +104,16 @@ public class App {
                 String address_number = request.queryParams("address_number");
                 admin.createUser(name,lastname,email,street,address_number); 
                 message = "success"; 
+                response.redirect("/hello");
+                return message;
             }
-            response.redirect("/hello");
-            return message;
         });
 
         //Form to add a vehicle
         get("/users/add/vehicles" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
             attributes.put("selectType",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
-            return new ModelAndView(attributes, "vehiclesAdd.moustache");
+            return new ModelAndView(attributes, "vehiclesAdd.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -130,7 +132,7 @@ public class App {
             };
             attributes.put("load",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
             
-            return new ModelAndView(attributes,"vehiclesAdd.moustache");
+            return new ModelAndView(attributes,"vehiclesAdd.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -138,30 +140,7 @@ public class App {
         // Form to add Addresses
         get("/users/add/addresses" , (request, response) ->{
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "addressAdd.moustache");
-        },
-            new MustacheTemplateEngine()
-        );
-
-        // Form to see posts and attempt to answer them
-        get("/users/add/answers" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "answersAdd.mustache");
-        },
-            new MustacheTemplateEngine()
-        );
-
-        post("/users/add/answers" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-
-            String email = request.queryParams("login");
-            User user = User.findFirst("email = ?",email);
-            List<Post> posts = Post.where("user_id = ?", user.id());
-
-            attributes.put("user_Id",user.id());
-            attributes.put("posts",posts);
-
-            return new ModelAndView(attributes, "answersAdd.mustache");
+            return new ModelAndView(attributes, "addressAdd.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -224,7 +203,7 @@ public class App {
             List<User> users = User.findAll();
             attributes.put("users_count", users.size());
             attributes.put("users", users);
-            return new ModelAndView(attributes, "users.moustache");
+            return new ModelAndView(attributes, "users.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -240,8 +219,10 @@ public class App {
             }
             else {
                 String address = user.address();
+                List<Post> posts = Post.where("user_id = ?",user.id());
                 attributes.put("user", user);
                 attributes.put("address_user", address);
+                attributes.put("posts",posts);
                 return new ModelAndView(attributes, "userId.mustache");
             }
         },
@@ -324,7 +305,7 @@ public class App {
             List<Vehicle> vehicles = Vehicle.findAll();
             attributes.put("vehicles_count", vehicles.size());
             attributes.put("vehicles", vehicles);
-            return new ModelAndView(attributes, "vehicles.moustache");
+            return new ModelAndView(attributes, "vehicles.mustache");
         },
             new MustacheTemplateEngine()
         );
@@ -361,13 +342,22 @@ public class App {
 
         // The form shown in the post details POSTs to this route
         post ("/questions",(request, response) -> { 
+            Post post = Post.findById(request.queryParams("postId"));
+
             String description = request.queryParams("description");
-            String post = request.queryParams("postId");
-            String user = request.queryParams("user"); //later we should use the id of the user logged
-            User u = User.findFirst("email = ?",user);
-            u.addQuestion(description,post);
-            response.redirect("/posts");
-            return "success"; 
+            String email = request.queryParams("user");
+
+            User userAsking = User.findFirst("email = ?",email);
+
+            //If the user asking is the owner of the post, redirect to 403
+            if (post.getInteger("user_id") == userAsking.id()) {
+                response.redirect("/whoops",403);
+                return "error";
+            } else {
+                userAsking.addQuestion(description,post);
+                response.redirect("/posts");
+                return "success";
+            }
         });
 
         /*//Show Question by id
@@ -395,9 +385,15 @@ public class App {
             User user = User.findById(request.queryParams("userId"));
             Post post = Post.findById(question.getString("post_id"));
             String description = request.queryParams("description");
-            user.addAnswer(description,post,question);
-            response.redirect("/posts/"+post.id());
-            return "success";
+            //The user answering should be the owner of the post
+            if (user.id() == post.getInteger("user_id")) {
+                user.addAnswer(description,post,question);
+                response.redirect("/posts/"+post.id());
+                return "success";
+            } else {
+                response.redirect("/whoops",403);
+                return "error";
+            }
         });
 
         // //Show Answer by id
@@ -406,20 +402,6 @@ public class App {
         //     return "Answer: " + a.toString();
         // });
 
-        /*// form 
-        get("/answers/user/:id", (request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            User user = User.findById(Integer.parseInt(request.params(":id")));
-            List<Answer> answers = Answer.where("user_id = ?", user.id());
-            attributes.put("user_name", user.name());
-            attributes.put("answers", answers);
-            return new ModelAndView(attributes, "answersUser.mustache");
-        },
-            new MustacheTemplateEngine()
-        );*/
-
-
-        
         
         /*---------------------- SEARCH ROUTES ----------------*/
 
