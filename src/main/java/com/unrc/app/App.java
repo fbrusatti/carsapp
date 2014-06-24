@@ -664,31 +664,31 @@ public class App {
 
 
         get ("/ListUser/:id/vehicles/:idV/newPost", (request, response) -> {         
-            String a ="<html> <head> <title> Create Post </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListUser/"+request.params("id")+"/vehicles/"+request.params("idV")+"/post\" method=\"post\">";
-            a= a + "<h1> Crear Post </h1> <FORM >";
+            String a ="<html> <head> <title> Create Post </title> </head> <body> <form action=\"/ListUser/"+request.params("id")+"/vehicles/"+request.params("idV")+"/post\" method=\"post\">";
+		 // crea un enlace para volver a la pag principal.
+	    a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
 
+            a= a + "<h1 style="+"color:#DF3A01"+"> Crear Post </h1> <FORM >";
 
-            // crea un enlace para volver a la pag anterior.
-            a= a + "<table align="+"right"+"><td> <a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a></td></table>";
-          
             //Post
             //lectura titulo
-            a=a+"<h3> Titulo Post</h3><INPUT type=text SIZE=25 NAME=title>";
+            a=a+"<p> Titulo Post</p><INPUT type=text SIZE=25 NAME=title>";
             //lectura Descricion
-            a=a+"<h3> Descripcion Post </h3><INPUT type=text < SIZE=25 NAME=description>";
+            a=a+"<p> Descripcion Post </p><INPUT type=text < SIZE=25 NAME=description>";
             //lectura precio
-            a=a+"<h3> Precio Post </h3><INPUT type=text SIZE=25 NAME=price>";					
+            a=a+"<p> Precio Post </p><INPUT type=text SIZE=25 NAME=price>";					
             
-            a= a + "<h3><td align=right valign=top></td><td align=center>";
+            a= a + "<table><td align=right valign=top></td><td align=center>";
             //creacion de botones
-            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></FORM></BODY></HTML>";
+            a=a+"<input type=reset value=Borrar_informacion><input type=submit value= Enviar></table></FORM></BODY></HTML>";
+			a= a+ "<a href="+"http://localhost:4567/ListUser/"+request.params("id")+"/vehicles> <h3 style="+"color:#DF3A01"+">Volver </h3> </a>" ;
             return a; 	
         });
         
         
         post("/ListUser/:id/vehicles/:idV/post", (request, response) -> {
             String retornar;
-            retornar=" <body link="+"#4000FF"+"><body alink="+"#4000FF"+"><body vlink="+"#4000FF"+"><body bgcolor="+"#BDBDBD"+">";
+            retornar=" <body>";
             User user = new User();
             //Cargar variable user con datos tomados por pantalla
             User user2 = new User();
@@ -712,22 +712,23 @@ public class App {
             user2.add(post);
             vehicle2.add(post);
             retornar =retornar +"Carga Exitosa";
-            retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+            retornar = retornar + "<a href="+"http://localhost:4567/ListUser/"+request.params("id")+"/vehicles><h3 style="+"color:#DF3A01"+"> Volver </h3></a>";
             return retornar;
          });
         
         
          get("/ListUser/:id/posts/:idQ/question", (request, response) -> {        
-            String a ="<html> <head> <title> cargarPregunta </title> </head> <body bgcolor="+"#BDBDBD"+"> <form action=\"/ListPost/"+request.params("idQ")+"/question\" method=\"post\">";
-            a= a + "<h1> Cargar Pregunta </h1> <FORM >";       
+            String a ="<html> <head> <title> cargarPregunta </title> </head> <body> <form action=\"/ListPost/"+request.params("idQ")+"/question\" method=\"post\">";
+            a=a + "<table align="+"right"+"><td><a href="+"http://localhost:4567/app"+"><img src="+"http://localhost:4567/ButtonHome.png"+" width="+"45"+" height="+"45" +"/></a></td></table>";
+            a= a + "<h1 style="+"color:#DF3A01"+"> Cargar Pregunta </h1> <FORM >";       
 
             //usaurio
             //lectura email111111
-            a=a+"<h3> email Usuario </h3><INPUT type=text SIZE=25 NAME=email>";
+            a=a+"<p > email Usuario </p><INPUT type=text SIZE=25 NAME=email>";
             
             //Post
             //lectura texto
-            a=a+"<h3> Texto Pregunta</h3><INPUT type=text SIZE=25 NAME=textQ>";
+            a=a+"<p> Texto Pregunta</p><INPUT type=text SIZE=25 NAME=textQ>";
             
             a= a + "<h3><td align=right valign=top></td><td align=center>";
             //creacion de botones
@@ -777,7 +778,7 @@ public class App {
               }
             
              
-		retornar = retornar + "<a href="+"http://localhost:4567/app"+"><h3 style="+"color:#0000FF"+"> Volver </h3></a>";
+		retornar = retornar + "<a href="+"http://localhost:4567/ListUser"+"><h3 style="+"\"color:#DF3A01\""+"> Volver </h3></a>";
             
                 return retornar; 
          });

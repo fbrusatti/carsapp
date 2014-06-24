@@ -8,7 +8,7 @@
 	<h1 style="color:#DF3A01" align="center">Preguntas del Anuncio</h1>
 
 	<table width="100%" border="1">
-		<tr>	
+		<tr colspan="2">	
 			<th colspan="2" style="color:#DF3A01">Texto pregunta</th>
 		</tr>
 	{{#QuestionPosts}}
@@ -16,9 +16,8 @@
 			<td colspan="2">{{getText}}</td>
 		</tr>
 		<tr>
-			<td> <a href="questions/{{id}}/newAnswer" style="color:#DF3A01"> Responder </a></td>
-		</tr>
-		<tr>					
+			<td > <a href="questions/{{id}}/newAnswer" style="color:#DF3A01"> Responder </a></td>
+							
 			<td> <a href="questions/{{id}}/answerInd" style="color:#DF3A01"> Respuestas </a></td>
 
 		</tr>
