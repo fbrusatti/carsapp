@@ -67,12 +67,14 @@
         {{/questions}}
         <br>
         <form action="/questions" method="post">
-        <input type="hidden" name="postId" value="{{id}}">
-        Your Question<br>
-        <textarea name="description" style="width:377px;height:50px;"></textarea><br>
-        Login (user email)
-        <input type="email" name="user">
-        Post
-        <input type="submit" value= "Send"> </form>        
+            <input type="hidden" name="postId" value="{{id}}">
+            Your Question:<br>
+            <textarea name="description" style="width:377px;height:50px;"></textarea><br>
+            Login (user email):
+            <input type="email" name="user">
+            <input type="submit" value="Post">
+        </form>        
         {{/post}}
+        <br>
+        <a href="http://localhost:4567/">Carsapp</a>
     </body>
