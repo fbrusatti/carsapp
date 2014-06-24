@@ -26,7 +26,6 @@ public class Question extends Model{
 
     public Answer answer() {
         Answer a = Answer.findFirst("question_id = ?", this.id());
-        System.out.println (a);
         return a;
     }
 

@@ -68,12 +68,11 @@ public class User extends Model {
   }
 
 
-  public void addQuestion (String d,String p){
+  public void addQuestion (String d,Post p){
     Question q = Question.create("description",d,"active",true);
     q.saveIt();
-    Post post = Post.findById(p);
     this.add(q);
-    post.add(q);
+    p.add(q);
     this.saveIt();
   }
 
