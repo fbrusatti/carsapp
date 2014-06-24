@@ -25,8 +25,12 @@ public class Question extends Model{
   	}
 
     public Answer answer() {
-    Answer a = Answer.findFirst("question_id = ?", this.id());
-    System.out.println (a);
-    return a;
-  }
+        Answer a = Answer.findFirst("question_id = ?", this.id());
+        System.out.println (a);
+        return a;
+    }
+
+    public Boolean active() {
+        return this.getBoolean("active");
+    }
 }
