@@ -3,6 +3,10 @@ package com.unrc.app;
 import com.unrc.app.models.User;
 import com.unrc.app.models.Address;
 import com.unrc.app.models.Vehicle;
+import com.unrc.app.models.Car;
+import com.unrc.app.models.Post;
+import com.unrc.app.models.Question;
+import com.unrc.app.models.Answer;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
@@ -63,15 +67,61 @@ public class UserTest{
         assertThat(a.getString("address_number"),is("101"));
 
     }
+    @Test
     public void addVehicleTest(){
         User user = new User();
         user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
         user.saveIt();
-        user.addVehicle("car","90","10000");
+        user.addCar("car","90","10000","sedan");
         Vehicle a = Vehicle.findFirst("user_id = ?", user.getString("id"));
         assertThat(a.getString("name"),is("car"));
         assertThat(a.getString("model"),is("90"));
         assertThat(a.getString("km"),is("10000"));
-
+        Car c = Car.findFirst("vehicle_id = ?", a.getString("id"));
+        assertThat(c.getString("type"),is("sedan"));
+    }
+    @Test
+    public void addPostTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
+        user.saveIt();
+        user.addTruck("mercedes","90","9000","heavy");
+        Vehicle a = Vehicle.findFirst("user_id = ?", user.getString("id"));
+        user.addPost("120000","Vendo camion",a);
+        Post p = Post.findFirst("user_id = ?", user.getString("id"));
+        assertThat(p.getString("price"),is("120000"));
+        assertThat(p.getString("description"),is("Vendo camion"));
+    }
+    @Test
+    public void addQuestionTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
+        user.saveIt();
+        user.addTruck("mercedes","90","9000","heavy");
+        Vehicle a = Vehicle.findFirst("user_id = ?", user.getString("id"));
+        user.addPost("120000","Vendo camion",a);
+        Post p = Post.findFirst("user_id = ?", user.getString("id"));
+        user.createUser("John","Hanckok","hanckok@mail.com","alvear","244");
+        User user2 = User.findFirst("email = ?","hanckok@mail.com");
+        user2.addQuestion ("pregunto por camion!",p.getString("id"));
+        Question q = Question.findFirst("user_id = ?", user2.getString("id"));
+        assertThat(q.getString("description"),is("pregunto por camion!"));
+    }
+    @Test
+    public void addAnswerTest(){
+        User user = new User();
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","is_admin",true);
+        user.saveIt();
+        user.addTruck("mercedes","90","9000","heavy");
+        Vehicle a = Vehicle.findFirst("user_id = ?", user.getString("id"));
+        user.addPost("120000","Vendo camion",a);
+        Post p = Post.findFirst("user_id = ?", user.getString("id"));
+        user.createUser("John","Hanckok","hanckok@mail.com","alvear","244");
+        User user2 = User.findFirst("email = ?","hanckok@mail.com");
+        user2.addQuestion ("pregunto por camion!",p.getString("id"));
+        Question q = Question.findFirst("user_id = ?", user2.getString("id"));
+        user.addAnswer("respondo por camion",p,q);
+        Answer an = Answer.findFirst("user_id = ?", user.getString("id"));
+        assertThat(an.getString("description"),is("respondo por camion"));
     }
 }
