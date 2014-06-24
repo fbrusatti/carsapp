@@ -103,7 +103,7 @@ public class UserTest{
         Post p = Post.findFirst("user_id = ?", user.getString("id"));
         user.createUser("John","Hanckok","hanckok@mail.com","alvear","244");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
-        user2.addQuestion ("pregunto por camion!",p.getString("id"));
+        user2.addQuestion ("pregunto por camion!",p);
         Question q = Question.findFirst("user_id = ?", user2.getString("id"));
         assertThat(q.getString("description"),is("pregunto por camion!"));
     }
@@ -118,7 +118,7 @@ public class UserTest{
         Post p = Post.findFirst("user_id = ?", user.getString("id"));
         user.createUser("John","Hanckok","hanckok@mail.com","alvear","244");
         User user2 = User.findFirst("email = ?","hanckok@mail.com");
-        user2.addQuestion ("pregunto por camion!",p.getString("id"));
+        user2.addQuestion ("pregunto por camion!",p);
         Question q = Question.findFirst("user_id = ?", user2.getString("id"));
         user.addAnswer("respondo por camion",p,q);
         Answer an = Answer.findFirst("user_id = ?", user.getString("id"));
