@@ -29,25 +29,6 @@ CREATE TABLE vehicles(
 	type VARCHAR(20) NOT NULL
 );
 
-/** FORMA EN LA QUE TODOS LOS VEHICULOS VAN A LA MISMA TABLA
-
-
-DROP TABLE IF EXISTS vehicles; -- Vehículos
-CREATE TABLE vehicles(
-	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	brand VARCHAR(20) NOT NULL,
-	model VARCHAR(20) NOT NULL,
-	year VARCHAR(4) NOT NULL,
-	color VARCHAR(20) NOT NULL, 
-	type VARCHAR(10) NOT NULL,
-	capacity INT(11),
-	length DOUBLE,
-	height DOUBLE,
-	cylinder_capacity INT(11),
-	user_id INT(11)
-);
-*/
-
 DROP TABLE IF EXISTS posts; -- Avisos
 CREATE TABLE posts(
 	id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
