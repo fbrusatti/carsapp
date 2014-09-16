@@ -26,8 +26,7 @@ Ptos
  2	** As a Guest i cannot ask a Question         (tambien podria ser: As a Guest i cannot to Question)
  1	** As a Guest i cannot Answer 
 
-Esto que sigue lo copie del pizarron, supongo que es la estructura que debería tener cada una de las historias del backlog, pero no se si es 
-importante que las hagamos de esa forma.
+a
 
 Formato:
 Id: 1
