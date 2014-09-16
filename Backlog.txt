@@ -26,7 +26,7 @@ Ptos
  2	** As a Guest i cannot ask a Question         (tambien podria ser: As a Guest i cannot to Question)
  1	** As a Guest i cannot Answer 
 
-a
+aa
 
 Formato:
 Id: 1
