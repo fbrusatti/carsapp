@@ -1,4 +1,4 @@
-pivotaltracker.com (<- maybe the best) || git commit -m "[#123] Add cars"
+pivotaltracker.com (<- maybe the best) || git commit -m "[#123] Add cars" (for starting stories. Include finish, fixes or delivers to other effects.)
 assembla.com
 planningpoker.com
 jira.atlassian.com
