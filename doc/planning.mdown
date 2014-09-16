@@ -1,0 +1,45 @@
+pivotaltracker.com (<- maybe the best) || git commit -m "[#123] Add cars"
+assembla.com
+planningpoker.com
+jira.atlassian.com
+tracker.com
+github.com
+
+*Roles*
+
+Project Owner
+Scrum Master
+Scrum Team
+
+*Artifacts*
+
+Product Vision
+Product Backlog
+Release Plan
+
+Sprint Backlog
+Sprint Burndown
+Implement List
+
+*Process*
+
+Sprint Backlog
+Sprint Planning
+**Some (short) cycle**
+Sprint Retrospective
+=>
+Product Incrementation
+
+*User Stories*
+
+Story Type: Feature/Bug/Chore
+State: Unstated/Stated/Finished/Delivered/Rejected
+Requester
+Owner
+Builder
+Tester
+Implementer
+Points
+'#id
+Description
+Comments
