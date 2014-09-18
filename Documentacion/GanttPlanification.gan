@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-06-23" view-index="0" gantt-divider-location="631" resource-divider-location="300" version="2.0" locale="es">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-07-02" view-index="0" gantt-divider-location="631" resource-divider-location="300" version="2.0" locale="es">
     <description/>
     <view zooming-state="default:0" id="gantt-chart">
-        <field id="tpd3" name="Nombre" width="55" order="0"/>
+        <field id="tpd3" name="Nombre" width="54" order="0"/>
         <field id="tpd4" name="Fecha de inicio" width="18" order="1"/>
         <field id="tpd5" name="Fecha de fin" width="26" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Nombre" width="56" order="0"/>
-        <field id="1" name="Función" width="43" order="1"/>
+        <field id="0" name="Nombre" width="50" order="0"/>
+        <field id="1" name="Función" width="50" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -55,112 +55,58 @@
             <depend id="36" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="36" name="test de la base de datos" color="#8cb6ce" meeting="false" start="2014-04-16" duration="4" complete="0" expand="true">
-            <depend id="38" type="2" difference="0" hardness="Strong"/>
+            <depend id="218" type="2" difference="0" hardness="Strong"/>
+            <depend id="223" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="38" name="implementacion del test del modelo User" color="#8cb6ce" meeting="false" start="2014-04-22" duration="2" complete="0" expand="true">
-            <depend id="40" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="40" name="implementacion del modelo User" color="#8cb6ce" meeting="false" start="2014-04-24" duration="2" complete="0" expand="true">
-            <depend id="101" type="2" difference="0" hardness="Strong"/>
-            <depend id="111" type="2" difference="0" hardness="Strong"/>
-            <depend id="120" type="2" difference="0" hardness="Strong"/>
-            <depend id="162" type="2" difference="0" hardness="Strong"/>
-            <depend id="171" type="2" difference="0" hardness="Strong"/>
-            <depend id="179" type="2" difference="0" hardness="Strong"/>
-            <depend id="188" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="101" name="implementacion del test del modelo Vehicle" color="#8cb6ce" meeting="false" start="2014-04-28" duration="2" complete="0" expand="true">
-            <depend id="108" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="108" name="implementacion del modelo Vehicle" color="#8cb6ce" meeting="false" start="2014-04-30" duration="2" complete="0" expand="true">
-            <depend id="120" type="2" difference="0" hardness="Strong"/>
-            <depend id="134" type="2" difference="0" hardness="Strong"/>
-            <depend id="144" type="2" difference="0" hardness="Strong"/>
-            <depend id="151" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="111" name="implementacion del test del modelo Address" color="#8cb6ce" meeting="false" start="2014-04-28" duration="2" complete="0" expand="true">
-            <depend id="116" type="2" difference="0" hardness="Strong"/>
-            <depend id="120" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="116" name="implementacion del modelo Address" color="#8cb6ce" meeting="false" start="2014-04-30" duration="2" complete="0" expand="true">
-            <depend id="134" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="120" name="implementacion del test del modelo Post" color="#8cb6ce" meeting="false" start="2014-05-02" duration="2" complete="0" expand="true">
-            <depend id="124" type="2" difference="0" hardness="Strong"/>
-            <depend id="171" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="124" name="implementacion del modelo Post" color="#8cb6ce" meeting="false" start="2014-05-06" duration="2" complete="0" expand="true">
-            <depend id="144" type="2" difference="0" hardness="Strong"/>
-            <depend id="151" type="2" difference="0" hardness="Strong"/>
-            <depend id="162" type="2" difference="0" hardness="Strong"/>
-            <depend id="179" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="134" name="implementacion del test del modelo Truck" color="#8cb6ce" meeting="false" start="2014-05-02" duration="2" complete="0" expand="true">
-            <depend id="141" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="141" name="implementacion del modelo Truck" color="#8cb6ce" meeting="false" start="2014-05-06" duration="2" complete="0" expand="true">
-            <depend id="144" type="2" difference="0" hardness="Strong"/>
-            <depend id="151" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="144" name="implementacion del test del modelo Motorcycle" color="#8cb6ce" meeting="false" start="2014-05-08" duration="2" complete="0" expand="true">
-            <depend id="148" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="148" name="implementacion del modelo Motorcycle" color="#8cb6ce" meeting="false" start="2014-05-12" duration="2" complete="0" expand="true">
-            <depend id="162" type="2" difference="0" hardness="Strong"/>
-            <depend id="171" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="151" name="implementacion del test del modelo Car" color="#8cb6ce" meeting="false" start="2014-05-08" duration="2" complete="0" expand="true">
-            <depend id="152" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="152" name="implementacion del modelo Car" color="#8cb6ce" meeting="false" start="2014-05-12" duration="2" complete="0" expand="true">
-            <depend id="162" type="2" difference="0" hardness="Strong"/>
-            <depend id="171" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="162" name="implementacion del test del modelo Question" color="#8cb6ce" meeting="false" start="2014-05-14" duration="2" complete="0" expand="true">
-            <depend id="168" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="168" name="implementacion del modelo Question" color="#8cb6ce" meeting="false" start="2014-05-16" duration="2" complete="0" expand="true">
-            <depend id="179" type="2" difference="0" hardness="Strong"/>
-            <depend id="188" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="171" name="impelementacion del test del modelo Rate" color="#8cb6ce" meeting="false" start="2014-05-14" duration="2" complete="0" expand="true">
-            <depend id="175" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="175" name="implementacion del modelo Rate" color="#8cb6ce" meeting="false" start="2014-05-16" duration="2" complete="0" expand="true">
-            <depend id="179" type="2" difference="0" hardness="Strong"/>
-            <depend id="188" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="179" name="implementacion del test del modelo Punctuation" color="#8cb6ce" meeting="false" start="2014-05-20" duration="2" complete="0" expand="true">
-            <depend id="185" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="185" name="implementacion del modelo Punctuation" color="#8cb6ce" meeting="false" start="2014-05-22" duration="2" complete="0" expand="true">
+        <task id="223" name="implementacion de los test de los modelos" color="#8cb6ce" meeting="false" start="2014-04-22" duration="24" complete="0" expand="true">
+            <notes><![CDATA[modelos de los test a :
+	-User
+	-Vehicle
+	-Address
+	-Post
+	-Truck
+	-Motorcycle
+	-Car
+	-Question
+	-Rate
+	-Punctuation
+	-Answer]]></notes>
             <depend id="195" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="188" name="implementacion del test del modelo Answer" color="#8cb6ce" meeting="false" start="2014-05-20" duration="2" complete="0" expand="true">
-            <depend id="192" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="192" name="implementacion del modelo Answer" color="#8cb6ce" meeting="false" start="2014-05-22" duration="2" complete="0" expand="true">
+        <task id="218" name="implementacion de los modelos" color="#8cb6ce" meeting="false" start="2014-04-22" duration="24" complete="0" expand="true">
+            <notes><![CDATA[modelos:
+	-User
+	-Vehicle
+	-Address
+	-Post
+	-Truck
+	-Motorcycle
+	-Car
+	-Question
+	-Rate
+	-Punctuation
+	-Answer]]></notes>
             <depend id="195" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="195" name="instalacion de spark" color="#8cb6ce" meeting="false" start="2014-05-26" duration="2" complete="0" expand="true">
-            <depend id="199" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="199" name="capacitacion sobre spark" color="#8cb6ce" meeting="false" start="2014-05-28" duration="7" complete="0" expand="true">
             <depend id="205" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="205" name="integracion de spark al proyecto" color="#8cb6ce" meeting="false" start="2014-06-06" duration="2" complete="0" expand="true">
+        <task id="205" name="integracion de spark al proyecto" color="#8cb6ce" meeting="false" start="2014-05-28" duration="4" complete="0" expand="true">
+            <depend id="230" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="230" name="implementacion de la capa web" color="#8cb6ce" meeting="false" start="2014-06-03" duration="1" complete="0" expand="true">
             <depend id="208" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="208" name="instalacion elasticSearch" color="#8cb6ce" meeting="false" start="2014-06-10" duration="7" complete="0" expand="true">
+        <task id="208" name="instalacion elasticSearch" color="#8cb6ce" meeting="false" start="2014-06-04" duration="7" complete="0" expand="true">
             <depend id="211" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="211" name="capacitacion sobre elasticSearch" color="#8cb6ce" meeting="false" start="2014-06-19" duration="7" complete="0" expand="true">
+        <task id="211" name="capacitacion sobre elasticSearch" color="#8cb6ce" meeting="false" start="2014-06-13" duration="7" complete="0" expand="true">
             <depend id="214" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="214" name="integracion de elasticSearch al proyecto" color="#8cb6ce" meeting="false" start="2014-06-30" duration="10" complete="0" expand="true">
+        <task id="214" name="integracion de elasticSearch al proyecto" color="#8cb6ce" meeting="false" start="2014-06-24" duration="10" complete="0" expand="true">
             <depend id="217" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="217" name="confeccion y capacitacion de la presentacion final" color="#8cb6ce" meeting="false" start="2014-07-14" duration="4" complete="0" expand="true"/>
+        <task id="217" name="confeccion y capacitacion de la presentacion final" color="#8cb6ce" meeting="false" start="2014-07-08" duration="4" complete="0" expand="true"/>
     </tasks>
     <resources/>
     <allocations/>
@@ -175,9 +121,9 @@
         <displaycolumn property-id="tpd1" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd7" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="337" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="113" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="162" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="342" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="118" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="167" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
