@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2014-04-07" view-index="0" gantt-divider-location="508" resource-divider-location="300" version="2.0" locale="es">
-    <description/>
+<?xml version="1.0" encoding="UTF-8"?><project name="Carsapp" company="" webLink="" view-date="2014-04-07" view-index="0" gantt-divider-location="436" resource-divider-location="300" version="2.0" locale="es">
+    <description><![CDATA[Aplicación web desarrollada en un curso de Ingeniería de Software en la Universidad Nacional de Río Cuarto.]]></description>
     <view zooming-state="default:6" id="gantt-chart">
-        <field id="tpd3" name="Nombre" width="56" order="0"/>
+        <field id="tpd3" name="Nombre" width="55" order="0"/>
         <field id="tpd4" name="Fecha de inicio" width="20" order="1"/>
         <field id="tpd5" name="Fecha de fin" width="23" order="2"/>
     </view>
@@ -89,9 +89,9 @@
         <displaycolumn property-id="tpd1" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd7" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="283" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="104" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="117" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="241" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="90" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="101" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
