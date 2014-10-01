@@ -134,5 +134,9 @@ public class User extends Model {
 	public String city() {
 		return this.parent(City.class).name();
 	}
+        
+        public Boolean isAdmin(){
+            return this.getBoolean("isAdmin");
+        }
 	
 }
