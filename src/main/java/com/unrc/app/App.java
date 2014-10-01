@@ -311,6 +311,7 @@ public class App {
         	u.set("mobile",request.queryParams("movil"));
         	u.set("telephone",request.queryParams("fijo"));
         	u.set("address",request.queryParams("direccion"));
+                u.set("isAdmin",0);
         	u.saveIt();
         	
         	City c = City.findById(request.queryParams("ciudad"));
