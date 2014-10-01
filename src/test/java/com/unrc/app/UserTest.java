@@ -4,7 +4,7 @@ import com.unrc.app.models.User;
 
 import org.javalite.activejdbc.Base;
 import org.junit.After;
-import org.junit.Before;
+import org.junit.Before;	
 import org.junit.Test;
 
 import static org.javalite.test.jspec.JSpec.the;
