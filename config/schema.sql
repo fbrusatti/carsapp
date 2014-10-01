@@ -9,7 +9,8 @@ CREATE TABLE users(
 	mobile VARCHAR(20),
 	telephone VARCHAR(20),
 	address VARCHAR(56),
-	city_id INT(11)
+	city_id INT(11),
+	isAdmin BOOLEAN NOT NULL
 );
 
 DROP TABLE IF EXISTS cities; -- Ciudades
