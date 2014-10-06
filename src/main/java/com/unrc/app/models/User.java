@@ -24,7 +24,7 @@ import static org.elasticsearch.node.NodeBuilder.*;
 public class User extends Model {
 	
 	static {     
-		validatePresenceOf("first_name", "last_name");
+		validatePresenceOf("first_name", "last_name", "email", "password");
 	}
   
 	@Override
@@ -107,7 +107,7 @@ public class User extends Model {
 		return this.getString("first_name");
 	}
        
-    public String lastName() {
+        public String lastName() {
 		return this.getString("last_name");
 	}
 
@@ -137,6 +137,10 @@ public class User extends Model {
         
         public Boolean isAdmin(){
             return this.getBoolean("isAdmin");
+        }
+        
+        public String password(){
+            return this.getString("password");
         }
 	
 }

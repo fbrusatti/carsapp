@@ -32,6 +32,7 @@ import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 public class App {
     
 	public static void main( String[] args) {
+            staticFileLocation("/public"); 
 		
 		/**
 		 * Open and close de database.
@@ -308,6 +309,7 @@ public class App {
         	u.set("email", request.queryParams("email"));
         	u.set("first_name",request.queryParams("firstName"));
         	u.set("last_name", request.queryParams("lastName"));
+                u.set("password", request.queryParams("password"));
         	u.set("mobile",request.queryParams("movil"));
         	u.set("telephone",request.queryParams("fijo"));
         	u.set("address",request.queryParams("direccion"));
@@ -348,6 +350,7 @@ public class App {
             u.set("email", request.queryParams("email"));
             u.set("first_name",request.queryParams("firstName"));
             u.set("last_name", request.queryParams("lastName"));
+            u.set("password", request.queryParams("password"));
             u.set("mobile",request.queryParams("movil"));
             u.set("telephone",request.queryParams("fijo"));
             u.set("address",request.queryParams("direccion"));

@@ -6,6 +6,7 @@ CREATE TABLE users(
     email VARCHAR(60) UNIQUE,
     first_name VARCHAR(56),
     last_name VARCHAR(56),
+    password VARCHAR(32),
 	mobile VARCHAR(20),
 	telephone VARCHAR(20),
 	address VARCHAR(56),
