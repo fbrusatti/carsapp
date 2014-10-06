@@ -9,6 +9,7 @@ import com.unrc.app.models.*;
 import org.javalite.activejdbc.Base;
 
 import spark.Spark.*;
+import spark.Session;
 import spark.ModelAndView;
 import static spark.Spark.*;
 
@@ -27,6 +28,7 @@ import org.elasticsearch.search.*;
 import org.elasticsearch.common.settings.*;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
+
 
 
 public class App {
@@ -54,8 +56,52 @@ public class App {
 			},
 			new MustacheTemplateEngine()
 		);
+                
+         /**
+         * Getting login
+         */
+        get("/login", (request, response) -> {
+            Session session = request.session(false);
+            if (session != null) response.redirect("");
+            return new ModelAndView(null,"login.mustache");
+            },
+            new MustacheTemplateEngine()
+        );
+        
+        
+        // Post Login
+        post("/login", (request, response) -> {
+            String email = request.queryParams("email");
+            String password = request.queryParams("password");
+            User u = User.findFirst("email = ?", email);
+            if (u != null ? u.password().equals(password) : false) {
+                Session session = request.session(true);
+                session.attribute("user_email", email);
+                session.attribute("user_id", u.getId());
+                session.maxInactiveInterval(30*60);               
+                response.redirect("/users/"+u.getId());
+                return null;
+            } else {
+                response.redirect("");
+                return null;
+            }
+        });
+        
+        // Get logout
+        get("/logout", (request, response) -> {
+            Session session = request.session(false);
+            if (session!=null) {
+                session.invalidate();
+            }
+            response.redirect("/");
+            return null;
+        });
+        
+
+        
+                
 		
-		/**
+        /**
          * Getting search
          */
         get("/search", (request, response) -> {
