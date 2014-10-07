@@ -1,0 +1,33 @@
+<html>
+	<head > 
+		<title> Paginal Principal </title>
+	</head>
+	<body>
+                <img src="http://localhost:4567/Banner.jpg" align="rigth" /></br>
+		<table border=1 align="center"> 
+			<tr>
+				<td>
+	    			<a href="http://localhost:4567/app/RegisterUser"> <img src="http://localhost:4567/ButtonNewUser.png"/> </a> </br>
+				</td>
+			</tr>
+		
+			<tr>
+				<td>
+					<a href="http://localhost:4567/app"> <img src="http://localhost:4567/ButtonList.png"/> </a> </br>
+					
+					<a href="http://localhost:4567/ListUser" style="color:#B40404" > <img src="http://localhost:4567/ButtonUser2.png"/> </a> </br>
+
+					<a href="http://localhost:4567/ListVehicles" style="color:#B40404" > <img src="http://localhost:4567/ButtonVehicle2.png"/> </a> </br>
+
+					<a href="http://localhost:4567/ListPost" style="color:#B40404" > <img src="http://localhost:4567/ButtonPost2.png"/> </a> </br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://localhost:4567/Search/User"> <img src="http://localhost:4567/ButtonSearch.png"/> </a> </br>
+				</td>
+			</tr>
+		</table>
+		
+	</body>
+</html>

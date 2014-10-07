@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title> Buscar Usuario </title>
+	</head>
+
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
+	<table width="100%" border="1">
+    		<td style="color:#DF3A01"> Resultados </td>
+		<td> {{cantidad}}</td>
+	</table>
+	
+	
+	<table width="100%" border="1">
+	<tr>
+		<th style="color:#DF3A01"> Nombre </th>
+		<th style="color:#DF3A01"> E-mail </th>	
+	</tr>
+	{{#list}}		
+	<tr>
+		<td>{{name}}</td>
+		<td>{{email}}</td>
+	</tr>
+	{{/list}}
+	</table>
+	<a href="http://localhost:4567/ListUser" style="color:#DF3A01"><h3>Volver </h3> </a> 
+</body>

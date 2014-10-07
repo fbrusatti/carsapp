@@ -1,0 +1,31 @@
+ <html>
+	<head > 
+		<title> List Questions </title>
+	</head>
+
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
+	<h1 style="color:#DF3A01" align="center">Preguntas del Anuncio</h1>
+
+	<table width="100%" border="1">
+		<tr colspan="2">	
+			<th colspan="2" style="color:#DF3A01">Texto pregunta</th>
+		</tr>
+	{{#QuestionPosts}}
+		<tr>	
+			<td colspan="2">{{getText}}</td>
+		</tr>
+		<tr>
+			<td > <a href="questions/{{id}}/newAnswer" style="color:#DF3A01"> Responder </a></td>
+							
+			<td> <a href="questions/{{id}}/answerInd" style="color:#DF3A01"> Respuestas </a></td>
+
+		</tr>
+	{{/QuestionPosts}}
+			
+	</table>
+
+	<a href="http://localhost:4567/ListUser" style="color:#DF3A01"> <h3>Volver </h3> </a> 
+	</body>
+
+</html>
