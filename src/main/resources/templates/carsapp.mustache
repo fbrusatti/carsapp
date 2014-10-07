@@ -1,10 +1,74 @@
-<h2> Carsapp </h2><br>
-Bienvenido a esta sencilla web a partir de la cual podrás publicar y compartir con el resto del mundo tus anuncios
-sobre venta de vehículos.<br>
-<br>
-<br>
-<b> Para ver los usuarios del sitio presiona </b><a href="/users">aquí</a>.<br>
-<br>
-<b> Para ver los posts del sitio presiona </b><a href="/posts">aquí</a>.<br>
-<br>
-<b> Para buscar presione </b><a href="/search">aquí</a>.<br>
+<div>
+	<div class="title">
+		 <h2>Carsapp</h2>
+	</div>
+	<div class="signUpButton">
+		<a href="/newUser"><button>Sign Up</button></a>
+	</div>
+	<div class="formSign">
+		<form name="formSignIn" action="" method="post">
+			<input name="email" placeholder="email" required/>
+			<input name="password" placeholder="password" required/>
+			<input type="submit" onclick="showFormSignIn" value="Sign In"/>	
+		</form>
+	</div>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<div class="bodyPage">
+		<h4>
+			Bienvenido a esta sencilla web a partir de la cual podrás publicar y compartir con el resto del mundo tus anuncios sobre venta de vehículos.
+		</h4>
+		<br>
+		<li>
+			<b> Para ver los usuarios del sitio presiona </b><a href="/users">aquí</a>.<br>
+		</li>
+		<br>
+		<li>
+			<b> Para ver los posts del sitio presiona </b><a href="/posts">aquí</a>.<br>
+		</li>
+		<br>
+		<li>
+			<b> Para buscar presione </b><a href="/search">aquí</a>.<br>
+		</li>
+		<br>
+	
+	</div>
+</div>
+<style type="text/css">
+	
+	.signUpButton {
+		margin-right: 0px;
+		margin-top: 20px;
+		float: right;
+	}
+
+	.formSign {
+		margin-top: 20px;
+		float: right;
+	}
+
+	.title {
+		margin: 0 auto;
+		margin-left: 20px;
+		float: left;
+		text-align: top;
+	}
+
+	.bodyPage {
+		margin-left: 30px;
+	}
+
+</style>
+<script type="text/javascript">
+	
+	function showFormSignIn() {
+
+	}
+
+	function showFormSignUp() {
+
+	}
+
+</script>
