@@ -78,6 +78,7 @@ public class App {
                 Session session = request.session(true);
                 session.attribute("user_email", email);
                 session.attribute("user_id", u.getId());
+                session.attribute("isAdmin",u.isAdmin());
                 session.maxInactiveInterval(30*60);               
                 response.redirect("/users/"+u.getId());
                 return null;
