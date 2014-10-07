@@ -340,6 +340,8 @@ public class App {
 		 *Adding a new User 
 		 */
 		get("newUser", (request, response) -> {
+                Session session = request.session(false);
+                if (session!=null) response.redirect("");
         	Map<String,Object> attributes = new HashMap<String,Object>();
         	List<City> cities = City.findAll();
         	attributes.put("cities",cities);
@@ -365,13 +367,14 @@ public class App {
         	
         	City c = City.findById(request.queryParams("ciudad"));
         	c.add(u);
-			
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "/users/"+u.id();
-            attributes.put("url",url);
-        	return new ModelAndView(attributes,"redirect.mustache"); 
-			},
-			new MustacheTemplateEngine()
+                Session session = request.session(true);
+                session.attribute("user_email", u.email());
+                session.attribute("user_id", u.getId());
+                session.attribute("isAdmin",u.isAdmin());
+                session.maxInactiveInterval(30*60);               
+                response.redirect("/users/"+u.getId());
+        	return null; 
+                    }	
 		);
         
         /**
