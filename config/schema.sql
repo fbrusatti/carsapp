@@ -58,6 +58,8 @@ CREATE TABLE posts(
     vehicle_id INT(11),
     price INT(7) NOT NULL,
     description VARCHAR(200) NOT NULL,
+    rate ENUM('1','2','3','4','5'),
+    total_rating INT(11),
   CONSTRAINT posts_pk PRIMARY KEY (id)
 );
 
