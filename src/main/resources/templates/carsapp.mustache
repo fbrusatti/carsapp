@@ -2,9 +2,18 @@
 	<div class="title">
 		 <h2>Carsapp</h2>
 	</div>
+        {{#existSession}}
+        <div class="logoutButton">
+		<a href="/logout"><button>Logout</button></a>
+	</div>
+        
+        {{/existSession}}
+
+       {{^existSession}}
 	<div class="signUpButton">
 		<a href="/newUser"><button>Sign Up</button></a>
 	</div>
+        
 	<div class="formSign">
 		<form name="formSignIn" action="/login" method="post">
 			<input name="email" type="email" placeholder="email" required/>
@@ -12,10 +21,12 @@
 			<input type="submit" value="Sign In"/>	
 		</form>
 	</div>
+        {{/existSession}}
 	<br/>
 	<br/>
 	<br/>
 	<br/>
+       
 	<div class="bodyPage">
 		<h4>
 			Bienvenido a esta sencilla web a partir de la cual podrás publicar y compartir con el resto del mundo tus anuncios sobre venta de vehículos.
