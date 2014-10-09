@@ -51,11 +51,11 @@ public class App {
 		 * Getting the principal page
 		 */
 		get("/", (request, response) -> {
-                        Session session = request.session(false);
-                        boolean existSession = false;
-                        if (session != null) existSession = true;
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
 			Map<String,Object> attributes = new HashMap<String,Object>();
-                        attributes.put("existSession", existSession);
+            attributes.put("existSession", existSession);
 			return new ModelAndView(attributes,"carsapp.mustache");
 			},
 			new MustacheTemplateEngine()
@@ -105,10 +105,6 @@ public class App {
             return null;
         });
         
-
-        
-                
-		
         /**
          * Getting search
          */
