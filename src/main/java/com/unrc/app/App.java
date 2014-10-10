@@ -109,7 +109,12 @@ public class App {
          * Getting search
          */
         get("/search", (request, response) -> {
-            return new ModelAndView(null,"search.mustache");
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("existSession", existSession);
+            return new ModelAndView(attributes,"search.mustache");
             },
             new MustacheTemplateEngine()
         );
@@ -134,7 +139,7 @@ public class App {
             Map<String,Object> attributes = new HashMap<String,Object>();
 
             //The search was executed through users.
-            if (request.queryParams("type").charAt(0)=='1') {
+            if (request.queryParams("type").charAt(0)=='2') {
                 resp = client.prepareSearch("users")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                         .setQuery(QueryBuilders.matchQuery("name",request.queryParams("name"))) 
@@ -159,7 +164,7 @@ public class App {
             }
 
             //The search was executed through posts.
-            if (request.queryParams("type").charAt(0)=='2') {
+            if (request.queryParams("type").charAt(0)=='1') {
                 resp = client.prepareSearch("posts")
                         .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                         .setQuery(QueryBuilders.matchQuery("title",request.queryParams("dates")))   
@@ -183,6 +188,11 @@ public class App {
 			}
 
             client.close();
+
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
+            attributes.put("existSession", existSession);
 
             return new ModelAndView(attributes,"search.mustache");
             },
