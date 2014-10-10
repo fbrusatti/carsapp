@@ -203,12 +203,22 @@ public class App {
          * Getting users
          */
 		get("/users", (request, response) -> {
-			Map<String,Object> attributes = new HashMap<String,Object>();
-			List<User> users = User.findAll();
-			boolean notEmpty = !users.isEmpty();
-			attributes.put("users",users);
-			attributes.put("notEmpty",notEmpty);
-			return new ModelAndView(attributes,"users.mustache");
+			
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            if (existSession) {
+                List<User> users = User.findAll();
+                boolean notEmpty = !users.isEmpty();
+                attributes.put("users",users);
+                attributes.put("notEmpty",notEmpty);
+                return new ModelAndView(attributes,"users.mustache");
+            } else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache"); 
+            }
 			},
 			new MustacheTemplateEngine()
         );
