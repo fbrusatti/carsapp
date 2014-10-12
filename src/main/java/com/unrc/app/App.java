@@ -356,15 +356,30 @@ public class App {
          * Getting vehicles of a User
          */ 
         get("/users/:id/vehicles", (request, response) -> {
-        	User u = User.findById(request.params("id"));
-        	List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
-        	boolean notEmpty = !vehicles.isEmpty();
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("userName",u.name());
-        	attributes.put("userVehicles",vehicles);
-        	attributes.put("notEmpty",notEmpty);
-        	return new ModelAndView(attributes,"user_vehicles.mustache");
-        	},
+            Session session = request.session(false);
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            if (session != null) {
+        	    User u = User.findById(request.params("id"));
+                String userEmail = u.email();
+        	    if (session.attribute("user_email").equals(userEmail)) {
+                    List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
+        	        boolean notEmpty = !vehicles.isEmpty();
+        	   
+        	        attributes.put("userName",u.name());
+        	        attributes.put("userVehicles",vehicles);
+        	        attributes.put("notEmpty",notEmpty);
+                    return new ModelAndView(attributes,"user_vehicles.mustache");
+                } else {
+                    String url = "/users/"+u.id();
+                    attributes.put("url",url);
+                    return new ModelAndView(attributes,"redirect.mustache"); 
+                }
+        	} else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            }
+            },
         	new MustacheTemplateEngine()
         );
         
