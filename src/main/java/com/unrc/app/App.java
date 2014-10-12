@@ -254,15 +254,24 @@ public class App {
          * Getting all the posts of a user
          */
         get("/users/:id/posts", (request, response) -> {
-            User u = User.findById(request.params("id"));
-        	List<Post> posts = Post.where("user_id = ?", request.params("id"));
-			boolean notEmpty = !posts.isEmpty();
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
             Map<String,Object> attributes = new HashMap<String,Object>();
-			attributes.put("id",u.id());
-            attributes.put("userName",u.name());
-			attributes.put("userPosts",posts);
-			attributes.put("notEmpty",notEmpty);
-            return new ModelAndView(attributes,"user_posts.mustache");
+            if (existSession) {
+                User u = User.findById(request.params("id"));
+                List<Post> posts = Post.where("user_id = ?", request.params("id"));
+                boolean notEmpty = !posts.isEmpty();
+                attributes.put("id",u.id());
+                attributes.put("userName",u.name());
+                attributes.put("userPosts",posts);
+                attributes.put("notEmpty",notEmpty);
+                return new ModelAndView(attributes,"user_posts.mustache");
+            } else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache"); 
+            } 
         	},
         	new MustacheTemplateEngine()
         );
