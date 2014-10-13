@@ -361,6 +361,8 @@ public class App {
             if (session != null) {
         	    User u = User.findById(request.params("id"));
                 String userEmail = u.email();
+                //System.out.println("emails equals: "+(session.attribute("user_email").equals(userEmail)));
+
         	    if (session.attribute("user_email").equals(userEmail)) {
                     List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
         	        boolean notEmpty = !vehicles.isEmpty();
@@ -467,11 +469,26 @@ public class App {
          * Adding a new Post 
          */
         get("/users/:id/newPost", (request,response) -> {
-		Map<String,Object> attributes = new HashMap<String,Object>();
-		attributes.put("id",request.params("id"));
-        	List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
-        	attributes.put("vehicles",vehicles);
-        	return new ModelAndView(attributes,"user_new_post.mustache"); 
+		    Session session = request.session(false);
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            if (session != null) {
+                User u = User.findById(request.params("id"));
+                String userEmail = u.email();
+                if (session.attribute("user_email").equals(userEmail)) {
+                    attributes.put("id",request.params("id"));
+                    List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
+                    attributes.put("vehicles",vehicles);
+                    return new ModelAndView(attributes,"user_new_post.mustache");
+                } else {
+                    String url = "/users/"+u.id();
+                    attributes.put("url",url);
+                    return new ModelAndView(attributes,"redirect.mustache"); 
+                }
+            } else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            }
 			},
 			new MustacheTemplateEngine()
 		);
@@ -554,15 +571,10 @@ public class App {
          * Getting all the posts
          */
         get("/posts", (request, response) -> {
-            Session session = request.session(false);
-            boolean existSession = false;
-            if (session != null) existSession = true;
-           
         	List<Post> posts = Post.findAll();
         	boolean notEmpty = !posts.isEmpty();
         	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("existSession", existSession);
-            attributes.put("posts",posts);
+        	attributes.put("posts",posts);
         	attributes.put("notEmpty",notEmpty);
         	return new ModelAndView(attributes,"posts.mustache");
 			},
