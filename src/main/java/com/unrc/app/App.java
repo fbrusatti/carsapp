@@ -516,11 +516,28 @@ public class App {
          * Adding a new Vehicle           
          */
         get("/users/:id/newVehicle", (request,response) -> {
-           Map<String,Object> attributes = new HashMap<String,Object>();
-           attributes.put("id",request.params("id"));
-           return new ModelAndView(attributes,"user_new_vehicle.mustache"); 
-           },
-           new MustacheTemplateEngine()
+            Session session = request.session(false);
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            if (session != null) {
+                User u = User.findById(request.params("id"));
+                String userEmail = u.email();
+                if (session.attribute("user_email").equals(userEmail)) {
+                    attributes.put("id",request.params("id"));
+                    return new ModelAndView(attributes,"user_new_vehicle.mustache"); 
+                } else {
+                    String url = "/users/"+u.id();
+                    attributes.put("url",url);
+                    return new ModelAndView(attributes,"redirect.mustache"); 
+                }
+            } else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            }
+
+           
+            },
+            new MustacheTemplateEngine()
         );
 
 
