@@ -6,7 +6,12 @@
 	{{#posts}}
 		<tr>
 			<td><a href="/users/{{ownerId}}/posts/{{id}}">{{title}}</a></td>
-			<td><a href="/users/{{ownerId}}">{{ownerName}}</a></td>
+			{{#existSession}}
+				<td><a href="/users/{{ownerId}}">{{ownerName}}</a></td>
+			{{/existSession}}
+			{{^existSession}}
+				<td>{{ownerName}}</td>
+			{{/existSession}}
 		</tr>
 	{{/posts}}
  </table>

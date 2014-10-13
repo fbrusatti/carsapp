@@ -554,10 +554,15 @@ public class App {
          * Getting all the posts
          */
         get("/posts", (request, response) -> {
+            Session session = request.session(false);
+            boolean existSession = false;
+            if (session != null) existSession = true;
+           
         	List<Post> posts = Post.findAll();
         	boolean notEmpty = !posts.isEmpty();
         	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("posts",posts);
+        	attributes.put("existSession", existSession);
+            attributes.put("posts",posts);
         	attributes.put("notEmpty",notEmpty);
         	return new ModelAndView(attributes,"posts.mustache");
 			},
