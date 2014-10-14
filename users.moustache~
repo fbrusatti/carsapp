@@ -1,0 +1,25 @@
+<html>
+<body bgcolor="#BDBDBD">
+
+<h1>Lista de Usuarios</h1>
+
+	<h2> Cantidad de Usuarios: {{users_count}}</h2>
+
+	<table width="100%" border="1" cellspacing="0" cellpadding="3">
+		
+			<tr>
+				<th style="color:#4000FF"> Nombre </th>
+				<th style="color:#4000FF"> Apellido </th>	
+				<th style="color:#4000FF"> E-mail </th>
+			</tr>
+		{{#users}}
+			<tr>
+				<td> {{getFirstName}} </td>
+				<td> {{getLastName}} </td>	
+				<td>{{getEmail}}</td></br>
+			</tr>
+		{{/users}}
+	</table>
+</body>
+
+</html>

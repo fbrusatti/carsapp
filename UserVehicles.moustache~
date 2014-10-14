@@ -1,0 +1,25 @@
+<html>
+	<head > 
+		<title> List Posts </title>
+	</head>
+
+	<body>
+	<a href="http://localhost:4567/app"><img src="http://localhost:4567/ButtonHome.png" width="45" height="45" style="float:right"/></a>
+	<h1 style="color:#DF3A01">Vehiculos del Usuario</h1>
+	
+		<table width="100%" border="1" cellspacing="0" cellpadding="3">
+			<tr>
+				<th style="color:#DF3A01">Patente </th>
+			</tr>
+			{{#UserVehicles}}
+			<tr>
+        			<td> <a href="vehicles/{{id}}" style="color:#DF3A01"> {{getPatent}} </a></td>				
+				<td> <a href="vehicles/{{id}}/newPost" style="color:#DF3A01"> Cargar post </a></td>
+
+			</tr>
+			{{/UserVehicles}}
+	</table>
+	<a href="http://localhost:4567/ListUser"> <h3>Volver </h3> </a> 
+	</body>
+
+</html>
