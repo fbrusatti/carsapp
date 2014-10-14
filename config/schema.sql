@@ -1,4 +1,4 @@
--- Integrantes: -BERTORELLO GABRIELA - CASTAGNERIS NAZARENO - LANZONI LUCAS - MOLLEA FEDERICO
+-- Integrantes:  - CASTAGNERIS NAZARENO - LANZONI LUCAS - MOLLEA FEDERICO
 DROP DATABASE IF EXISTS  carsapp_development;
 CREATE DATABASE IF NOT EXISTS carsapp_development;
 
@@ -11,6 +11,14 @@ CREATE TABLE carsapp_development.users(
 	pass VARCHAR(20),
 	address_id INT(11), 
 	CONSTRAINT users_pk PRIMARY KEY (id)
+);
+-- DROP TABLE IF EXISTS administrators;
+CREATE TABLE administrators(
+  id INT NOT NULL auto_increment PRIMARY KEY,
+  first_name VARCHAR(40),
+  last_name VARCHAR(40),
+  pass VARCHAR(20) NOT NULL,
+  email VARCHAR(40) NOT NULL unique
 );
 
 -- DROP TABLE IF EXISTS addresses; -- Ciudad
