@@ -81,9 +81,9 @@ public class App {
             if (u != null ? u.password().equals(password) : false) {
                 Session session = request.session(true);
                 session.attribute("user_email", email);
-                session.attribute("user_id", u.getId());
+                session.attribute("user_id", u.id());
                 session.maxInactiveInterval(30*60);               
-                response.redirect("/users/"+u.getId());
+                response.redirect("/users/"+u.id());
                 return null;
             } else {
                 String body = "";
@@ -298,9 +298,12 @@ public class App {
             Session session = request.session(false);
             boolean isOwnerOrAdmin = false;
             boolean isGuest;
+            Map<String,Object> attributes = new HashMap<String,Object>();
             User u = User.findById(request.params("id"));
             if (session != null) {
                 String userEmail = u.email();
+                String session_id = session.attribute("user_id");
+                attributes.put("session_id",session_id);
                 if (session.attribute("user_email").equals(userEmail)) {
                     isOwnerOrAdmin = true;
                 } else {
@@ -314,7 +317,7 @@ public class App {
             Post p = Post.findById(request.params("postId"));
             Vehicle v = Vehicle.findById(p.get("vehicle_id"));
             List<Question> q = Question.where("post_id = ?",request.params("postId"));
-            Map<String,Object> attributes = new HashMap<String,Object>();
+            
             attributes.put("isGuest",isGuest);
             attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
             attributes.put("userName",u.name());
@@ -450,9 +453,9 @@ public class App {
         	c.add(u);
                 Session session = request.session(true);
                 session.attribute("user_email", u.email());
-                session.attribute("user_id", u.getId());
+                session.attribute("user_id", u.id());
                 session.maxInactiveInterval(30*60);               
-                response.redirect("/users/"+u.getId());
+                response.redirect("/users/"+u.id());
         	return null; 
                     }	
 		);
@@ -704,15 +707,24 @@ public class App {
          * Posting a new question 
          */
         post("users/:id/posts/:postId/newQuestion", (request, response) -> {
-            Question q = new Question();
-            q.set("description",request.queryParams("descrip"));
-            q.set("user_id", request.queryParams("userId"));
-            q.set("post_id",request.params("postId"));
-            q.saveIt();        	
+            
+            Session session = request.session(false);
             Map<String,Object> attributes = new HashMap<>();
-            String url = "/users/"+request.params("id")+"/posts/"+request.params("postId");
-            attributes.put("url",url);
-        	return new ModelAndView(attributes,"redirect.mustache"); 
+            if (session != null) {
+                String session_id = session.attribute("user_id");
+                Question q = new Question();
+                q.set("description",request.queryParams("descrip"));
+                q.set("post_id",request.params("postId"));
+                q.set("user_id", session_id);
+                q.saveIt();
+                String url = "/users/"+request.params("id")+"/posts/"+request.params("postId");
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            } else {
+                String url = "/login";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            } 
 			},
 			new MustacheTemplateEngine()
 		);

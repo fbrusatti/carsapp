@@ -39,11 +39,12 @@
     {{/vehicle}}
     <h3>     Consultas   </h3>
     {{^isGuest}}
-		<form action="/users/{{ownerId}}/posts/{{id}}/newQuestion" method="post">
-			<b>Nueva Consulta: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
-			<b>IdUsuario: </b><br><textarea name="userId" rows="1" cols="3" required/></textarea><br>
-			<input type="submit" value="Enviar">
-		</form>
+    	{{^isOwnerOrAdmin}}
+			<form action="/users/{{ownerId}}/posts/{{id}}/newQuestion" method="post">
+				<b>Nueva Consulta: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
+				<input type="submit" value="Enviar">
+			</form>
+		{{/isOwnerOrAdmin}}
 	{{/isGuest}}
     {{#questions}}
     {{#isGuest}}
