@@ -1,0 +1,48 @@
+<h1>User</h1>
+
+ 	<h2>{{#user}} {{name}} {{/user}}</h2>
+
+ 	<style>
+ 	table,th,td
+ 	{
+ 	border:1px solid black;
+ 	border-collapse:collapse;
+ 	}
+ 	th,td
+ 	{
+ 	padding:5px;
+ 	}
+ 	</style>
+ 	</head>
+ 	<body>
+	 	<table style type="text/css">
+                <tr>
+                    <th> Address </th>
+                </tr>
+                <tr>
+                    <td>{{address_user}}</td>
+                </tr>
+	    </style>
+	  	</table>
+        <br>
+        <h3> Posts: </h3>
+        <table style type="text/css">
+                <tr>
+                    <th> Vehicle </th>
+                    <th> Price </th>
+                    <th> Description </th>
+                </tr>
+                {{#posts}}
+                    <tr>
+                        {{#vehicle}}
+                        <td><a href="http://localhost:4567/posts/{{id}}"> {{name}} </a></td>
+                        {{/vehicle}}
+                        <td>${{price}}</td> 
+                        <td>{{description}}</td>
+                    </tr>
+                {{/posts}}
+        </style>
+        </table>
+        <br>
+        <a href="http://localhost:4567/">Carsapp</a>
+	</body>

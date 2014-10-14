@@ -1,0 +1,38 @@
+<h1>Search Posts</h1>
+
+<body>
+    <form name="search" action="/search/posts" method="post">
+    Search (post description): <input type="search" name="postSearch" autofocus required>
+    Price (From):              <input type="number" name="minPrice" min="0">
+    Price (To):                <input type="number" name="maxPrice" min="0">
+                               <input type="submit" value="Search">
+    </form>
+
+    {{#result_count}}
+    Results: {{result_count}}
+    {{/result_count}}
+    <br>
+
+    <style>
+    table,th,td
+    { border:1px solid black;
+      border-collapse:collapse; }
+    th,td
+    { padding:5px; }
+    </style>
+     
+    <table style= "width:300px" width="100%" border="0" cellspacing="0" cellpadding="3">
+        {{#found?}}
+        <tr>
+            <th> Price</th>
+            <th> Description </th>
+        </tr>
+        {{/found?}}
+        {{#result}}
+        <tr>
+            <td>${{price}}</td> 
+            <td><a href="http://localhost:4567/posts/{{id}}">{{description}}</td>
+        </tr>
+        {{/result}}
+    </table>
+</body>

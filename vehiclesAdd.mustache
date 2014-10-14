@@ -1,0 +1,62 @@
+<title>
+	Load vehicle
+</title>
+<body>
+	{{#selectType}} <!-- If the mustache is loaded to select the type, only this section is shown -->
+	<form action="/user/add/vehicles" method="post">
+		<input type="radio" name="vehicleType" value="car" required>car <br>
+		<input type="radio" name="vehicleType" value="moto" required>moto <br>
+		<input type="radio" name="vehicleType" value="truck" required>truck <br>
+		<input type="radio" name="vehicleType" value="other" required>other <br>
+		Guardar 
+		<input type="submit" value= "Save"> 
+
+	</form>
+	{{/selectType}}
+	{{#load}} <!-- If the mustache is loaded to load the vehicle, only this section is shown --> 
+	<form action="/vehicles" method="post">
+		Name 
+		<input type="text" name="name"><br>
+		Model (YYYY)
+		<input type="text" name="model"><br>
+		KM (in numbers)
+		<input type="text" name="km"><br>
+		<br>
+		
+		{{#car}}
+			<input type="hidden" name="vehicleType" value="car">
+			<input type="radio" name="carType" value="sedan" required>sedan <br>
+			<input type="radio" name="carType" value="compact" required>compact <br>
+			<input type="radio" name="carType" value="coupe" required>coupe <br>
+			<input type="radio" name="carType" value="wagon" required>wagon <br>
+			<input type="radio" name="carType" value="sports" required>sports <br>
+			<input type="radio" name="carType" value="other" required>other <br>
+		{{/car}}
+		{{#truck}}
+			<input type="hidden" name="vehicleType" value="truck">
+			<input type="radio" name="truckType" value="light" required>light <br>
+			<input type="radio" name="truckType" value="medium" required>medium <br>
+			<input type="radio" name="truckType" value="heavy" required>heavy <br>
+			<input type="radio" name="truckType" value="other" required>other <br>
+		{{/truck}}
+		{{#moto}}
+			<input type="hidden" name="vehicleType" value="moto">
+			<input type="radio" name="motoType" value="standard" required>standard <br>
+			<input type="radio" name="motoType" value="cruiser" required>cruiser <br>
+			<input type="radio" name="motoType" value="sport" required>sport <br>
+			<input type="radio" name="motoType" value="touring" required>touring <br>
+			<input type="radio" name="motoType" value="scooter" required> scooter <br>
+			<input type="radio" name="motoType" value="off-road" required> off-road <br>
+			<input type="radio" name="motoType" value="other" required> other <br>
+		{{/moto}}
+		{{#other}}
+			<input type="hidden" name="vehicleType" value="other">
+		{{/other}}
+		<br>
+		Login (user email)
+		<input type="text" name="user"><br>
+		Guardar 
+		<input type="submit" value= "Save"> 
+	</form>
+	{{/load}} 
+</body>

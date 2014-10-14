@@ -1,0 +1,33 @@
+<h1>Users</h1>
+
+ 	<h2>Users count: {{users_count}}</h2>
+
+ 	<style>
+ 	table,th,td
+ 	{
+ 	border:1px solid black;
+ 	border-collapse:collapse;
+ 	}
+ 	th,td
+ 	{
+ 	padding:5px;
+ 	}
+ 	</style>
+ 	</head>
+ 	<body>
+	 	<table style= "width:300px" width="100%" border="0" cellspacing="0" cellpadding="3">
+			<tr>
+				<th> Name </th>
+				<th> Email </th>
+			</tr>
+			{{#users}}
+				<tr>
+					<td><a href="http://localhost:4567/users/{{id}}">  {{name}} </a></td> 
+					<td>{{email}}</td>
+	        	</tr>
+	    	{{/users}}
+	  	</table>
+	</style>
+		<br>
+    	<a href="http://localhost:4567/">Carsapp</a>
+	</body>
