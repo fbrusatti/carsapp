@@ -33,17 +33,15 @@ public class Post extends Model {
     return this.getInteger("total_rating");
   }
 
-  public Integer sumrate() {
+  public Integer sumRate() {
     return this.getInteger("sum_rate");
   }
 
-  public void addrate(Integer r) { //update rate, total_rating, sum_rate to a new rate
+  public void addRate(Integer r) { //update rate, total_rating, sum_rate to a new rate
     this.set("total_rating", this.ratings() + 1);
-    this.saveIt();
     this.set("sum_rate", this.sumrate() + r);
     this.saveIt();
-    Integer newr = this.sumrate()/this.ratings();
-    this.set("rate",Integer.toString(newr));
+    this.set("rate",Integer.toString(this.sumrate()/this.ratings()));
     this.saveIt();
   }
 
