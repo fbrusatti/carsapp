@@ -633,10 +633,24 @@ public class App {
          * Getting the answers of a question
          */
         get("users/:userId/posts/:postId/question/:idQuestion", (request, response) -> {
+            Session session = request.session(false);
+            boolean isOwnerOrAdmin = false;
+            if (session != null) {
+                User u = User.findById(request.params("userId"));
+                String userEmail = u.email();
+                if (session.attribute("user_email").equals(userEmail)) {
+                    isOwnerOrAdmin = true;
+                } else {
+                    isOwnerOrAdmin = u.isAdmin();
+                }
+            }
+            
             List<Answer> answers = Answer.where("question_id = ?",request.params("idQuestion"));
             Question q = Question.findById(request.params("idQuestion"));
             Post p = Post.findById(request.params("postId"));
             Map<String,Object> attributes = new HashMap<String,Object>();
+
+            attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
             attributes.put("question",q);
             attributes.put("answers",answers);
 			attributes.put("post",request.params("postId"));
