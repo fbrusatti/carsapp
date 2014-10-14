@@ -1,0 +1,42 @@
+﻿Este sería el backlog del proyecto, fijense que le pueden agregar o quitar y lo vamos charlando. Las oraciones que tienen ** son las que 
+agregué y le coloque los puntos teniendo en cuenta como se habían colocado en las que tienen * que son las que habiamos hecho en clase. 
+Recuerden que cada punto representa 2hs de trabajo, y creo que habían dicho que hicieramos alrededor de 10 puntos, pero bueno después lo 
+vemos. 
+
+Ptos
+ 1	* As an Admin i want to create a User 
+ 1 	* As a User i want to add an Address 
+ 2	* As a User i want to ABD a Car
+ 2	* As a User i want to ABD a Truck
+ 2	* As a User i want to ABD a Motorcycle
+ 2	* As a User i want to ABD a Other                              //10 Puntos hasta acá
+ 2	* As a User i want to create a Post
+ 1 	* As a User i want to destroy a Post	
+ 2	* As a User i want to modify my Posts
+ 8	* As a User i want to search a Post
+ 2	* As a User i want to qualify a Post
+ 1	* As a User i cannot qualify my owns Posts					
+ 2	* As a User i want to ask a Question
+ 1	* As a User i cannot ask question in my owns Posts
+ 1 	* As a User i want to Answer Questions in my Posts
+ 1	* As a User i cannot Answer Questions in other's Posts
+ 8	* As a Guest i want to search a Post
+ 1	* As a Guest i cannot create a Post	
+ 1	** As a Guest i cannot qualify a Post
+ 2	** As a Guest i cannot ask a Question         (tambien podria ser: As a Guest i cannot to Question)
+ 1	** As a Guest i cannot Answer 
+
+aaa
+
+Formato:
+Id: 1
+Name: As an Admin i want to create a User
+Description: 	This story create a user in the system. The system will inform if the user already existed or if it has been succesfully 
+							created. In the last case a email message is sent to the new user notify  
+Type: 
+points: 1
+status:started,
+requester
+owner
+priority
+

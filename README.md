@@ -30,10 +30,14 @@ Installation
   ```
     $ mysql -u root
     mysql> create database carsapp_development;
+    mysql> create database carsapp_test;
   ```
 
   - Create users table
   ``` $ mysql -u root carsapp_development < config/schema.sql ```
+  
+   - Create test table
+  ``` $ mysql -u root carsapp_test < config/schema.sql ```
   
   - Run application
   ``` ./run.sh ```

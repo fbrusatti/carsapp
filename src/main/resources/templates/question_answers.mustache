@@ -1,0 +1,23 @@
+<a href="/"> Inicio </a><br>
+
+{{#question}}
+    <h2> {{description}}</h2>
+
+{{#isOwnerOrAdmin}}
+<form action="/users/{{user}}/posts/{{post}}/question/{{id}}/newAnswer" method="post">
+<b>Responder: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
+<input type=hidden name="questionId" value={{id}}>
+<input type=hidden name="userId" value={{user}}>
+<input type="submit" value="Enviar">
+</form>
+{{/isOwnerOrAdmin}}
+{{/question}}
+
+{{#answers}}
+	{{#isGuest}}
+		<b>{{userName}}</b>: {{description}} {{createdAt}} <br>
+	{{/isGuest}}
+	{{^isGuest}}
+   		<a href="/users/{{ownerAnswerId}}"><b>{{userName}}</b></a>: {{description}} {{createdAt}} <br>
+   	{{/isGuest}}
+{{/answers}}

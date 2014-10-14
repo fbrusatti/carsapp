@@ -1,0 +1,8 @@
+<a href="/"> Inicio </a><br>
+{{#post}}
+    <form action="/users/{{ownerId}}/posts/{{id}}/edit" method="post">
+    <b>Título: </b><input type="text" value="{{title}}" name="title" size="20" required/><br>
+    <b>Descripción: </b><br><textarea name="descrip" rows="5" cols="60" required/>{{description}}</textarea><br>
+    <input type="submit" value="Enviar"><input type="reset" value="Borrar">
+</form>
+{{/post}}
