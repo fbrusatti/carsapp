@@ -228,10 +228,25 @@ public class App {
          * Getting user by id
          */
         get("/users/:id", (request, response) -> {
-        	User u = User.findById(request.params("id"));
         	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("user",u);
-        	return new ModelAndView(attributes,"user_id.mustache");
+            Session session = request.session(false);
+            boolean isOwnerOrAdmin = false;
+            if (session != null) {
+                User u = User.findById(request.params("id"));
+                String userEmail = u.email();
+                if (session.attribute("user_email").equals(userEmail)) {
+                    isOwnerOrAdmin = true;
+                } else {
+                    isOwnerOrAdmin = u.isAdmin();
+                }
+                attributes.put("user",u);
+                attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
+                return new ModelAndView(attributes,"user_id.mustache");
+            } else {
+                String url = "/";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache"); 
+            }
 			},
 			new MustacheTemplateEngine()
         );
@@ -280,11 +295,28 @@ public class App {
          * Getting a post of a user
          */
         get("users/:id/posts/:postId", (request, response) -> {
-            Post p = Post.findById(request.params("postId"));
+            Session session = request.session(false);
+            boolean isOwnerOrAdmin = false;
+            boolean isGuest;
             User u = User.findById(request.params("id"));
+            if (session != null) {
+                String userEmail = u.email();
+                if (session.attribute("user_email").equals(userEmail)) {
+                    isOwnerOrAdmin = true;
+                } else {
+                    isOwnerOrAdmin = u.isAdmin();
+                }
+                isGuest=false;
+            } else {
+                isGuest=true;
+            }
+
+            Post p = Post.findById(request.params("postId"));
             Vehicle v = Vehicle.findById(p.get("vehicle_id"));
             List<Question> q = Question.where("post_id = ?",request.params("postId"));
             Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("isGuest",isGuest);
+            attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
             attributes.put("userName",u.name());
             attributes.put("post",p);
             attributes.put("vehicle",v);
@@ -635,6 +667,7 @@ public class App {
         get("users/:userId/posts/:postId/question/:idQuestion", (request, response) -> {
             Session session = request.session(false);
             boolean isOwnerOrAdmin = false;
+            boolean isGuest;
             if (session != null) {
                 User u = User.findById(request.params("userId"));
                 String userEmail = u.email();
@@ -643,6 +676,9 @@ public class App {
                 } else {
                     isOwnerOrAdmin = u.isAdmin();
                 }
+                isGuest=false;
+            } else {
+                isGuest=true;
             }
             
             List<Answer> answers = Answer.where("question_id = ?",request.params("idQuestion"));
@@ -650,6 +686,7 @@ public class App {
             Post p = Post.findById(request.params("postId"));
             Map<String,Object> attributes = new HashMap<String,Object>();
 
+            attributes.put("isGuest",isGuest);
             attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
             attributes.put("question",q);
             attributes.put("answers",answers);

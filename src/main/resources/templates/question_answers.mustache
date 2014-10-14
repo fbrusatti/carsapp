@@ -14,5 +14,10 @@
 {{/question}}
 
 {{#answers}}
-   <a href="/users/{{ownerAnswerId}}"><b>{{userName}}</b></a>: {{description}} {{createdAt}} <br>
+	{{#isGuest}}
+		<b>{{userName}}</b>: {{description}} {{createdAt}} <br>
+	{{/isGuest}}
+	{{^isGuest}}
+   		<a href="/users/{{ownerAnswerId}}"><b>{{userName}}</b></a>: {{description}} {{createdAt}} <br>
+   	{{/isGuest}}
 {{/answers}}

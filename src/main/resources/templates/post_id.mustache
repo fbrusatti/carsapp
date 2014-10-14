@@ -1,15 +1,22 @@
 <a href="/"> Inicio </a><br>
 {{#post}}
-	<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2>
-	<a href="/users/{{ownerId}}/posts/{{id}}/edit"><button type="button" > Editar </button></a>
-	<button type="button" onclick="toogle_eliminar()">Eliminar post</button>
-	<span id="span_eliminar" style="display:none">
-		<form action="/users/{{ownerId}}/posts/{{id}}/delete" method="post" >
-			<b>¿Seguro que desea eliminar el post?: </b>
-			<input type="submit" value="Si">
-			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
-		</form>
-	</span>
+	{{#isGuest}}
+		<h2> {{ownerName}} - {{title}}</h2>
+	{{/isGuest}}
+	{{^isGuest}}
+		<h2><a href="/users/{{ownerId}}"> {{ownerName}}</a> - {{title}}</h2>
+		{{#isOwnerOrAdmin}}
+			<a href="/users/{{ownerId}}/posts/{{id}}/edit"><button type="button" > Editar </button></a>
+			<button type="button" onclick="toogle_eliminar()">Eliminar post</button>
+			<span id="span_eliminar" style="display:none">
+				<form action="/users/{{ownerId}}/posts/{{id}}/delete" method="post" >
+					<b>¿Seguro que desea eliminar el post?: </b>
+					<input type="submit" value="Si">
+					<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
+				</form>
+			</span>
+		{{/isOwnerOrAdmin}}
+	{{/isGuest}}
 	<br>
 	<b>Post creado el: </b> {{createdAt}}<br>
 	<br>
@@ -29,23 +36,28 @@
                     <b>Altura: </b> {{height}}<br>
                 {{/truck}}
                 <b>Color: </b><table bgcolor= "{{color}}" border="1" cellpadding="1" cellspacing="1"><tr><td><font color="{{color}}">Color</td></font></tr></table>
-        {{/vehicle}}
-
-	<h3>     Consultas   </h3>
-
-<form action="/users/{{ownerId}}/posts/{{id}}/newQuestion" method="post">
-<b>Nueva Consulta: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
-<b>IdUsuario: </b><br><textarea name="userId" rows="1" cols="3" required/></textarea><br>
-<input type="submit" value="Enviar">
-</form>
-
+    {{/vehicle}}
+    <h3>     Consultas   </h3>
+    {{^isGuest}}
+		<form action="/users/{{ownerId}}/posts/{{id}}/newQuestion" method="post">
+			<b>Nueva Consulta: </b><br><textarea name="descrip" rows="5" cols="60" required/></textarea><br>
+			<b>IdUsuario: </b><br><textarea name="userId" rows="1" cols="3" required/></textarea><br>
+			<input type="submit" value="Enviar">
+		</form>
+	{{/isGuest}}
     {{#questions}}
-      <a href="/users/{{ownerQuestionId}}"><b>{{ownerName}}</b></a>: {{description}} {{createdAt}} 
+    {{#isGuest}}
+    	<b>{{ownerName}}</b>: {{description}} {{createdAt}} 
+    {{/isGuest}}
+    {{^isGuest}}
+      <a href="/users/{{ownerQuestionId}}"><b>{{ownerName}}</b></a>: {{description}} {{createdAt}}
+    {{/isGuest}} 
       <a href="/users/{{ownerId}}/posts/{{postId}}/question/{{id}}">
       	<button type="button">Ver repuestas/Responder</button>
       </a>
       <br>
     {{/questions}}
+    
 {{/post}}
 
 <script>
