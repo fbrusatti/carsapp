@@ -25,6 +25,26 @@ public class Post extends Model {
     return this.getString("description");
   }
 
+  public Integer rate() {
+    return this.getInteger("rate");
+  }
+
+  public Integer ratings() {
+    return this.getInteger("total_rating");
+  }
+
+  public Integer sumRate() {
+    return this.getInteger("sum_rate");
+  }
+
+  public void addRate(Integer r) { //update rate, total_rating, sum_rate to a new rate
+    this.set("total_rating", this.ratings() + 1);
+    this.set("sum_rate", this.sumRate() + r);
+    this.saveIt();
+    this.set("rate",Integer.toString(this.sumRate()/this.ratings()));
+    this.saveIt();
+  }
+
   public User user() {
     User u = User.findById(this.getInteger("user_id"));
     return u;
