@@ -348,10 +348,24 @@ public class App {
          * Editing a post
          */ 
         get("/users/:id/posts/:postId/edit", (request,response) -> {
+        	Session session = request.session(false);
             Map<String,Object> attributes = new HashMap<String,Object>();
-            Post p = Post.findById(request.params("postId"));
-            attributes.put("post",p);
-            return new ModelAndView(attributes,"edit_post.mustache"); 
+            if (session != null) {
+            	Post p = Post.findById(request.params("postId"));	
+            	Int userId = p.user_id();
+        	    if (session.attribute("user_id").equals(userId)) {	
+            		attributes.put("post",p);
+            		return new ModelAndView(attributes,"edit_post.mustache");
+            	} else {
+                    String url = "/users/:id/posts/"+p.postId();
+                    attributes.put("url",url);
+                    return new ModelAndView(attributes,"redirect.mustache"); 
+                }
+        	} else {
+                String url = "/login";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            }	 
             },
             new MustacheTemplateEngine()
         );
@@ -463,14 +477,27 @@ public class App {
         /**
          * Editing a user
          */ 
-         get("/users/:id/edit", (request,response) -> {
+        get("/users/:id/edit", (request,response) -> {
+         	Session session = request.session(false);
             Map<String,Object> attributes = new HashMap<String,Object>();
-            User u = User.findById(request.params("id"));
-            List<City> c = City.findAll();
-            attributes.put("user",u);
-            attributes.put("cities",c);
-            
-            return new ModelAndView(attributes,"edit_user.mustache"); 
+            if (session != null) {
+        	    User u = User.findById(request.params("id"));
+                String userEmail = u.email();
+        	    if (session.attribute("user_email").equals(userEmail)){ 
+                        List<City> c = City.findAll();
+            			attributes.put("user",u);
+            			attributes.put("cities",c);            
+            			return new ModelAndView(attributes,"edit_user.mustache");
+            	} else {
+                    String url = "/users/"+u.id();
+                    attributes.put("url",url);
+                    return new ModelAndView(attributes,"redirect.mustache"); 
+                }
+        	} else {
+                String url = "/login";
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache");
+            } 
             },
             new MustacheTemplateEngine()
         );
