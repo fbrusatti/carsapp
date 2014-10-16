@@ -351,13 +351,14 @@ public class App {
         	Session session = request.session(false);
             Map<String,Object> attributes = new HashMap<String,Object>();
             if (session != null) {
-            	Post p = Post.findById(request.params("postId"));	
-            	Int userId = p.user_id();
-        	    if (session.attribute("user_id").equals(userId)) {	
+            	Post p = Post.findById(request.params("postId"));
+                User u = User.findById(request.params("id"));
+                String userEmail = u.email();	
+        	    if (session.attribute("user_email").equals(userEmail)) {	
             		attributes.put("post",p);
             		return new ModelAndView(attributes,"edit_post.mustache");
             	} else {
-                    String url = "/users/:id/posts/"+p.postId();
+                    String url = "/users/"+u.id()+"/posts/"+p.id();
                     attributes.put("url",url);
                     return new ModelAndView(attributes,"redirect.mustache"); 
                 }
