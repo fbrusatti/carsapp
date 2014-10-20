@@ -1,26 +1,29 @@
-<h1>Posts</h1>
+	<head>
+		<h1>Posts</h1>
 
- 	<h2>Posts count: {{posts_count}}</h2>
+	 	<h2>Posts count: {{posts_count}}</h2>
 
- 	<style>
- 	table,th,td
- 	{
- 	border:1px solid black;
- 	border-collapse:collapse;
- 	}
- 	th,td
- 	{
- 	padding:5px;
- 	}
- 	</style>
+	 	<script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+	 	<style>
+	 	table,th,td
+	 	{
+	 	border:1px solid black;
+	 	border-collapse:collapse;
+	 	}
+	 	th,td
+	 	{
+	 	padding:5px;
+	 	}
+	 	</style>
  	</head>
  	<body>
-	 	<table style type="text/css">
+	 	<table style type="text/css" class="sortable">
 			<tr>
 				<th> Vehicle </th>
 				<th> Price </th>
 				<th> Description </th>
 				<th> User </th>
+				<th> Rating </th>
 			</tr>
 			{{#posts}}
 				<tr>
@@ -32,6 +35,7 @@
 					{{#user}}
 					<td>{{name}}</td>
 					{{/user}}
+					<td>{{rate}} Stars</td>
 	        	</tr>
 	    	{{/posts}}
 	    </style>
