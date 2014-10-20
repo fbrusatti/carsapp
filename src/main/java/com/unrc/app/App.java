@@ -240,12 +240,18 @@ public class App {
                 response.redirect("/whoops",404);
                 return new ModelAndView(attributes, "postId.mustache");
             } else {
+                //Questions
                 List<Question> questions = Question.where("post_id = ?", post.id());
                 attributes.put("vehicle_name", post.vehicle().name());
                 attributes.put("post", post);
                 if (questions != null) {
                     attributes.put("questions", questions);
                 }
+                //Rating
+                if (post.rate() != 0) { //rate() = 0 means the post is not rated yet
+                    attributes.put("rating",post.rate());
+                }
+
                 return new ModelAndView(attributes, "postId.mustache");
             }
         },
@@ -274,6 +280,24 @@ public class App {
         }, 
             new MustacheTemplateEngine()
         );
+
+        post("/posts/rate", (request, response) -> {
+            String postId = request.queryParams("postId");
+            Post post = Post.findById(postId);
+            User user = User.findFirst("email = ?",request.queryParams("login"));
+            Integer rating = Integer.valueOf(request.queryParams("rating"));
+
+            if (user == null || post.userId() == user.id()) { // User trying to rate is null or the post owner,
+                response.redirect("/posts/"+postId);          // reload page without rating.
+                return "fail";
+            }
+            else {
+                post.addRate(rating);
+                response.redirect("/posts/"+postId);
+                return "success";
+            }
+
+        });
 
         /*---------------------- VEHICLE ROUTES ----------------*/
 
