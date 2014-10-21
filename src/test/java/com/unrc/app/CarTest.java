@@ -41,7 +41,7 @@ public class CarTest{
     //creo dos autos y verifico si son o no iguales
     @Test
     public void shouldValidatefindByCar(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User m = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle a1 = Vehicle.createVehicle("ghg345","corsa","chevrolet",m);
         Vehicle a2 = Vehicle.createVehicle("ghg344","escort","ford",m);
         Vehicle a3 = Vehicle.findByPatent("ghg345"); 
@@ -56,7 +56,7 @@ public class CarTest{
     //verifico si un auto(creado anteriormente) existe y luego busco un auto inexistente
     @Test
     public void shouldValidateExistCar(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User u = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle a = Vehicle.createVehicle("gkg357","polo","volkswagen",u);
         Car t1= Car.createCar(true , a);
         the(Car.existCar(t1.getString("id_vehicle"))).shouldBeTrue();
@@ -66,7 +66,7 @@ public class CarTest{
    //creo un nuevo auto y verifico la consistencia de ese auto
     @Test
     public void shouldValidateCreateCar(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User u = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
         Car t = Car.createCar(true , a);
         the(a).shouldBe("valid");
@@ -87,7 +87,7 @@ public class CarTest{
     //creo un auto y luego intento eliminar un auto existente,luego intento eliminar un auto inexistente
       @Test
     public void shouldValidateDeleteCar(){
-     User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+     User u = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
      Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
      Car t = Car.createCar(true , a);
      the(Car.deleteCar("abc123")).shouldBeTrue();

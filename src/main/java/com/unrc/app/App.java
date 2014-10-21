@@ -13,7 +13,8 @@ import spark.TemplateEngine;
 import static spark.Spark.*;
 import org.elasticsearch.node.*;
 import org.elasticsearch.client.*;
-
+import spark.Request;
+import spark.Session;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -31,13 +32,25 @@ public class App
     public static Client client(){
     return node.client();
     }
+
+     public static Session existsSession(Request request) {
+        Session session = request.session(false);
+        if (null != session) {
+            Set<String> attrb = request.session(false).attributes();
+            if (attrb.contains("user_email") && attrb.contains("user_id"))
+                return session;
+            else return null;
+        }
+        else return null;
+    }
+
 	public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
 
         get("/",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "hello.mustache");
+            return new ModelAndView(attributes, "login.mustache");
         },
          new MustacheTemplateEngine()
         );
@@ -318,7 +331,8 @@ public class App
             String name = request.queryParams("first_name");
             String lastname = request.queryParams("last_name");
             String email = request.queryParams("email");
-            User nuevoUser= new User();nuevoUser.createUser(name,lastname,email);
+            String pass = request.queryParams("passs");
+            User nuevoUser= new User();nuevoUser.createUser(name,lastname,email,pass);
             response.redirect("/users");
             return "success";
         });
@@ -349,6 +363,7 @@ public class App
             return form;
         });  
 
+        
         post ("/addresses",(request, response) ->{
             String email = request.queryParams("userEmail");
             String calle = request.queryParams("street");
@@ -539,6 +554,7 @@ public class App
             return "success";
         });
 
+
         get("/newAnswer",(request,response)->{
             String form = "<form action= \"/answers \" method= \"post\">";
             form+="<center><h1>Responder pregunta</h1></center>";
@@ -580,6 +596,69 @@ public class App
             response.redirect("/answers");
             return "success";
         });
+
+        /**INSERCIONES**/
+        get("/invitado",(request,response)->{
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "invitado.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
+
+        get("/home",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            //List<User> users = User.findAll();
+            //attributes.put("users_count", users.size());
+            //attributes.put("users", users);   
+            return new ModelAndView(attributes, "hello.mustache");
+        },
+         new MustacheTemplateEngine()
+       );
+
+        get ("/login",(request, response) ->{
+            String res = "";
+            String pass = request.queryParams("passs");
+            String email = request.queryParams("email");
+            User us = User.findByEmail(email);
+            if (us != null) {
+                Boolean usuario=User.existUser(email);
+                Boolean clave=User.findUserByPass(pass);
+                if (usuario && clave) {
+                    Session session = request.session(true);
+                    session.attribute("user_email", email);
+                    session.attribute("user_id", us.getId());
+                    session.maxInactiveInterval(30*60);
+                    response.redirect("/home"); 
+                    res += "existe el usuario.";
+                    return res;
+                }
+                else{
+                    res += "El password indicado no es correcto.";
+                    return res;
+                }    
+            }
+            else {
+                res += "El email indicado no existe .";
+                return res;
+            }
+
+        });
+            
+     
+
+        get("/logout", (request, response) -> {
+            String res = "";
+            Session session = existsSession(request);
+            if (null == session) {
+                res += "No hay ninguna sesion activa.";
+              ;
+            } else {
+                session.invalidate();
+                response.redirect("/"); 
+            }
+              return res;
+        });
+
 
 
 /*

@@ -30,7 +30,7 @@ public class RateTest{
     //Creo un Rate invalido y lo corroboro 
     @Test
     public void shouldValidateMandatoryFields(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Rate rate = new Rate();
@@ -47,8 +47,8 @@ public class RateTest{
     //creo tres rates y verifico si son o no iguales
     @Test
     public void shouldValidatefindById(){
-        User user1 = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
-        User user2 = User.createUser("alejandro", "tissera", "alejandrotissera@gmail.com");
+        User user1 = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
+        User user2 = User.createUser("alejandro", "tissera", "alejandrotissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user1);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user1, vehicle);
         Rate rate1 = Rate.createRate(1, post, user1);
@@ -62,7 +62,7 @@ public class RateTest{
     //verifico si un rate(creado anteriormente) existe y luego busco un rate inexistente
     @Test
     public void shouldValidateExistRate(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Rate rate = Rate.createRate(5, post, user);
@@ -73,7 +73,7 @@ public class RateTest{
     //creo un nuevo rate y verifico la consistencia de ese rate
     @Test
     public void shouldValidateCreateRate(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Rate rate = Rate.createRate(3, post, user);

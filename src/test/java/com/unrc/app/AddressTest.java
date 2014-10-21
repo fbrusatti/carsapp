@@ -41,7 +41,7 @@ public class AddressTest{
 
     @Test
     public void shouldValidateCreateAddress(){
-        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
+        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com", "asd123");
         Address address = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
         the(address).shouldBe("valid");
         the(address).shouldNotBeNull();
@@ -54,7 +54,7 @@ public class AddressTest{
     //También creo un Address distinto, y 
     @Test
     public void shouldValidateFindByAddress(){
-        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
+        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com", "asd123");
         Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
         Address a3 = Address.createAddress("Rioja", 1023,"Cordoba",u);
         Address a2 = Address.findByAddress("Lincoln", 874,"Rio Cuarto");
@@ -67,7 +67,7 @@ public class AddressTest{
     //verifico si una direccion(creada anteriormente) existe y luego busco una direccion inexistente
     @Test
     public void shouldValidateExistsAddress(){
-        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
+        User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com", "asd123");
         Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
         the(Address.existAddress(a.getString("street"),a.getInteger("num"),a.getString("city"))).shouldBeTrue();
         the(Address.existAddress("Parana", 1024,"La Quiaca")).shouldBeFalse();
@@ -80,7 +80,7 @@ public class AddressTest{
     //Intento eliminar San Martin 1654, lo cual SI se puede (NO tiene ningun usuario asociado)
     @Test
     public void shouldValidateDeleteAddress(){        
-      User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com");
+      User u = User.createUser("Didier","Drogba","tito_drogba@hotmail.com", "asd123");
       Address a = Address.createAddress("Lincoln", 874,"Rio Cuarto",u);
       Address a2 = Address.createAddress("San Martin", 1654,"Cordoba",u);
       User.deleteUserAddress("San Martin",1654,"Cordoba","tito_drogba@hotmail.com"); //elimino la relacion San Martin 1654 -> Didier Drogba

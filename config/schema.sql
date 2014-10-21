@@ -7,9 +7,10 @@ CREATE TABLE carsapp_development.users(
     email VARCHAR(60) UNIQUE,
     first_name VARCHAR(56),
     last_name VARCHAR(56),
+    passs varchar(20),
     points int,  
     count_operation int ,
-    password VARCHAR(50),
+    
   CONSTRAINT users_pk PRIMARY KEY (id)
 );
 

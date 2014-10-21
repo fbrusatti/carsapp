@@ -40,7 +40,7 @@ public class QuestionTest{
     //creo dos preguntas y verifico si son o no iguales
     @Test
     public void shouldValidatefindByQuestion(){
-        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Question c1= Question.createQuestion("a cuanto vende el auto?" , user, post);
@@ -54,7 +54,7 @@ public class QuestionTest{
     //verifico si una pergunta(creado anteriormente) existe y luego busco una pregunta inexistente
     @Test
     public void shouldValidateExistQuestion(){
-        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Question p= Question.createQuestion("pregunta1" , user, post);
@@ -65,7 +65,7 @@ public class QuestionTest{
    //creo una nueva pregunta y verifico la consistencia de esa pregunta
     @Test
     public void shouldValidateCreateQuestion(){
-        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Question p = Question.createQuestion("pregunta1" , user, post);
@@ -80,7 +80,7 @@ public class QuestionTest{
     //creo una pregunta y luego intento eliminarla ,luego intento eliminar una pregunta inexistente
       @Test
     public void shouldValidateDeleteQuestion(){
-        User user = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User user = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("ghg345","corsa","chevrolet",user);
         Post post = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Question t = Question.createQuestion("pregunta1", user, post);
