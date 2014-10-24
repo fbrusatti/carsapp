@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.unrc.app.models.*;
+import com.unrc.app.controllers.*;
 import org.javalite.activejdbc.Base;
 
 import spark.Spark.*;
@@ -61,7 +62,7 @@ public class App {
 			new MustacheTemplateEngine()
 		);
                 
-         /**
+        /**
          * Getting login
          */
         get("/login", (request, response) -> {
@@ -75,24 +76,10 @@ public class App {
         
         // Post Login
         post("/login", (request, response) -> {
-            String email = request.queryParams("email");
-            String password = request.queryParams("password");
-            User u = User.findFirst("email = ?", email);
-            if (u != null ? u.password().equals(password) : false) {
-                Session session = request.session(true);
-                session.attribute("user_email", email);
-                session.attribute("user_id", u.id());
-                session.maxInactiveInterval(30*60);               
-                response.redirect("/users/"+u.id());
-                return null;
-            } else {
-                String body = "";
-                body += "<body><script type='text/javascript'>";
-                body += "alert('Usuario o contraseña incorrecta'); document.location = '/';";
-                body += "</script></body>";
-                return body;
-               
-            }
+            UserController userController = new UserController();
+            String url = userController.login(request);
+            response.redirect(url);
+            return null; 
         });
         
         // Get logout
@@ -203,22 +190,8 @@ public class App {
          * Getting users
          */
 		get("/users", (request, response) -> {
-			
-            Session session = request.session(false);
-            boolean existSession = false;
-            if (session != null) existSession = true;
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (existSession) {
-                List<User> users = User.findAll();
-                boolean notEmpty = !users.isEmpty();
-                attributes.put("users",users);
-                attributes.put("notEmpty",notEmpty);
-                return new ModelAndView(attributes,"users.mustache");
-            } else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache"); 
-            }
+            UserController userController = new UserController();
+            return userController.getUsersView(request);
 			},
 			new MustacheTemplateEngine()
         );
@@ -228,25 +201,8 @@ public class App {
          * Getting user by id
          */
         get("/users/:id", (request, response) -> {
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-            Session session = request.session(false);
-            boolean isOwnerOrAdmin = false;
-            if (session != null) {
-                User u = User.findById(request.params("id"));
-                String userEmail = u.email();
-                if (session.attribute("user_email").equals(userEmail)) {
-                    isOwnerOrAdmin = true;
-                } else {
-                    isOwnerOrAdmin = u.isAdmin();
-                }
-                attributes.put("user",u);
-                attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
-                return new ModelAndView(attributes,"user_id.mustache");
-            } else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache"); 
-            }
+            UserController userController = new UserController();
+            return userController.getUserView(request);
 			},
 			new MustacheTemplateEngine()
         );
@@ -255,14 +211,11 @@ public class App {
          * Deleting a user
          */
         post("users/:id/delete", (request, response) -> {
-            User u = User.findById(request.params("id"));
-            u.deleteCascade();
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "/users";
-            attributes.put("url",url);
-            return new ModelAndView(attributes,"redirect.mustache"); 
-            },
-            new MustacheTemplateEngine()
+            UserController userController = new UserController();
+            String url = userController.delete(request);
+            response.redirect(url);
+            return null;
+            }
         );
 
         /**
@@ -439,8 +392,8 @@ public class App {
 		 *Adding a new User 
 		 */
 		get("newUser", (request, response) -> {
-                Session session = request.session(false);
-                if (session!=null) response.redirect("");
+            Session session = request.session(false);
+            if (session!=null) response.redirect("");
         	Map<String,Object> attributes = new HashMap<String,Object>();
         	List<City> cities = City.findAll();
         	attributes.put("cities",cities);
@@ -453,26 +406,11 @@ public class App {
          * Posting a new user
          */
         post("/users", (request, response) -> {
-        	User u = new User();
-        	u.set("email", request.queryParams("email"));
-        	u.set("first_name",request.queryParams("firstName"));
-        	u.set("last_name", request.queryParams("lastName"));
-                u.set("password", request.queryParams("password"));
-        	u.set("mobile",request.queryParams("movil"));
-        	u.set("telephone",request.queryParams("fijo"));
-        	u.set("address",request.queryParams("direccion"));
-                u.set("isAdmin",0);
-        	u.saveIt();
-        	
-        	City c = City.findById(request.queryParams("ciudad"));
-        	c.add(u);
-                Session session = request.session(true);
-                session.attribute("user_email", u.email());
-                session.attribute("user_id", u.id());
-                session.maxInactiveInterval(30*60);               
-                response.redirect("/users/"+u.id());
+        	UserController userController = new UserController();
+            String url = userController.add(request);
+            response.redirect(url);
         	return null; 
-                    }	
+            }	
 		);
         
         /**
@@ -507,25 +445,11 @@ public class App {
          * Posting a user edited
          */       
         post("/users/:id/edit", (request,response) -> {
-            User u = User.findById(request.params("id"));
-            u.set("email", request.queryParams("email"));
-            u.set("first_name",request.queryParams("firstName"));
-            u.set("last_name", request.queryParams("lastName"));
-            u.set("password", request.queryParams("password"));
-            u.set("mobile",request.queryParams("movil"));
-            u.set("telephone",request.queryParams("fijo"));
-            u.set("address",request.queryParams("direccion"));
-            u.saveIt();
-            
-            City c = City.findById(request.queryParams("ciudad"));
-            c.add(u);
-            
-            Map<String,Object> attributes = new HashMap<>();
-            String url = "/users/"+u.id();
-            attributes.put("url",url);
-            return new ModelAndView(attributes,"redirect.mustache"); 
-            },
-            new MustacheTemplateEngine()
+            UserController userController = new UserController();
+            String url = userController.edit(request);
+            response.redirect(url);
+            return null;
+            } 
         );
 
         /**
