@@ -66,9 +66,8 @@ public class App {
          * Getting login
          */
         get("/login", (request, response) -> {
-            Session session = request.session(false);
-            if (session != null) response.redirect("");
-            return new ModelAndView(null,"login.mustache");
+            UserController userController = new UserController();
+            return userController.getLoginView(request);
             },
             new MustacheTemplateEngine()
         );
@@ -392,12 +391,8 @@ public class App {
 		 *Adding a new User 
 		 */
 		get("newUser", (request, response) -> {
-            Session session = request.session(false);
-            if (session!=null) response.redirect("");
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-        	List<City> cities = City.findAll();
-        	attributes.put("cities",cities);
-        	return new ModelAndView(attributes,"new_user.mustache");
+            UserController userController = new UserController();
+            return userController.getAddView(request);
 			},
 			new MustacheTemplateEngine()
         );
@@ -417,26 +412,8 @@ public class App {
          * Editing a user
          */ 
         get("/users/:id/edit", (request,response) -> {
-         	Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (session != null) {
-        	    User u = User.findById(request.params("id"));
-                String userEmail = u.email();
-        	    if (session.attribute("user_email").equals(userEmail)){ 
-                        List<City> c = City.findAll();
-            			attributes.put("user",u);
-            			attributes.put("cities",c);            
-            			return new ModelAndView(attributes,"edit_user.mustache");
-            	} else {
-                    String url = "/users/"+u.id();
-                    attributes.put("url",url);
-                    return new ModelAndView(attributes,"redirect.mustache"); 
-                }
-        	} else {
-                String url = "/login";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            } 
+            UserController userController = new UserController();
+            return userController.getEditView(request); 
             },
             new MustacheTemplateEngine()
         );

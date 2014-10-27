@@ -16,7 +16,7 @@ public class UserController {
 
 	/**
 	 * Get the view for all users.
-	 * @return the users view if exists a session or the corresponden redirect
+	 * @return the users view if exists a session or the correspondent redirect
 	 * if no exists a session.
 	 */
 	public ModelAndView getUsersView(Request req) {
@@ -64,6 +64,23 @@ public class UserController {
         }
 	}
 
+    /**
+     * Add user view
+     * @return the view for add a new user if not exists session.
+     */
+    public ModelAndView getAddView(Request req){
+        Session session = req.session(false);
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        if (session==null) {
+            List<City> cities = City.findAll();
+            attributes.put("cities",cities);
+            return new ModelAndView(attributes,"new_user.mustache");
+        } else {
+            attributes.put("url","/");
+            return new ModelAndView(attributes,"redirect.mustache");
+        }
+    }
+
 	/**
 	 * Add a new user
 	 * @param req is the Request that contains the user information.
@@ -90,6 +107,32 @@ public class UserController {
 
         return "/users/"+u.id();               
 	}
+
+    /**
+     * Edit user view
+     * @return the view for edit a user only if the session correspond to the profile owner.
+     */
+    public ModelAndView getEditView(Request req) {
+        Session session = req.session(false);
+        Map<String,Object> attributes = new HashMap<String,Object>();
+        if (session != null) {
+            User u = User.findById(req.params("id"));
+            String userEmail = u.email();
+            if (session.attribute("user_email").equals(userEmail)){ 
+                List<City> c = City.findAll();
+                attributes.put("user",u);
+                attributes.put("cities",c);            
+                return new ModelAndView(attributes,"edit_user.mustache");
+            } else {
+                String url = "/users/"+u.id();
+                attributes.put("url",url);
+                return new ModelAndView(attributes,"redirect.mustache"); 
+            }
+        } else {
+            attributes.put("url","/login");
+            return new ModelAndView(attributes,"redirect.mustache");
+        }
+    }
 
 	/**
 	 * Edit a user
@@ -141,4 +184,19 @@ public class UserController {
         }
         return "/users/"+u.id();
 	}
+
+    /**
+     * User login view
+     * @return the view for the user login if not exists a session.
+     */
+    public ModelAndView getLoginView(Request req) {
+        Session session = req.session(false);
+        if (session == null) {
+            return new ModelAndView(null,"login.mustache");
+        } else {
+            Map<String,Object> attributes = new HashMap<String,Object>();
+            attributes.put("url","/");
+            return new ModelAndView(attributes,"redirect.mustache");
+        }
+    }
 }
