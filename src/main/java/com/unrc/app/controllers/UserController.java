@@ -1,7 +1,9 @@
-package com.unrc.app;
+package com.unrc.app.controllers;
 
 import org.javalite.activejdbc.*;
 import static spark.Spark.*;
+import spark.Request;
+import spark.Response;
 import spark.ModelAndView;
 import spark.TemplateEngine;
 
@@ -19,12 +21,12 @@ import com.unrc.app.models.User;
 
 public class UserController {
 
-    ModelAndView newUserForm() {
+    public ModelAndView newUserForm() {
         Map<String, Object> attributes = new HashMap<>();
         return new ModelAndView(attributes, "usersNew.mustache");
     }
     
-    String addUser(request Request, response Response) {
+    public String addUser(Request request, Response response) {
         User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
         String message = new String();
         if (!(admin.getBoolean("is_admin"))) {
