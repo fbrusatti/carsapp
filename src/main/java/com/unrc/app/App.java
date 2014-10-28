@@ -60,6 +60,8 @@ public class App {
                 use.printStackTrace();
             }*/
 
+        /* - CONTROLLER CREATIONS - */
+        UserController userController = new UserController();
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
@@ -85,30 +87,13 @@ public class App {
 
         //Form to create a user
         get("/users/new" , (request, response) ->{
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "usersNew.mustache");
+            return userController.newUserForm();
         },
             new MustacheTemplateEngine()
         );
 
         post ("/users",(request, response) ->{ 
-            User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
-            String message = new String();
-            if (!(admin.getBoolean("is_admin"))) {
-                response.redirect("/whoops",403);
-                message = "fail";
-                return message;
-            } else {
-                String name = request.queryParams("name");
-                String lastname = request.queryParams("lastname");
-                String email = request.queryParams("email");
-                String street = request.queryParams("street");
-                String address_number = request.queryParams("address_number");
-                admin.createUser(name,lastname,email,street,address_number); 
-                message = "success"; 
-                response.redirect("/hello");
-                return message;
-            }
+            return userController.addUser(request,response);
         });
 
         //Form to add a vehicle
