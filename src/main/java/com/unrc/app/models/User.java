@@ -25,7 +25,7 @@ public class User extends Model {
         status = false;
     }
     return status;
-  }
+    }
     
 	//retorna un booleano verificando a partir del email si un usuario existe
 	public static Boolean existUser(String email){

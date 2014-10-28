@@ -33,7 +33,7 @@ public class App
     return node.client();
     }
 
-     public static Session existsSession(Request request) {
+    public static Session existsSession(Request request) {
         Session session = request.session(false);
         if (null != session) {
             Set<String> attrb = request.session(false).attributes();
@@ -47,17 +47,24 @@ public class App
 	public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
+        
 
-        get("/",(request, response) -> {
+        before((request, response) -> {
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+        });
+
+
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+        User admin = new User();
+        admin.createUser("admin","admin","admin@carsapp.com", "admin");
+        Base.close();
+
+        get("/login",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "login.mustache");
         },
          new MustacheTemplateEngine()
         );
-
-        before((request, response) -> {
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        }); 
 
         get("/users",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -268,6 +275,10 @@ public class App
 
         //List all addresses
         get("/addresses", (request, response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             Map<String, Object> attributes = new HashMap<>();
             List<Address> addresses = Address.findAll();
             attributes.put("addresses_count", addresses.size());
@@ -289,6 +300,10 @@ public class App
 
         /**INSERCIONES**/
         get("/newUser",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "newUser.mustache");
         },
@@ -326,19 +341,25 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        
         //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
             String lastname = request.queryParams("last_name");
             String email = request.queryParams("email");
             String pass = request.queryParams("passs");
-            User nuevoUser= new User();nuevoUser.createUser(name,lastname,email,pass);
+            User nuevoUser= new User();
+            nuevoUser.createUser(name,lastname,email,pass);
             response.redirect("/users");
             return "success";
         });
 
         //Insert an address
         get("/newAddress",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }            
             String form = "<form action= \"/addresses \" method= \"post\">";
             form+="<center><h1>Crear Direccion</h1></center>";
             form+="Email usuario : ";
@@ -378,6 +399,10 @@ public class App
         });
 
         get("/newVehicle",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/vehicles \" method= \"post\">";
             form+="<center><h1>Crear Vehículo</h1></center>";
             form+="Email usuario : ";
@@ -468,6 +493,10 @@ public class App
         });
         
         get("/newPost",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/posts \" method= \"post\">";
             form+="<center><h1>Crear nueva publicación</h1></center>";
             form+="Email usuario : ";
@@ -513,6 +542,10 @@ public class App
         });
 
         get("/newQuestion",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/questions \" method= \"post\">";
             form+="<center><h1>Realizar pregunta</h1></center>";
             form+="Quien pregunta? : ";
@@ -556,6 +589,10 @@ public class App
 
 
         get("/newAnswer",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/answers \" method= \"post\">";
             form+="<center><h1>Responder pregunta</h1></center>";
             form+="Quien responde? : ";
@@ -598,7 +635,7 @@ public class App
         });
 
         /**INSERCIONES**/
-        get("/invitado",(request,response)->{
+        get("/",(request,response)->{
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "invitado.mustache");
         },
@@ -606,6 +643,10 @@ public class App
         );
 
         get("/home",(request, response) -> {
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             Map<String, Object> attributes = new HashMap<>();
             //List<User> users = User.findAll();
             //attributes.put("users_count", users.size());
@@ -613,9 +654,20 @@ public class App
             return new ModelAndView(attributes, "hello.mustache");
         },
          new MustacheTemplateEngine()
-       );
+        );
 
-        get ("/login",(request, response) ->{
+        get("/homeAdmin",(request, response) -> {
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "admin.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
+
+        get ("/authentication",(request, response) ->{
             String res = "";
             String pass = request.queryParams("passs");
             String email = request.queryParams("email");
@@ -628,6 +680,11 @@ public class App
                     session.attribute("user_email", email);
                     session.attribute("user_id", us.getId());
                     session.maxInactiveInterval(30*60);
+                    if (email == "admin@carsapp.com"){
+                        response.redirect("/homeAdmin"); 
+                        res += "existe el usuario.";
+                        return res;    
+                    }
                     response.redirect("/home"); 
                     res += "existe el usuario.";
                     return res;
@@ -651,31 +708,13 @@ public class App
             Session session = existsSession(request);
             if (null == session) {
                 res += "No hay ninguna sesion activa.";
-              ;
             } else {
                 session.invalidate();
                 response.redirect("/"); 
             }
-              return res;
+            return res;
         });
 
-
-
-/*
-        post ("/search/posts",(request, response) ->{
-            String query = request.queryParams("carsappsearch");
-
-            SearchResponse res = client().prepareSearch("users")
-                            .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                            .setQuery(QueryBuilders.termQuery("email",query))
-                            .execute()
-                            .actionGet();
-
-            //Gets the search results
-            SearchHit[] docs = res.getHits().getHits();
-            return "success";
-        });
-*/
         after((request, response) -> {
             Base.close();    
         });
