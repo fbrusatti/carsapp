@@ -511,43 +511,14 @@ public class App {
       	  	} else {
       	  		return "La ubicación ingresada no es válida";
       	  	}
-      	  
         });
-        
         
         /**
          * Getting the answers of a question
          */
         get("users/:userId/posts/:postId/question/:idQuestion", (request, response) -> {
-            Session session = request.session(false);
-            boolean isOwnerOrAdmin = false;
-            boolean isGuest;
-            if (session != null) {
-                User u = User.findById(request.params("userId"));
-                String userEmail = u.email();
-                if (session.attribute("user_email").equals(userEmail)) {
-                    isOwnerOrAdmin = true;
-                } else {
-                    isOwnerOrAdmin = u.isAdmin();
-                }
-                isGuest=false;
-            } else {
-                isGuest=true;
-            }
-            
-            List<Answer> answers = Answer.where("question_id = ?",request.params("idQuestion"));
-            Question q = Question.findById(request.params("idQuestion"));
-            Post p = Post.findById(request.params("postId"));
-            Map<String,Object> attributes = new HashMap<String,Object>();
-
-            attributes.put("isGuest",isGuest);
-            attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
-            attributes.put("question",q);
-            attributes.put("answers",answers);
-			attributes.put("post",request.params("postId"));
-            attributes.put("user",request.params("userId"));
-            attributes.put("userName", p.ownerName());
-            return new ModelAndView(attributes,"question_answers.mustache");
+            AnswerController answerController = new AnswerController();
+            return answerController.getAnswersOfQuestionView(request);
             },
             new MustacheTemplateEngine()
         );
@@ -566,17 +537,10 @@ public class App {
          * Posting a new answer 
          */
          post("users/:id/posts/:postId/question/:questionId/newAnswer", (request, response) -> {
-            Answer a = new Answer();
-            a.set("description",request.queryParams("descrip"));
-            a.set("user_id", request.params("id"));
-            a.set("question_id",request.params("questionId"));
-            a.saveIt();        	
-            Map<String,Object> attributes = new HashMap<>();
-            String url = "/users/"+request.params("id")+"/posts/"+request.params("postId")+"/question/"+request.params("questionId");
-            attributes.put("url",url);
-        	return new ModelAndView(attributes,"redirect.mustache"); 
-			},
-			new MustacheTemplateEngine()
+            AnswerController answerController = new AnswerController();
+            answerController.add(request,response);
+            return null;
+            }
 		);
         
         
