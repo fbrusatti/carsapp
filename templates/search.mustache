@@ -1,0 +1,26 @@
+<html>
+
+<center><h1>CARSAPP</h1>
+
+<form action= "/search" method= "post">
+      Buscar Anuncio :
+      <input type ="text" name="query">
+      <input type="submit" value ="Buscar">
+</form>
+</center>
+
+
+	{{#results}}
+		<b>Resultados: </b><br>	
+		{{#print}}
+			<td><b>ID:</b> {{id}} - <a href="posts/{{id}}">{{title}}</a> - <b>Publicado por:</b> <a href="users/{{usrId}}">{{usrEmail}}</a><br>
+		{{/print}}
+	{{/results}}
+	{{^results}}
+		<b>No hubieron coincidencias...</b><br>
+	{{/results}}
+
+
+</form>
+<button><a href="http://localhost:4567/">Inicio</a></button>
+</html>

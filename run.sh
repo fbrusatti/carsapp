@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "*******************  BUILDING MODULE  *****************************************"
-mvn clean install
+mvn clean install -DskipTests=true
 
 echo "*******************  COLLECTING DEPENDENCIES  *********************************"
 mvn dependency:copy-dependencies
@@ -10,4 +10,4 @@ for file in `ls target/dependency`; do export CLASSPATH=$CLASSPATH:target/depend
 export CLASSPATH=$CLASSPATH:target/classes
 
 echo "*******************  EXECUTING PROGRAM******************************************"
-java -cp $CLASSPATH -Dactivejdbc.log com.unrc.app.App 
+java -cp $CLASSPATH -Dactivejdbc.log com.unrc.app.App

@@ -1,0 +1,26 @@
+  <html>
+	  <head><center>
+	  	<title>Publicaciones</title>
+	  </head>
+	  <body>
+	  	<h1>Publicaciones</h1>
+
+		  <h2>Cantidad de publicaciones realizadas: {{posts_count}}</h2>
+
+		  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		    {{#posts}}
+		        <tr>
+		          <td><b>ID:</b> {{id}} </td>
+		          <td><b>Titulo:</b> {{title}} </td>
+		          <td><b>Descripcion:</b> {{description}}</td>
+
+		        </tr>
+
+		    {{/posts}}
+		  </table>
+	</center>
+		  <button><a href="http://localhost:4567/">Inicio</a></button>
+	  </body>
+	
+  </html>
+  

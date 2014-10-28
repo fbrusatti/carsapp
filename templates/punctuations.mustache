@@ -1,0 +1,16 @@
+<html>
+<center>
+  <h1>Puntuaciones</h1>
+
+  <h2>Cantidad de puntuaciones otorgadas: {{answers_count}}</h2>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    {{#punctuations}}
+        <tr>
+          <td><b>Puntuacion:</b> {{points}} <b>ID usuario puntuador:</b> {{giver}} <b>ID usuario puntuado:</b> {{receiver}}</td>
+        </tr>
+    {{/punctuations}}
+  </table>
+</center>
+<button><a href="http://localhost:4567/">Inicio</a></button>
+</html>
