@@ -46,7 +46,7 @@ public class PostTest{
     //creo dos usuarios y verifico si son o no iguales
     @Test
     public void shouldValidatefindById(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post1 = Post.createPost("nuevopost1", "nuevadescripcion", user, vehicle);
         Post post2 = Post.createPost("nuevopost2", "nuevadescripcion", user, vehicle);
@@ -60,7 +60,7 @@ public class PostTest{
     //verifico si un usuario(creado anteriormente) existe y luego busco un usuario inexistente
     @Test
     public void shouldValidateExistPost(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post = Post.createPost("nuevopost", "nuevadescripcion", user, vehicle);
         the(Post.existPost(post.getInteger("id"))).shouldBeTrue();
@@ -70,7 +70,7 @@ public class PostTest{
     //creo un nuevo usuario y verifico la consistencia de ese usuario
     @Test
     public void shouldValidateCreatePost(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com","asd123");
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
         Post post = Post.createPost("nuevo post","nueva descripcion", user, vehicle);
         the(post).shouldBe("valid");
@@ -83,7 +83,7 @@ public class PostTest{
     //creo un usuario y luego intento eliminar un usuario existente,luego intento eliminar un usuario inexistente
     @Test
     public void shouldValidateDelete(){
-        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com");
+        User user = User.createUser("adrian", "tissera", "adriantissera@gmail.com", "asd123");
 
         Vehicle vehicle = Vehicle.createVehicle("qwe123", "asd", "ford", user);
 

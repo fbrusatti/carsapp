@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "*******************  BUILDING MODULE  *****************************************"
-mvn clean install
+mvn clean install -DskipTests=true
 
 echo "*******************  COLLECTING DEPENDENCIES  *********************************"
 mvn dependency:copy-dependencies

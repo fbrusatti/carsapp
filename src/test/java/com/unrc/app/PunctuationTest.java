@@ -43,7 +43,7 @@ public class PunctuationTest{
     //creo dos autos y verifico si son o no iguales
     @Test
     public void shouldValidatefindByPunctuation(){
-        User m = User.createUser("Jhony", "GUzman", "gm@gmail.com");
+        User m = User.createUser("Jhony", "GUzman", "gm@gmail.com", "asd123");
         Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", m);
 
         Post p = Post.createPost("titulo", "descripcion", m, v); 
@@ -57,8 +57,8 @@ public class PunctuationTest{
     //verifico si un auto(creado anteriormente) existe y luego busco un auto inexistente
     @Test
     public void shouldValidateExistPunctuation(){
-        User u1 = User.createUser("Jhony","GUzman","gm@gmail.com");
-        User u2 = User.createUser("ariel","GUzman","jf@gmail.com");
+        User u1 = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
+        User u2 = User.createUser("ariel","GUzman","jf@gmail.com", "asd123");
         Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", u1);
         Post p = Post.createPost("t","d", u1, v); 
         Punctuation c1 = Punctuation.createPunctuation(1, p, u2);
@@ -69,8 +69,8 @@ public class PunctuationTest{
    //creo un nuevo auto y verifico la consistencia de ese auto
     @Test
     public void shouldValidateCreatePunctuation(){
-        User u1 = User.createUser("Jhony","GUzman","gm@gmail.com");
-        User u2 = User.createUser("ariel","GUzman","jf@gmail.com");
+        User u1 = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
+        User u2 = User.createUser("ariel","GUzman","jf@gmail.com", "asd123");
         Vehicle v = Vehicle.createVehicle("qwe123", "asd", "ford", u1);
         Post p = Post.createPost("t","d", u1, v); 
         Punctuation c1 = Punctuation.createPunctuation(1, p, u2);
@@ -79,8 +79,8 @@ public class PunctuationTest{
         the(c1).shouldContain(1);
         the(c1).shouldContain(u2.getInteger("id"));
         the(c1).shouldContain(u1.getInteger("id"));
-        User u3 = User.createUser("Jhony","GUzman","gmd@gmail.com");
-        User u4 = User.createUser("ariel","GUzman","jfd@gmail.com");
+        User u3 = User.createUser("Jhony","GUzman","gmd@gmail.com", "asd123");
+        User u4 = User.createUser("ariel","GUzman","jfd@gmail.com", "asd123");
         Post p2 = Post.createPost("t","d", u3, v); 
         the(c1).shouldNotContain(-1);
         the(c1).shouldNotContain(u3.getInteger("id")); 

@@ -43,8 +43,8 @@ public class VehicleTest{
     //creo dos vehiculo y verifico si son o no iguales
     @Test
     public void shouldValidatefindByPatent(){
-        User m = User.createUser("Jhony","GUzman","gm@gmail.com");
-        User n = User.createUser("Jhony","GUzman","ga@gmail.com");
+        User m = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
+        User n = User.createUser("Jhony","GUzman","ga@gmail.com", "asd1234");
         Vehicle a1 = Vehicle.createVehicle("ghg345","corsa","chevrolet",m);
         Vehicle a2 = Vehicle.createVehicle("ghg344","escort","ford",n);
         Vehicle a3 = Vehicle.findByPatent("ghg345");
@@ -56,7 +56,7 @@ public class VehicleTest{
     //verifico si un vehiculo(creado anteriormente) existe y luego busco un vehiculo inexistente
     @Test
     public void shouldValidateExistVehicle(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User u = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle a = Vehicle.createVehicle("gkg357","polo","volkswagen",u);
         the(Vehicle.existVehicle(a.getString("patent"))).shouldBeTrue();
         the(Vehicle.existVehicle("abd123")).shouldBeFalse();
@@ -65,7 +65,7 @@ public class VehicleTest{
    //creo un nuevo vehiculo y verifico la consistencia de ese vehiculo
     @Test
     public void shouldValidateCreateVehicle(){
-        User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+        User u = User.createUser("Jhony","GUzman","gm@gmail.com", "asd123");
         Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
         the(a).shouldBe("valid");
         the(a).shouldNotBeNull();
@@ -82,7 +82,7 @@ public class VehicleTest{
     //creo un vehiculo y luego intento eliminar un vehiculo existente,luego intento eliminar un vehiculo inexistente
       @Test
     public void shouldValidateDeleteVehicle(){
-     User u = User.createUser("Jhony","GUzman","gm@gmail.com");
+     User u = User.createUser("Jhony","GUzman","gm@gmail.com","asd123");
      Vehicle a = Vehicle.createVehicle("abc123","ka","ford",u);
      the(Vehicle.deleteVehicle("abc123")).shouldBeTrue();
      the(Vehicle.deleteVehicle("aaa111")).shouldBeFalse();

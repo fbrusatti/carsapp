@@ -13,7 +13,8 @@ import spark.TemplateEngine;
 import static spark.Spark.*;
 import org.elasticsearch.node.*;
 import org.elasticsearch.client.*;
-
+import spark.Request;
+import spark.Session;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -31,20 +32,39 @@ public class App
     public static Client client(){
     return node.client();
     }
+
+    public static Session existsSession(Request request) {
+        Session session = request.session(false);
+        if (null != session) {
+            Set<String> attrb = request.session(false).attributes();
+            if (attrb.contains("user_email") && attrb.contains("user_id"))
+                return session;
+            else return null;
+        }
+        else return null;
+    }
+
 	public static void main( String[] args )
     {
         System.out.println( "Hello cruel World!" );
-
-        get("/",(request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "hello.mustache");
-        },
-         new MustacheTemplateEngine()
-        );
+        
 
         before((request, response) -> {
             Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
-        }); 
+        });
+
+
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
+        User admin = new User();
+        admin.createUser("admin","admin","admin@carsapp.com", "admin");
+        Base.close();
+
+        get("/login",(request, response) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "login.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
         get("/users",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -255,6 +275,10 @@ public class App
 
         //List all addresses
         get("/addresses", (request, response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             Map<String, Object> attributes = new HashMap<>();
             List<Address> addresses = Address.findAll();
             attributes.put("addresses_count", addresses.size());
@@ -276,6 +300,10 @@ public class App
 
         /**INSERCIONES**/
         get("/newUser",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             Map<String, Object> attributes = new HashMap<>();
             return new ModelAndView(attributes, "newUser.mustache");
         },
@@ -313,18 +341,25 @@ public class App
             new MustacheTemplateEngine()
         );
 
+        
         //Insert an User
         post ("/users",(request, response) ->{
             String name = request.queryParams("first_name");
             String lastname = request.queryParams("last_name");
             String email = request.queryParams("email");
-            User nuevoUser= new User();nuevoUser.createUser(name,lastname,email);
+            String pass = request.queryParams("passs");
+            User nuevoUser= new User();
+            nuevoUser.createUser(name,lastname,email,pass);
             response.redirect("/users");
             return "success";
         });
 
         //Insert an address
         get("/newAddress",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }            
             String form = "<form action= \"/addresses \" method= \"post\">";
             form+="<center><h1>Crear Direccion</h1></center>";
             form+="Email usuario : ";
@@ -349,6 +384,7 @@ public class App
             return form;
         });  
 
+        
         post ("/addresses",(request, response) ->{
             String email = request.queryParams("userEmail");
             String calle = request.queryParams("street");
@@ -363,6 +399,10 @@ public class App
         });
 
         get("/newVehicle",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/vehicles \" method= \"post\">";
             form+="<center><h1>Crear Vehículo</h1></center>";
             form+="Email usuario : ";
@@ -453,6 +493,10 @@ public class App
         });
         
         get("/newPost",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/posts \" method= \"post\">";
             form+="<center><h1>Crear nueva publicación</h1></center>";
             form+="Email usuario : ";
@@ -498,6 +542,10 @@ public class App
         });
 
         get("/newQuestion",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/questions \" method= \"post\">";
             form+="<center><h1>Realizar pregunta</h1></center>";
             form+="Quien pregunta? : ";
@@ -539,7 +587,12 @@ public class App
             return "success";
         });
 
+
         get("/newAnswer",(request,response)->{
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
             String form = "<form action= \"/answers \" method= \"post\">";
             form+="<center><h1>Responder pregunta</h1></center>";
             form+="Quien responde? : ";
@@ -581,22 +634,87 @@ public class App
             return "success";
         });
 
+        /**INSERCIONES**/
+        get("/",(request,response)->{
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "invitado.mustache");
+        },
+            new MustacheTemplateEngine()
+        );
 
-/*
-        post ("/search/posts",(request, response) ->{
-            String query = request.queryParams("carsappsearch");
+        get("/home",(request, response) -> {
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
+            Map<String, Object> attributes = new HashMap<>();
+            //List<User> users = User.findAll();
+            //attributes.put("users_count", users.size());
+            //attributes.put("users", users);   
+            return new ModelAndView(attributes, "hello.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
-            SearchResponse res = client().prepareSearch("users")
-                            .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                            .setQuery(QueryBuilders.termQuery("email",query))
-                            .execute()
-                            .actionGet();
+        get("/homeAdmin",(request, response) -> {
+            Session session = existsSession(request);
+            if (null == session) {
+                response.redirect("/");
+            }
+            Map<String, Object> attributes = new HashMap<>();
+            return new ModelAndView(attributes, "admin.mustache");
+        },
+         new MustacheTemplateEngine()
+        );
 
-            //Gets the search results
-            SearchHit[] docs = res.getHits().getHits();
-            return "success";
+        get ("/authentication",(request, response) ->{
+            String res = "";
+            String pass = request.queryParams("passs");
+            String email = request.queryParams("email");
+            User us = User.findByEmail(email);
+            if (us != null) {
+                Boolean usuario=User.existUser(email);
+                Boolean clave=User.findUserByPass(pass);
+                if (usuario && clave) {
+                    Session session = request.session(true);
+                    session.attribute("user_email", email);
+                    session.attribute("user_id", us.getId());
+                    session.maxInactiveInterval(30*60);
+                    if (email == "admin@carsapp.com"){
+                        response.redirect("/homeAdmin"); 
+                        res += "existe el usuario.";
+                        return res;    
+                    }
+                    response.redirect("/home"); 
+                    res += "existe el usuario.";
+                    return res;
+                }
+                else{
+                    res += "El password indicado no es correcto.";
+                    return res;
+                }    
+            }
+            else {
+                res += "El email indicado no existe .";
+                return res;
+            }
+
         });
-*/
+            
+     
+
+        get("/logout", (request, response) -> {
+            String res = "";
+            Session session = existsSession(request);
+            if (null == session) {
+                res += "No hay ninguna sesion activa.";
+            } else {
+                session.invalidate();
+                response.redirect("/"); 
+            }
+            return res;
+        });
+
         after((request, response) -> {
             Base.close();    
         });

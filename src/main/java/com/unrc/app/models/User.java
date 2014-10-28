@@ -8,6 +8,7 @@ public class User extends Model {
 
       validatePresenceOf("first_name", "last_name");
       validatePresenceOf("email");
+      validatePresenceOf("passs");
 
       
   }
@@ -16,7 +17,16 @@ public class User extends Model {
 		return (findFirst("email = ?", email));
 	}
 
-
+ 
+    
+    public static Boolean findUserByPass(String pass){
+    Boolean status=true;
+    if( User.first("passs = ?", pass)==null){
+        status = false;
+    }
+    return status;
+    }
+    
 	//retorna un booleano verificando a partir del email si un usuario existe
 	public static Boolean existUser(String email){
     	Boolean status=true;
@@ -27,8 +37,8 @@ public class User extends Model {
     }
    
     //a partir del nombre-apellido-email crea un usuario nuevo siempre y cuando este no exista en la bd
-	public static User createUser(String name, String lastname, String email){
-    	User user=create("first_name", name, "last_name", lastname, "email", email);
+	public static User createUser(String name, String lastname, String email,String pass){
+    	User user=create("first_name", name, "last_name", lastname, "email", email,"passs", pass);
         if(!existUser(email)){
         	user.saveIt();
         }
