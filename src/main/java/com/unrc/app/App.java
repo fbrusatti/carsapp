@@ -219,77 +219,18 @@ public class App {
          * Getting all the posts of a user
          */
         get("/users/:id/posts", (request, response) -> {
-            Session session = request.session(false);
-            boolean existSession = false;
-            if (session != null) existSession = true;
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (existSession) {
-                User u = User.findById(request.params("id"));
-                List<Post> posts = Post.where("user_id = ?", request.params("id"));
-                boolean notEmpty = !posts.isEmpty();
-                attributes.put("id",u.id());
-                attributes.put("userName",u.name());
-                attributes.put("userPosts",posts);
-                attributes.put("notEmpty",notEmpty);
-                return new ModelAndView(attributes,"user_posts.mustache");
-            } else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache"); 
-            } 
-        	},
-        	new MustacheTemplateEngine()
+            PostController postController = new PostController();
+            return postController.getPostsUser(request);
+            },
+            new MustacheTemplateEngine()
         );
         
         /**
          * Getting a post of a user
          */
         get("users/:id/posts/:postId", (request, response) -> {
-            Session session = request.session(false);
-            boolean isOwnerOrAdmin = false;
-            boolean isGuest;
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            User u = User.findById(request.params("id"));
-            if (session != null) {
-                String userEmail = u.email();
-                String session_id = session.attribute("user_id");
-                attributes.put("session_id",session_id);
-                if (session.attribute("user_email").equals(userEmail)) {
-                    isOwnerOrAdmin = true;
-                } else {
-                    isOwnerOrAdmin = u.isAdmin();
-                }
-                isGuest=false;
-            } else {
-                isGuest=true;
-            }
-
-            Post p = Post.findById(request.params("postId"));
-            Vehicle v = Vehicle.findById(p.get("vehicle_id"));
-            List<Question> q = Question.where("post_id = ?",request.params("postId"));
-            
-            attributes.put("isGuest",isGuest);
-            attributes.put("isOwnerOrAdmin", isOwnerOrAdmin);
-            attributes.put("userName",u.name());
-            attributes.put("post",p);
-            attributes.put("vehicle",v);
-            attributes.put("questions",q);
-            attributes.put("postId",p.id());
-            switch (v.type()) {
-                case "Auto":
-                    Car c = Car.findFirst("vehicle_id = ?", v.id());
-                    attributes.put("car",c);
-                break;
-                case "Motocicleta":
-                    Motorcycle m = Motorcycle.findFirst("vehicle_id = ?", v.id());
-                    attributes.put("motorcycle",m);
-                break;
-                case "Camión":
-                   Truck t = Truck.findFirst("vehicle_id = ?", v.id());
-                    attributes.put("truck",t);
-                break;
-            }     
-            return new ModelAndView(attributes,"post_id.mustache");
+            PostController postController = new PostController();
+            return postController.getPost(request);
             },
             new MustacheTemplateEngine()
 	    );
@@ -298,25 +239,8 @@ public class App {
          * Editing a post
          */ 
         get("/users/:id/posts/:postId/edit", (request,response) -> {
-        	Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (session != null) {
-            	Post p = Post.findById(request.params("postId"));
-                User u = User.findById(request.params("id"));
-                String userEmail = u.email();	
-        	    if (session.attribute("user_email").equals(userEmail)) {	
-            		attributes.put("post",p);
-            		return new ModelAndView(attributes,"edit_post.mustache");
-            	} else {
-                    String url = "/users/"+u.id()+"/posts/"+p.id();
-                    attributes.put("url",url);
-                    return new ModelAndView(attributes,"redirect.mustache"); 
-                }
-        	} else {
-                String url = "/login";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            }	 
+            PostController postController = new PostController();
+            return postController.getEditPost(request);
             },
             new MustacheTemplateEngine()
         );
@@ -325,32 +249,20 @@ public class App {
          * Posting a post edited
          */       
          post("/users/:id/posts/:postId/edit", (request,response) -> {
-            Post p = Post.findById(request.params("postId"));
-            p.set("title", request.queryParams("title"));
-            p.set("description",request.queryParams("descrip"));
-            p.saveIt();
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "/users/"+request.params("id")+"/posts/"+p.id();
-            attributes.put("url",url);
-            
-            return new ModelAndView(attributes,"redirect.mustache"); 
-            },
-            new MustacheTemplateEngine()
-        );
+            PostController postController = new PostController();
+            postController.editPost(request, response);
+            return null;
+            }
+   );
 		
         /**
          * Deleting a post of a user
          */
         post("users/:id/posts/:postId/delete", (request, response) -> {
-            Post p = Post.findById(request.params("postId"));
-            p.deleteCascade();
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "/users/"+request.params("id")+"/posts";
-            attributes.put("url",url);
-            return new ModelAndView(attributes,"redirect.mustache"); 
-            },
-            new MustacheTemplateEngine()
-        );
+            PostController postController = new PostController();
+            postController.deletePost(request, response);
+            return null;
+        });
 
         /**
          * Getting vehicles of a User
@@ -406,26 +318,8 @@ public class App {
          * Adding a new Post 
          */
         get("/users/:id/newPost", (request,response) -> {
-		    Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (session != null) {
-                User u = User.findById(request.params("id"));
-                String userEmail = u.email();
-                if (session.attribute("user_email").equals(userEmail)) {
-                    attributes.put("id",request.params("id"));
-                    List<Vehicle> vehicles = Vehicle.where("user_id = ?",request.params("id"));
-                    attributes.put("vehicles",vehicles);
-                    return new ModelAndView(attributes,"user_new_post.mustache");
-                } else {
-                    String url = "/users/"+u.id();
-                    attributes.put("url",url);
-                    return new ModelAndView(attributes,"redirect.mustache"); 
-                }
-            } else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            }
+            PostController postController = new PostController();
+            return postController.getNewPost(request);
 			},
 			new MustacheTemplateEngine()
 		);
@@ -434,19 +328,10 @@ public class App {
 		 * Posting a new Post  
          */
         post("/users/:id/newPost", (request, response) -> {
-            Post p = new Post();
-        	p.set("title", request.queryParams("title"));
-        	p.set("description",request.queryParams("descrip"));
-        	p.set("user_id", request.params("id"));
-        	Vehicle v = Vehicle.findById(request.queryParams("vehicles"));
-        	p.saveIt();
-        	v.add(p);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "posts/"+p.id();
-            attributes.put("url",url);
-        	return new ModelAndView(attributes,"redirect.mustache"); 
-			},
-			new MustacheTemplateEngine()
+            PostController postController = new PostController();
+            postController.newPost(request, response);
+            return null;
+        }
 		);
  
         /*
@@ -474,14 +359,10 @@ public class App {
          * Getting all the posts
          */
         get("/posts", (request, response) -> {
-        	List<Post> posts = Post.findAll();
-        	boolean notEmpty = !posts.isEmpty();
-        	Map<String,Object> attributes = new HashMap<String,Object>();
-        	attributes.put("posts",posts);
-        	attributes.put("notEmpty",notEmpty);
-        	return new ModelAndView(attributes,"posts.mustache");
-			},
-			new MustacheTemplateEngine()
+        	PostController postController = new PostController();
+                return postController.getPosts(request);
+		},
+		new MustacheTemplateEngine()
         );
         
         
