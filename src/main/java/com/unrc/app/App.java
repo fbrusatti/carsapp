@@ -552,32 +552,14 @@ public class App {
             new MustacheTemplateEngine()
         );
         
-        
-        
         /**
          * Posting a new question 
          */
         post("users/:id/posts/:postId/newQuestion", (request, response) -> {
-            
-            Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<>();
-            if (session != null) {
-                String session_id = session.attribute("user_id");
-                Question q = new Question();
-                q.set("description",request.queryParams("descrip"));
-                q.set("post_id",request.params("postId"));
-                q.set("user_id", session_id);
-                q.saveIt();
-                String url = "/users/"+request.params("id")+"/posts/"+request.params("postId");
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            } else {
-                String url = "/login";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            } 
-			},
-			new MustacheTemplateEngine()
+            QuestionController questionController = new QuestionController();
+            questionController.add(request,response);
+            return null;
+            }
 		);
         
         /**
