@@ -465,11 +465,9 @@ public class App {
 		 */
         post("users/:id/newVehicle", (request, response) -> {
             VehicleController vehicleController = new VehicleController();
-            String url = vehicleController.add(request);
-            response.redirect(url);
+            vehicleController.add(request,response);
             return null;
-			},
-			new MustacheTemplateEngine()
+			}
 		);  
         
         /*

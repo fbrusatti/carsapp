@@ -8,6 +8,7 @@ import com.unrc.app.models.Truck;
 
 import spark.Session;
 import spark.Request;
+import spark.Response;
 import spark.ModelAndView;
 
 import java.util.LinkedList;
@@ -70,9 +71,9 @@ public class VehicleController  {
 	/**
 	 * Add a new vehicle
 	 * @param req is the Request that contains the vehicle information and the vehicle owner id.
-	 * @return a string that is the path of redirection.
+	 * @param resp is the Response that will make the redirection.
 	 */
-	public String add(Request req) {
+	public void add(Request req,Response resp) {
 		Vehicle v = new Vehicle();
 		v.set("brand", req.queryParams("brand"));
 		v.set("model", req.queryParams("model"));
@@ -104,6 +105,6 @@ public class VehicleController  {
 			t.saveIt();
 			v.add(t);
 		}
-        return "/users/"+req.params("id")+"/newPost";
+        resp.redirect("/users/"+req.params("id")+"/newPost");
 	}
 }
