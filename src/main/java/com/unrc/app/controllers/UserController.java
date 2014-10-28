@@ -5,6 +5,7 @@ import com.unrc.app.models.City;
 
 import spark.Session;
 import spark.Request;
+import spark.Response;
 import spark.ModelAndView;
 
 import java.util.LinkedList;
@@ -84,9 +85,9 @@ public class UserController {
 	/**
 	 * Add a new user
 	 * @param req is the Request that contains the user information.
-	 * @return a string that is the path of redirection.
+	 * @param resp is the Response that will make the redirection.
 	 */
-	public String add(Request req) {
+	public void add(Request req,Response resp) {
 		User u = new User();
         u.set("email", req.queryParams("email"));
         u.set("first_name",req.queryParams("firstName"));
@@ -105,7 +106,7 @@ public class UserController {
         session.attribute("user_id", u.id());
         session.maxInactiveInterval(30*60);
 
-        return "/users/"+u.id();               
+        resp.redirect("/users/"+u.id());             
 	}
 
     /**
@@ -137,9 +138,9 @@ public class UserController {
 	/**
 	 * Edit a user
 	 * @param req is the Request that contains the new user information.
-	 * @return a string that is the path of redirection.
+	 * @param resp is the Response that will make the redirection.
 	 */
-	public String edit(Request req) {
+	public void edit(Request req,Response resp) {
 		User u = User.findById(req.params("id"));
         u.set("email", req.queryParams("email"));
         u.set("first_name",req.queryParams("firstName"));
@@ -153,26 +154,26 @@ public class UserController {
         City c = City.findById(req.queryParams("ciudad"));
         c.add(u);
         
-        return "/users/"+u.id();
+        resp.redirect("/users/"+u.id());
 	}
 
 	/**
 	 * Delete a user
 	 * @param req is the Request that contains the user key which will be deleted.
-	 * @return a string that is the path of redirection.
+	 * @param resp is the Response that will make the redirection. 
 	 */
-	public String delete(Request req) {
+	public void delete(Request req,Response resp) {
 		User u = User.findById(req.params("id"));
         u.deleteCascade();
-        return "/users";
+        resp.redirect("/users");
 	}
 
 	/**
 	* User login
 	* @param req is the Request that contains the user email and password.
-	* @return a string that is the path of redirection.
+	* @param resp is the Response that will make the redirection.
 	*/
-	public String login(Request req) {
+	public void login(Request req,Response resp) {
 		String email = req.queryParams("email");
         String password = req.queryParams("password");
         User u = User.findFirst("email = ?", email);
@@ -182,7 +183,7 @@ public class UserController {
             session.attribute("user_id", u.id());
             session.maxInactiveInterval(30*60);               
         }
-        return "/users/"+u.id();
+        resp.redirect("/users/"+u.id());
 	}
 
     /**

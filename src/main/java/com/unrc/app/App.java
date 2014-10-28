@@ -76,8 +76,7 @@ public class App {
         // Post Login
         post("/login", (request, response) -> {
             UserController userController = new UserController();
-            String url = userController.login(request);
-            response.redirect(url);
+            userController.login(request,response);
             return null; 
         });
         
@@ -211,8 +210,7 @@ public class App {
          */
         post("users/:id/delete", (request, response) -> {
             UserController userController = new UserController();
-            String url = userController.delete(request);
-            response.redirect(url);
+            userController.delete(request,response);
             return null;
             }
         );
@@ -379,8 +377,7 @@ public class App {
          */
         post("/users", (request, response) -> {
         	UserController userController = new UserController();
-            String url = userController.add(request);
-            response.redirect(url);
+            userController.add(request,response);
         	return null; 
             }	
 		);
@@ -400,8 +397,7 @@ public class App {
          */       
         post("/users/:id/edit", (request,response) -> {
             UserController userController = new UserController();
-            String url = userController.edit(request);
-            response.redirect(url);
+            userController.edit(request,response);
             return null;
             } 
         );
