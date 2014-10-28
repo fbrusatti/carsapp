@@ -358,31 +358,8 @@ public class App {
          * Getting vehicles of a User
          */ 
         get("/users/:id/vehicles", (request, response) -> {
-            Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (session != null) {
-        	    User u = User.findById(request.params("id"));
-                String userEmail = u.email();
-                //System.out.println("emails equals: "+(session.attribute("user_email").equals(userEmail)));
-
-        	    if (session.attribute("user_email").equals(userEmail)) {
-                    List<Vehicle> vehicles = Vehicle.where("user_id = ?", request.params("id"));
-        	        boolean notEmpty = !vehicles.isEmpty();
-        	   
-        	        attributes.put("userName",u.name());
-        	        attributes.put("userVehicles",vehicles);
-        	        attributes.put("notEmpty",notEmpty);
-                    return new ModelAndView(attributes,"user_vehicles.mustache");
-                } else {
-                    String url = "/users/"+u.id();
-                    attributes.put("url",url);
-                    return new ModelAndView(attributes,"redirect.mustache"); 
-                }
-        	} else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            }
+            VehicleController vehicleController = new VehicleController();
+            return vehicleController.getUserVehiclesView(request);
             },
         	new MustacheTemplateEngine()
         );
@@ -480,26 +457,8 @@ public class App {
          * Adding a new Vehicle           
          */
         get("/users/:id/newVehicle", (request,response) -> {
-            Session session = request.session(false);
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            if (session != null) {
-                User u = User.findById(request.params("id"));
-                String userEmail = u.email();
-                if (session.attribute("user_email").equals(userEmail)) {
-                    attributes.put("id",request.params("id"));
-                    return new ModelAndView(attributes,"user_new_vehicle.mustache"); 
-                } else {
-                    String url = "/users/"+u.id();
-                    attributes.put("url",url);
-                    return new ModelAndView(attributes,"redirect.mustache"); 
-                }
-            } else {
-                String url = "/";
-                attributes.put("url",url);
-                return new ModelAndView(attributes,"redirect.mustache");
-            }
-
-           
+            VehicleController vehicleController = new VehicleController();
+            return vehicleController.getAddView(request);
             },
             new MustacheTemplateEngine()
         );
@@ -509,41 +468,10 @@ public class App {
          * Posting a new Vehicle 
 		 */
         post("users/:id/newVehicle", (request, response) -> {
-			Vehicle v = new Vehicle();
-			v.set("brand", request.queryParams("brand"));
-			v.set("model", request.queryParams("model"));
-			v.set("year", request.queryParams("year"));
-			v.set("color", request.queryParams("color"));
-			v.set("user_id",request.params("id"));
-			if (request.queryParams("type").charAt(0)=='1') {
-				v.set("type","Auto");
-				v.saveIt();
-				Car c = new Car();
-				c.set("capacity",request.queryParams("capacity"));
-				c.saveIt();
-				v.add(c);
-			}
-			if (request.queryParams("type").charAt(0)=='2') {
-				v.set("type","Motocicleta");
-				v.saveIt();
-				Motorcycle m = new Motorcycle();
-				m.set("cylinder_capacity",request.queryParams("cylinder_capacity"));
-				m.saveIt();
-				v.add(m);
-			}
-			if (request.queryParams("type").charAt(0)=='3') {
-				v.set("type","Camión");
-				v.saveIt();
-				Truck t = new Truck();
-				t.set("length",request.queryParams("length"));
-				t.set("height",request.queryParams("height"));
-				t.saveIt();
-				v.add(t);
-			}
-            Map<String,Object> attributes = new HashMap<String,Object>();
-            String url = "newPost";
-            attributes.put("url",url);
-        	return new ModelAndView(attributes,"redirect.mustache"); 
+            VehicleController vehicleController = new VehicleController();
+            String url = vehicleController.add(request);
+            response.redirect(url);
+            return null;
 			},
 			new MustacheTemplateEngine()
 		);  
