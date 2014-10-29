@@ -680,7 +680,8 @@ public class App
                     session.attribute("user_email", email);
                     session.attribute("user_id", us.getId());
                     session.maxInactiveInterval(30*60);
-                    if (email == "admin@carsapp.com"){
+                    String aux = "admin@carsapp.com";
+                    if (email.equals(aux)){
                         response.redirect("/homeAdmin"); 
                         res += "existe el usuario.";
                         return res;    
