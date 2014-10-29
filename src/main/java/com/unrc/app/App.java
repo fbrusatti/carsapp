@@ -40,6 +40,8 @@ import com.unrc.app.models.Question;
 import com.unrc.app.models.Answer;
 import com.unrc.app.models.Address;
 
+import com.unrc.app.controllers.AnswerController;
+
 
 public class App {
     public static void main( String[] args ) {
@@ -145,27 +147,6 @@ public class App {
             new MustacheTemplateEngine()
         );
 
-        // Form to write the answer to a question
-        get("/questions/post/:id" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            Post post = Post.findById(Integer.parseInt(request.params(":id")));
-            List<Question> activeQuestions = Question.where("post_id = ? AND active = true",post.id());
-
-            if (post == null || activeQuestions == null) {
-                response.redirect("/whoops", 404);
-                return new ModelAndView(attributes, "answerPost.mustache"); //only for compiling purposes
-            } else {
-                attributes.put("questions_count",activeQuestions.size());
-                attributes.put("userId",post.userId());
-                attributes.put("postId",post.id());
-                attributes.put("questions",activeQuestions);
-            }
-            return new ModelAndView(attributes, "answerPost.mustache");
-        },
-            new MustacheTemplateEngine()
-        );
-
-
         //From to create a Post
         get("/users/add/post" , (request,response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -263,18 +244,6 @@ public class App {
             new MustacheTemplateEngine()
         );
 
-        post("/posts/answer",(request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            Question question = Question.findById(request.queryParams("questionId"));
-            User user = User.findFirst("email = ?",request.queryParams("login"));
-            attributes.put("question",question);
-            attributes.put("user",user);
-
-            return new ModelAndView(attributes, "postAnswer.mustache");
-        }, 
-            new MustacheTemplateEngine()
-        );
-
         /*---------------------- VEHICLE ROUTES ----------------*/
 
         // /users/add/vehicle does a POST to this route
@@ -327,18 +296,6 @@ public class App {
 
         /*---------------------- QUESTION ROUTES ----------------*/
 
-        
-        /*//List of Questions
-        get("/questions", (request,response) -> {
-            List<Question> questionList = Question.findAll();
-            String list = new String();
-            for (Question q: questionList) {
-                User u = User.findById(q.getInteger("user_id"));
-                Post p = Post.findById(q.getInteger("post_id"));
-                list = list+q.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Question: "+q.getString("description")+"\n";
-            }
-            return list;
-        });*/
 
         // The form shown in the post details POSTs to this route
         post ("/questions",(request, response) -> { 
@@ -360,48 +317,21 @@ public class App {
             }
         });
 
-        /*//Show Question by id
-        get("/questions/:id", (request, response) -> {
-            Question q = Question.findById(Integer.parseInt(request.params(":id")));
-            return "Question: " + q.toString();
-        });*/
-
         /*---------------------- ANSWERS ROUTES ----------------*/
 
-        //List of Answers
-        get("/answers", (request,response) -> {
-            List<Answer> answerList = Answer.findAll();
-            String list = new String();
-            for (Answer a: answerList) {
-                User u = User.findById(a.getInteger("user_id"));
-                Post p = Post.findById(a.getInteger("post_id"));
-                list = list+a.getString("id")+" "+"User Name: "+u.getString("first_name")+" "+"Post: "+p.getString("id")+" "+"Answer: "+a.getString("description")+"\n";
-            }
-            return list;
-        });
+        //create instance AnswerController
+        AnswerController answer = new AnswerController();
 
+        post("/posts/answer",(request, response) -> {
+            return answer.answerForm(request);
+        }, 
+            new MustacheTemplateEngine()
+        );
+       
         post("/answers", (request,response) -> {
-            Question question = Question.findById(request.queryParams("questionId"));
-            User user = User.findById(request.queryParams("userId"));
-            Post post = Post.findById(question.getString("post_id"));
-            String description = request.queryParams("description");
-            //The user answering should be the owner of the post
-            if (user.id() == post.getInteger("user_id")) {
-                user.addAnswer(description,post,question);
-                response.redirect("/posts/"+post.id());
-                return "success";
-            } else {
-                response.redirect("/whoops",403);
-                return "error";
-            }
+       
+            return answer.addAnswer(request,response);
         });
-
-        // //Show Answer by id
-        // get("/answers/:id", (request, response) -> {
-        //     Answer a = Answer.findById(Integer.parseInt(request.params(":id")));
-        //     return "Answer: " + a.toString();
-        // });
-
         
         /*---------------------- SEARCH ROUTES ----------------*/
 
