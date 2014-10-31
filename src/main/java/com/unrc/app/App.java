@@ -41,6 +41,11 @@ import com.unrc.app.models.Answer;
 import com.unrc.app.models.Address;
 
 
+
+import com.unrc.app.controllers.QuestionController;
+
+
+
 public class App {
     public static void main( String[] args ) {
         /*try {                           //code to open browser in hello url. problem, it loads without the content of spark
@@ -59,8 +64,14 @@ public class App {
             }*/
 
 
+            /* - CONTROLLER CREATIONS - */
+
+             // Create Instance QuestionController
+            QuestionController question = new QuestionController();
+
+
         before((request, response) -> {
-            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
+            Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "root");
         });
 
         get("/",(request, response) -> {
@@ -262,7 +273,7 @@ public class App {
         },
             new MustacheTemplateEngine()
         );
-
+/*
         post("/posts/answer",(request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
             Question question = Question.findById(request.queryParams("questionId"));
@@ -274,7 +285,7 @@ public class App {
         }, 
             new MustacheTemplateEngine()
         );
-
+*/
         /*---------------------- VEHICLE ROUTES ----------------*/
 
         // /users/add/vehicle does a POST to this route
@@ -340,25 +351,12 @@ public class App {
             return list;
         });*/
 
+
         // The form shown in the post details POSTs to this route
-        post ("/questions",(request, response) -> { 
-            Post post = Post.findById(request.queryParams("postId"));
 
-            String description = request.queryParams("description");
-            String email = request.queryParams("user");
-
-            User userAsking = User.findFirst("email = ?",email);
-
-            //If the user asking is the owner of the post, redirect to 403
-            if (post.getInteger("user_id") == userAsking.id()) {
-                response.redirect("/whoops",403);
-                return "error";
-            } else {
-                userAsking.addQuestion(description,post);
-                response.redirect("/posts");
-                return "success";
-            }
-        });
+            post ("/questions",(request, response) -> { 
+                return question.addQuestion(request,response);
+            });
 
         /*//Show Question by id
         get("/questions/:id", (request, response) -> {
@@ -379,6 +377,7 @@ public class App {
             }
             return list;
         });
+/*
 
         post("/answers", (request,response) -> {
             Question question = Question.findById(request.queryParams("questionId"));
@@ -395,6 +394,8 @@ public class App {
                 return "error";
             }
         });
+
+*/
 
         // //Show Answer by id
         // get("/answers/:id", (request, response) -> {
