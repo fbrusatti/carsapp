@@ -27,13 +27,18 @@ import com.unrc.app.models.Address;
 
 public class UserController {
 
+<<<<<<< HEAD
     /* -------------------------------- Forms -------------------------------------------- */
 
     public ModelAndView addUserForm() {
+=======
+    public ModelAndView newUserForm() {
+>>>>>>> 236392d05b0624dcb2661ea817cae6eb0b026ef7
         Map<String, Object> attributes = new HashMap<>();
         return new ModelAndView(attributes, "usersNew.mustache");
     }
     
+<<<<<<< HEAD
     public ModelAndView addVehicleForm() {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("selectType",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
@@ -108,6 +113,8 @@ public class UserController {
     
     /* -------------------------------- Adds -------------------------------------------- */
 
+=======
+>>>>>>> 236392d05b0624dcb2661ea817cae6eb0b026ef7
     public String addUser(Request request, Response response) {
         User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
         String message = new String();
