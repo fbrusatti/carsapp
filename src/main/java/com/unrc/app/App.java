@@ -19,8 +19,7 @@ import static spark.Spark.*;
 public class App {
     
 	public static void main( String[] args) {
-            staticFileLocation("/public"); 
-		
+            
 		/**
 		 * Open and close de database.
 		 */
@@ -45,7 +44,28 @@ public class App {
 			},
 			new MustacheTemplateEngine()
 		);
-                
+        
+        /**
+         * Getting search
+         */
+        get("/search", (request, response) -> {
+            SearchController searchController = new SearchController();
+            return searchController.getSearchView(request);
+            },
+            new MustacheTemplateEngine()
+        );
+        
+        /**
+         * Realizing a search
+         */
+        post("/search", (request, response) -> {
+            SearchController searchController = new SearchController();
+            return searchController.postSearchView(request);
+            
+            },
+            new MustacheTemplateEngine()
+        );
+
         /**
          * Getting login
          */
@@ -57,14 +77,18 @@ public class App {
         );
         
         
-        // Post Login
+        /**
+         * Post login
+         */
         post("/login", (request, response) -> {
             UserController userController = new UserController();
             userController.login(request,response);
             return null; 
         });
         
-        // Get logout
+        /**
+         * Getting logout
+         */
         get("/logout", (request, response) -> {
             Session session = request.session(false);
             if (session!=null) {
@@ -74,26 +98,6 @@ public class App {
             return null;
         });
         
-         /**
-         * Getting search
-         */
-        get("/search", (request, response) -> {
-            SearchController searchController = new SearchController();
-            return searchController.getSearchView(request);
-            },
-            new MustacheTemplateEngine()
-        );
-        
-                /**
-         * Realizing a search
-         */
-        post("/search", (request, response) -> {
-            SearchController searchController = new SearchController();
-            return searchController.postSearchView(request);
-            
-            },
-            new MustacheTemplateEngine()
-        );
 		
 		/**
          * Getting users
@@ -115,7 +119,46 @@ public class App {
 			},
 			new MustacheTemplateEngine()
         );
+
+        /**
+         *Adding a new User 
+         */
+        get("newUser", (request, response) -> {
+            UserController userController = new UserController();
+            return userController.getAddView(request);
+            },
+            new MustacheTemplateEngine()
+        );
         
+        /**
+         * Posting a new user
+         */
+        post("/users", (request, response) -> {
+            UserController userController = new UserController();
+            userController.add(request,response);
+            return null; 
+            }   
+        );
+        
+        /**
+         * Editing a user
+         */ 
+        get("/users/:id/edit", (request,response) -> {
+            UserController userController = new UserController();
+            return userController.getEditView(request); 
+            },
+            new MustacheTemplateEngine()
+        );
+         
+        /**
+         * Posting a user edited
+         */       
+        post("/users/:id/edit", (request,response) -> {
+            UserController userController = new UserController();
+            userController.edit(request,response);
+            return null;
+        });
+
         /**
          * Deleting a user
          */
@@ -123,7 +166,16 @@ public class App {
             UserController userController = new UserController();
             userController.delete(request,response);
             return null;
-            }
+        });
+
+        /*
+         * Getting all the posts
+         */
+        get("/posts", (request, response) -> {
+            PostController postController = new PostController();
+                return postController.getPosts(request);
+        },
+        new MustacheTemplateEngine()
         );
 
         /**
@@ -147,6 +199,25 @@ public class App {
 	    );
 
         /**
+         * Adding a new Post 
+         */
+        get("/users/:id/newPost", (request,response) -> {
+            PostController postController = new PostController();
+            return postController.getNewPost(request);
+            },
+            new MustacheTemplateEngine()
+        );
+        
+        /**
+         * Posting a new Post  
+         */
+        post("/users/:id/newPost", (request, response) -> {
+            PostController postController = new PostController();
+            postController.newPost(request, response);
+            return null;
+        });
+
+        /**
          * Editing a post
          */ 
         get("/users/:id/posts/:postId/edit", (request,response) -> {
@@ -163,8 +234,7 @@ public class App {
             PostController postController = new PostController();
             postController.editPost(request, response);
             return null;
-            }
-   );
+        });
 		
         /**
          * Deleting a post of a user
@@ -184,67 +254,7 @@ public class App {
             },
         	new MustacheTemplateEngine()
         );
-        
-        /**
-		 *Adding a new User 
-		 */
-		get("newUser", (request, response) -> {
-            UserController userController = new UserController();
-            return userController.getAddView(request);
-			},
-			new MustacheTemplateEngine()
-        );
-		
-        /**
-         * Posting a new user
-         */
-        post("/users", (request, response) -> {
-        	UserController userController = new UserController();
-            userController.add(request,response);
-        	return null; 
-            }	
-		);
-        
-        /**
-         * Editing a user
-         */ 
-        get("/users/:id/edit", (request,response) -> {
-            UserController userController = new UserController();
-            return userController.getEditView(request); 
-            },
-            new MustacheTemplateEngine()
-        );
-         
-        /**
-         * Posting a user edited
-         */       
-        post("/users/:id/edit", (request,response) -> {
-            UserController userController = new UserController();
-            userController.edit(request,response);
-            return null;
-            } 
-        );
 
-        /**
-         * Adding a new Post 
-         */
-        get("/users/:id/newPost", (request,response) -> {
-            PostController postController = new PostController();
-            return postController.getNewPost(request);
-			},
-			new MustacheTemplateEngine()
-		);
-		
-		/**
-		 * Posting a new Post  
-         */
-        post("/users/:id/newPost", (request, response) -> {
-            PostController postController = new PostController();
-            postController.newPost(request, response);
-            return null;
-        }
-		);
- 
         /*
          * Adding a new Vehicle           
          */
@@ -255,7 +265,6 @@ public class App {
             new MustacheTemplateEngine()
         );
 
-
         /**
          * Posting a new Vehicle 
 		 */
@@ -263,47 +272,7 @@ public class App {
             VehicleController vehicleController = new VehicleController();
             vehicleController.add(request,response);
             return null;
-			}
-		);  
-        
-        /*
-         * Getting all the posts
-         */
-        get("/posts", (request, response) -> {
-        	PostController postController = new PostController();
-                return postController.getPosts(request);
-		},
-		new MustacheTemplateEngine()
-        );
-        
-        
-        /**
-         * Getting cities
-         */
-        get("/cities", (request, response) -> {
-        	List<City> cities = City.findAll();
-        	return cities;
-        });
-        
-        /**
-         * Getting posts by location
-         */
-        get("/cities/:id/posts", (request, response) -> {
-        	City c = City.findById(request.params("id"));
-      	  	List<Post> postFromLocate=new LinkedList<Post>();
-      	  	if (c!=null) {
-      	  		List<User> usersFromLocate = (List<User>)(c.get("users"));
-      	  		for (User u : usersFromLocate) {
-      			  List<Post> postOfUser = u.getAll(Post.class);
-      			  for (Post p : postOfUser) {
-      				  postFromLocate.add(p);
-      			  }
-      	  		}
-      	  		return postFromLocate;
-      	  	} else {
-      	  		return "La ubicación ingresada no es válida";
-      	  	}
-        });
+		});  
         
         /**
          * Getting the answers of a question
