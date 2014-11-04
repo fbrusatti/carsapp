@@ -41,6 +41,7 @@ import com.unrc.app.models.Answer;
 import com.unrc.app.models.Address;
 
 import com.unrc.app.controllers.AnswerController;
+import com.unrc.app.controllers.PostController;
 
 
 public class App {
@@ -213,33 +214,24 @@ public class App {
 
         /*---------------------- POST ROUTES -----------------*/
 
+        //create instance PostController
+        PostController postController = new PostController();
+
         //Show Post by id
         get("/posts/:id", (request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            Post post = Post.findById(Integer.parseInt(request.params(":id")));
-            if (post == null) {
-                response.redirect("/whoops",404);
-                return new ModelAndView(attributes, "postId.mustache");
-            } else {
-                List<Question> questions = Question.where("post_id = ?", post.id());
-                attributes.put("vehicle_name", post.vehicle().name());
-                attributes.put("post", post);
-                if (questions != null) {
-                    attributes.put("questions", questions);
-                }
-                return new ModelAndView(attributes, "postId.mustache");
-            }
+            return postController.showById(request, response);
         },
             new MustacheTemplateEngine()
         );
 
+        //Add rating at post
+        post("/posts/rate", (request, response) -> {
+            return postController.addRate(request,response);
+        });
+
         //List of Posts
         get("/posts",(request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            List<Post> posts = Post.findAll();
-            attributes.put("posts_count", posts.size());
-            attributes.put("posts", posts);
-            return new ModelAndView(attributes, "posts.mustache");
+            return postController.show();
         },
             new MustacheTemplateEngine()
         );
