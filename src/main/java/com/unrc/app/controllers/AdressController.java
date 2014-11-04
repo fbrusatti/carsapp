@@ -14,6 +14,7 @@ import static spark.Spark.*;
 import org.elasticsearch.node.*;
 import org.elasticsearch.client.*;
 import spark.Request;
+import spark.Response;
 import spark.Session;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.action.search.SearchResponse;
@@ -63,7 +64,7 @@ public class AdressController{
             return form;    
     }
 
-    public String PostAdress(Request res,Response res){
+    public String PostAdress(Request req,Response res){
             String email = req.queryParams("userEmail");
             String calle = req.queryParams("street");
             String numero = req.queryParams("num");

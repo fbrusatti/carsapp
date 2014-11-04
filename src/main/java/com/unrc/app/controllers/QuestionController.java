@@ -14,6 +14,7 @@ import static spark.Spark.*;
 import org.elasticsearch.node.*;
 import org.elasticsearch.client.*;
 import spark.Request;
+import spark.Response;
 import spark.Session;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.action.search.SearchResponse;
