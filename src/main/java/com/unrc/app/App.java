@@ -42,11 +42,8 @@ import com.unrc.app.models.Address;
 
 import com.unrc.app.controllers.AnswerController;
 import com.unrc.app.controllers.PostController;
-
-
-
 import com.unrc.app.controllers.QuestionController;
-
+import com.unrc.app.controllers.UserController;
 
 
 public class App {
@@ -66,11 +63,9 @@ public class App {
                 use.printStackTrace();
             }*/
 
-
-            /* - CONTROLLER CREATIONS - */
-
-             // Create Instance QuestionController
-            QuestionController question = new QuestionController();
+        /* - CONTROLLER CREATIONS - */
+        UserController userController = new UserController();
+        QuestionController question = new QuestionController();
 
 
         before((request, response) -> {
@@ -97,106 +92,55 @@ public class App {
 
         //Form to create a user
         get("/users/new" , (request, response) ->{
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "usersNew.mustache");
+            return userController.addUserForm();
         },
             new MustacheTemplateEngine()
         );
 
         post ("/users",(request, response) ->{ 
-            User admin = User.findFirst("email = ?",request.queryParams("admin")); //search if the user creating the user is an admin
-            String message = new String();
-            if (!(admin.getBoolean("is_admin"))) {
-                response.redirect("/whoops",403);
-                message = "fail";
-                return message;
-            } else {
-                String name = request.queryParams("name");
-                String lastname = request.queryParams("lastname");
-                String email = request.queryParams("email");
-                String street = request.queryParams("street");
-                String address_number = request.queryParams("address_number");
-                admin.createUser(name,lastname,email,street,address_number); 
-                message = "success"; 
-                response.redirect("/hello");
-                return message;
-            }
+            return userController.addUser(request,response);
         });
 
         //Form to add a vehicle
         get("/users/add/vehicles" , (request, response) ->{
-            Map<String, Object> attributes = new HashMap<>();
-            attributes.put("selectType",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
-            return new ModelAndView(attributes, "vehiclesAdd.mustache");
+            return userController.addVehicleForm();
         },
             new MustacheTemplateEngine()
         );
 
         post("/user/add/vehicles" , (request, response) ->{
-            Map<String, Object> attributes = new HashMap<>();
-            String type = request.queryParams("vehicleType");
-            if (type.equals("car")) {
-                attributes.put("car",true);
-            }if (type.equals("truck")) {
-                attributes.put("truck",true);
-            }if (type.equals("moto")) {
-                attributes.put("moto",true);
-            }if (type.equals("other")) {
-                attributes.put("other",true);
-            };
-            attributes.put("load",true); //This is to select the type of vehicle without seeing the other part of loading the vehicle
-            
-            return new ModelAndView(attributes,"vehiclesAdd.mustache");
+            return userController.addVehicle(request);
         },
             new MustacheTemplateEngine()
         );
 
         // Form to add Addresses
         get("/users/add/addresses" , (request, response) ->{
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "addressAdd.mustache");
+            return userController.addAddressesForm();
         },
             new MustacheTemplateEngine()
         );
 
         //From to create a Post
         get("/users/add/post" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            return new ModelAndView(attributes, "postAdd.mustache");
+            return userController.addPostForm();
         },
             new MustacheTemplateEngine()
         );
 
         post("/users/add/post" , (request,response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-
-            String email = request.queryParams("login");
-            User u = User.findFirst("email = ?",email);
-            List<Vehicle> vehicles = Vehicle.where("user_id = ?", u.id());
-
-            attributes.put("vehicles",vehicles);
-            attributes.put("userId",u.id());
-
-            return new ModelAndView(attributes, "postAdd.mustache");
+            return userController.selectVehiclesForm(request); //This form list the vehicles for the post creation
         },
             new MustacheTemplateEngine()
         );
 
         post("/posts" , (request,response) -> {
-            User user = User.findById(request.queryParams("userId"));
-            Vehicle vehicle = Vehicle.findById(request.queryParams("vehicle"));
-            user.addPost(request.queryParams("price"),request.queryParams("description"),vehicle);
-            response.redirect("/posts");
-            return "success";
+            return userController.addPost(request, response);
         });
 
         //List of users
         get("/users",(request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            List<User> users = User.findAll();
-            attributes.put("users_count", users.size());
-            attributes.put("users", users);
-            return new ModelAndView(attributes, "users.mustache");
+            return userController.listUsers();
         },
             new MustacheTemplateEngine()
         );
@@ -204,20 +148,7 @@ public class App {
         
         //Show User by the id
         get("/users/:id", (request, response) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            User user = User.findById(Integer.parseInt(request.params(":id")));
-            if (user == null) {
-                response.redirect("/whoops", 404);
-                return new ModelAndView(attributes, "userId.mustache"); //only for compiling purposes
-            }
-            else {
-                String address = user.address();
-                List<Post> posts = Post.where("user_id = ?",user.id());
-                attributes.put("user", user);
-                attributes.put("address_user", address);
-                attributes.put("posts",posts);
-                return new ModelAndView(attributes, "userId.mustache");
-            }
+            return userController.listUserById(request, response);
         },
             new MustacheTemplateEngine()
         );
@@ -303,9 +234,16 @@ public class App {
 
         // The form shown in the post details POSTs to this route
 
-            post ("/questions",(request, response) -> { 
-                return question.addQuestion(request,response);
-            });
+        post ("/questions",(request, response) -> { 
+            return question.addQuestion(request,response);
+        });
+
+        // Form to write the answer to a question
+        get("/questions/post/:id" , (request,response) -> {
+            return userController.addAnswerForm(request, response);
+        },
+            new MustacheTemplateEngine()
+        );
 
         /*---------------------- ANSWERS ROUTES ----------------*/
         //create instance AnswerController
