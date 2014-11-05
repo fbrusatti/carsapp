@@ -21,6 +21,7 @@ Cars app will use the following open source tools:
 * [Junit] - Framework to write repeatable tests.
 * [MySql] - Open source database.
 * [Activejdbc] - Java implementation of Active Record design pattern.
+* [Pivotal Tracker] - Tracker for SCRUM histories and backlog [(project)] [ptracker].
 
 
 Installation
@@ -75,4 +76,4 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   [Activejdbc]: https://github.com/javalite/activejdbc
   [Maven]: http://maven.apache.org/
   [Mea]: http://mea-docta-ignorantia.appspot.com/posts/project_2014.html
-
+  [ptracker]: https://www.pivotaltracker.com/n/projects/1163058

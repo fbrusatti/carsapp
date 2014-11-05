@@ -1,0 +1,45 @@
+	<head>
+		<h1>Posts</h1>
+
+	 	<h2>Posts count: {{posts_count}}</h2>
+
+	 	<script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+	 	<style>
+	 	table,th,td
+	 	{
+	 	border:1px solid black;
+	 	border-collapse:collapse;
+	 	}
+	 	th,td
+	 	{
+	 	padding:5px;
+	 	}
+	 	</style>
+ 	</head>
+ 	<body>
+	 	<table style type="text/css" class="sortable">
+			<tr>
+				<th> Vehicle </th>
+				<th> Price </th>
+				<th> Description </th>
+				<th> User </th>
+				<th> Rating </th>
+			</tr>
+			{{#posts}}
+				<tr>
+					{{#vehicle}}
+					<td><a href="http://localhost:4567/posts/{{id}}"> {{name}} </a></td>
+					{{/vehicle}}
+					<td>${{price}}</td> 
+					<td>{{description}}</td>
+					{{#user}}
+					<td>{{name}}</td>
+					{{/user}}
+					<td>{{rate}} Stars</td>
+	        	</tr>
+	    	{{/posts}}
+	    </style>
+	  	</table>
+	  	<br>
+        <a href="http://localhost:4567/">Carsapp</a>
+	</body>

@@ -1,0 +1,39 @@
+<h1>Vehicles</h1>
+
+ 	<h2>Vehicles count: {{vehicles_count}}</h2>
+
+ 	<style>
+ 	table,th,td
+ 	{
+ 	border:1px solid black;
+ 	border-collapse:collapse;
+ 	}
+ 	th,td
+ 	{
+ 	padding:5px;
+ 	}
+ 	</style>
+ 	</head>
+ 	<body>
+	 	<table style type="text/css">
+			<tr>
+				<th> Name </th>
+				<th> Model </th>
+				<th> Km </th>
+				<th> User </th>
+			</tr>
+			{{#vehicles}}
+				<tr>
+					<td>{{name}}</td> 
+					<td>{{model}}</td>
+					<td>{{km}}</td>
+					{{#user}}
+					<td>{{name}}</td>
+					{{/user}}
+	        	</tr>
+	    	{{/vehicles}}
+	    </style>
+	  	</table>
+	  	<br>
+        <a href="http://localhost:4567/">Carsapp</a>
+	</body>
