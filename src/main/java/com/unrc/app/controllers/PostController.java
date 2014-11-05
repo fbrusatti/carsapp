@@ -28,9 +28,10 @@ public class PostController {
  		Map<String, Object> attributes = new HashMap<>();
         Post post = Post.findById(Integer.parseInt(request.params(":id")));
         if (post == null) {
-        	response.redirect("/whoops",404);
-        	return new ModelAndView(attributes, "postId.mustache");
+            response.redirect("/whoops",404);
+            return new ModelAndView(attributes, "postId.mustache");
         } else {
+            //Questions
             List<Question> questions = Question.where("post_id = ?", post.id());
             attributes.put("vehicle_name", post.vehicle().name());
             attributes.put("post", post);
@@ -42,7 +43,7 @@ public class PostController {
                 attributes.put("rating",post.rate());
             }
 
-        	return new ModelAndView(attributes, "postId.mustache");
+            return new ModelAndView(attributes, "postId.mustache");
         }
     }
 
