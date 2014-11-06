@@ -1,0 +1,220 @@
+<?xml version='1.0'?>
+<diagram>
+	<elements>
+		<entityid id="0" posX="359" posY="194" name="users"></entityid>
+		<entityid id="1" posX="275" posY="577" name="posts"></entityid>
+		<entityid id="2" posX="577" posY="707" name="rates"></entityid>
+		<entityid id="3" posX="100" posY="68" name="answers"></entityid>
+		<entityid id="4" posX="100" posY="430" name="questions"></entityid>
+		<entityid id="5" posX="841" posY="438" name="cars"></entityid>
+		<entityid id="6" posX="959" posY="295" name="vehicles"></entityid>
+		<entityid id="7" posX="679" posY="317" name="punctuation"></entityid>
+		<entityid id="8" posX="708" posY="66" name="addresses"></entityid>
+		<entityid id="9" posX="1065" posY="436" name="motorcycles"></entityid>
+		<entityid id="10" posX="959" posY="437" name="trucks"></entityid>
+		<attributeid id="11" posX="455" posY="152" type="normal" name="points" required="false" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="12" posX="489" posY="211" type="normal" name="count_operation" required="false" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="13" posX="248" posY="237" type="normal" name="email" required="true" unique="true" datatype="varchar" length="50"></attributeid>
+		<attributeid id="14" posX="226" posY="194" type="normal" name="last_name" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="15" posX="373" posY="118" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="16" posX="262" posY="146" type="normal" name="name" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="17" posX="160" posY="21" type="normal" name="description" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="18" posX="64" posY="22" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="19" posX="150" posY="497" type="normal" name="description" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="20" posX="47" posY="493" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="21" posX="827" posY="277" type="key" name="licence_plate" required="true" unique="true" datatype="varchar" length="6"></attributeid>
+		<attributeid id="22" posX="961" posY="235" type="normal" name="model" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="23" posX="1059" posY="254" type="normal" name="brand" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="24" posX="841" posY="512" type="normal" name="is_coupe" required="true" unique="false" datatype="char" length="50"></attributeid>
+		<attributeid id="25" posX="958" posY="514" type="normal" name="count_belt" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="26" posX="1065" posY="509" type="normal" name="wheel_size" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="27" posX="1067" posY="308" type="normal" name="engine_size" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="28" posX="341" posY="517" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="29" posX="368" posY="643" type="normal" name="description" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="30" posX="636" posY="751" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="31" posX="523" posY="751" type="normal" name="stars" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="32" posX="615" posY="102" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="33" posX="607" posY="24" type="normal" name="street" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="34" posX="725" posY="20" type="normal" name="num" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<attributeid id="35" posX="827" posY="24" type="normal" name="apartment" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<attributeid id="36" posX="630" posY="365" type="key" name="id" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="37" posX="740" posY="364" type="normal" name="points" required="true" unique="false" datatype="integer" length="50"></attributeid>
+		<relationshipid id="38" posX="286" posY="392" name="users_posts"></relationshipid>
+		<relationshipid id="39" posX="261" posY="744" name="posts_rates"></relationshipid>
+		<relationshipid id="40" posX="66" posY="250" name="questions_answers"></relationshipid>
+		<relationshipid id="41" posX="241" posY="68" name="users_answers"></relationshipid>
+		<relationshipid id="42" posX="193" posY="332" name="users_questions"></relationshipid>
+		<relationshipid id="43" posX="449" posY="66" name="users_addresses"></relationshipid>
+		<relationshipid id="44" posX="481" posY="317" name="users_punctuation"></relationshipid>
+		<relationshipid id="45" posX="704" posY="153" name="users_vehicles"></relationshipid>
+		<relationshipid id="46" posX="455" posY="416" name="users_rates"></relationshipid>
+		<relationshipid id="47" posX="599" posY="455" name="posts_vehicles"></relationshipid>
+		<isaid id="48" posX="959" posY="365"></isaid>
+		<entityid id="49" posX="1014" posY="105" name="cities"></entityid>
+		<relationshipid id="50" posX="839" posY="105" name="addresses_cities"></relationshipid>
+		<attributeid id="51" posX="994" posY="54" type="key" name="zip_code" required="true" unique="true" datatype="integer" length="50"></attributeid>
+		<attributeid id="52" posX="1093" posY="60" type="normal" name="province" required="true" unique="true" datatype="varchar" length="50"></attributeid>
+		<attributeid id="53" posX="1095" posY="142" type="normal" name="name" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+		<relationshipid id="54" posX="73" posY="579" name="posts_questions"></relationshipid>
+		<attributeid id="55" posX="191" posY="643" type="normal" name="title" required="true" unique="false" datatype="varchar" length="50"></attributeid>
+	</elements>
+	<entity id="0">
+		<attributelist>
+			<attribute id="11"></attribute>
+			<attribute id="12"></attribute>
+			<attribute id="13"></attribute>
+			<attribute id="14"></attribute>
+			<attribute id="15"></attribute>
+			<attribute id="16"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="1">
+		<attributelist>
+			<attribute id="28"></attribute>
+			<attribute id="29"></attribute>
+			<attribute id="55"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="2">
+		<attributelist>
+			<attribute id="30"></attribute>
+			<attribute id="31"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="3">
+		<attributelist>
+			<attribute id="17"></attribute>
+			<attribute id="18"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="4">
+		<attributelist>
+			<attribute id="19"></attribute>
+			<attribute id="20"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="5">
+		<attributelist>
+			<attribute id="24"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="6">
+		<attributelist>
+			<attribute id="21"></attribute>
+			<attribute id="22"></attribute>
+			<attribute id="23"></attribute>
+			<attribute id="27"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="7">
+		<attributelist>
+			<attribute id="36"></attribute>
+			<attribute id="37"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="8">
+		<attributelist>
+			<attribute id="32"></attribute>
+			<attribute id="33"></attribute>
+			<attribute id="34"></attribute>
+			<attribute id="35"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="9">
+		<attributelist>
+			<attribute id="26"></attribute>
+		</attributelist>
+	</entity>
+	<entity id="10">
+		<attributelist>
+			<attribute id="25"></attribute>
+		</attributelist>
+	</entity>
+	<relationship id="38">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="1" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="39">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="1" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="2" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="40">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="3" refintegrity="false"></role>
+			<role mincard="1" maxcard="1" name="" entityid="4" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="41">
+		<rolelist>
+			<role mincard="0" maxcard="N" name="" entityid="3" refintegrity="false"></role>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="42">
+		<rolelist>
+			<role mincard="0" maxcard="N" name="" entityid="4" refintegrity="false"></role>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="43">
+		<rolelist>
+			<role mincard="1" maxcard="N" name="" entityid="0" refintegrity="false"></role>
+			<role mincard="1" maxcard="N" name="" entityid="8" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="44">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="7" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="45">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="6" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="46">
+		<rolelist>
+			<role mincard="0" maxcard="N" name="" entityid="2" refintegrity="false"></role>
+			<role mincard="1" maxcard="1" name="" entityid="0" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="47">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="1" refintegrity="false"></role>
+			<role mincard="1" maxcard="1" name="" entityid="6" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<isa id="48">
+		<superentity id="6"></superentity>
+		<subentitylist>
+			<subentity id="5"></subentity>
+			<subentity id="10"></subentity>
+			<subentity id="9"></subentity>
+		</subentitylist>
+	</isa>
+	<entity id="49">
+		<attributelist>
+			<attribute id="51"></attribute>
+			<attribute id="52"></attribute>
+			<attribute id="53"></attribute>
+		</attributelist>
+	</entity>
+	<relationship id="50">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="49" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="8" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+	<relationship id="54">
+		<rolelist>
+			<role mincard="1" maxcard="1" name="" entityid="1" refintegrity="false"></role>
+			<role mincard="0" maxcard="N" name="" entityid="4" refintegrity="false"></role>
+		</rolelist>
+	</relationship>
+</diagram>

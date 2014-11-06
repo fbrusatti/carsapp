@@ -1,0 +1,36 @@
+<html>
+<center>
+  <h1>User</h1>
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    {{#user_id}}
+        <tr>
+          <td><b>ID:</b> {{id}} <b>Nombre:</b> {{name}} <b>Email:</b> {{email}}</td>
+        </tr>
+    {{/user_id}}
+  </table>
+<br><br>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+  <td><form method="get" action="/newAddress">
+    <button><a href="http://localhost:4567/newAddress">Agregar dirección</a></button>
+  </form></td>
+
+  <td><form method="get" action="/newVehicle">
+    <button><a href="http://localhost:4567/newVehicle">Agregar vehículo</a></button>
+  </form></td>
+
+  <td><form method="get" action="/newPost">
+    <button><a href="http://localhost:4567/newPost">Crear publicación</a></button>
+  </form></td>
+
+  <td><form method="get" action="/newQuestion">
+    <button><a href="http://localhost:4567/newQuestion">Realizar pregunta</a></button>
+  </form></td>
+
+  <td><form method="get" action="/newAnswer">
+    <button><a href="http://localhost:4567/newAnswer">Responder pregunta</a></button>
+  </form></td>
+</table>
+</center>
+<button><a href="http://localhost:4567/">Inicio</a></button>
+</html>

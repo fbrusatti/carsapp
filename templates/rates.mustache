@@ -1,0 +1,27 @@
+  <html>
+	  <head><center>
+	  	<title>Puntuaciones de Posts</title>
+	  </head>
+	  <body>
+	  	<h1>Puntuaciones de Posts</h1>
+
+		  <h2>Cantidad de puntuaciones de publicaciones otorgadas: {{rates_count}}</h2>
+
+		  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		    {{#rates}}
+		        <tr>
+		          <td><b>N°:</b> {{id}} </td>
+		          <td><b>Puntos:</b> {{stars}} </td>
+		          <td><b>N° Post:</b> {{id_post}}</td>
+		          <td><b>N° Usuario:</b> {{id_user}}</td>
+
+		        </tr>
+
+		    {{/rates}}
+		  </table>
+		  <a href="http://localhost:4567/hello">atras</a>
+	  </body>
+	</center>
+	<button><a href="http://localhost:4567/">Inicio</a></button>
+  </html>
+  
