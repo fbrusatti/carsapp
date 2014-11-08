@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class UserTest{
     @Before
     public void before(){
-        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_test", "root", "");
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/carsapp_development", "root", "");
         System.out.println("UserTest setup");
         Base.openTransaction();
     }
@@ -32,8 +32,10 @@ public class UserTest{
         the(user).shouldNotBe("valid");
         the(user.errors().get("first_name")).shouldBeEqual("value is missing");
         the(user.errors().get("last_name")).shouldBeEqual("value is missing");
+	the(user.errors().get("email")).shouldBeEqual("value is missing");
+	the(user.errors().get("contrasena")).shouldBeEqual("value is missing");
 
-        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com");
+        user.set("first_name", "John", "last_name", "Doe", "email", "example@email.com","contrasena","asd123");
 
         // Everything is good:
         the(user).shouldBe("valid");
