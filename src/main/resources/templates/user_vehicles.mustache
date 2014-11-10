@@ -1,0 +1,16 @@
+<a href="/"> Inicio </a><br>
+<h2> Vehículos de {{userName}}</h2><br>
+
+{{#notEmpty}}
+<table border="1">
+	<tr><th>    Tipo    </th><th>        Marca        </th></tr>
+	{{#userVehicles}}
+		<tr>
+			<td>{{type}}</td><td>{{generalBrand}}</td>
+		</tr>
+	{{/userVehicles}}
+ </table>
+{{/notEmpty}}
+{{^notEmpty}}
+	<b>El usuario no posee vehículos</b>
+{{/notEmpty}}

@@ -1,0 +1,39 @@
+<a href="/"> Inicio </a><br>
+{{#user}}
+	<h2>{{name}}</h2>
+	{{#isOwnerOrAdmin}}
+	<a href="/users/{{id}}/edit"><button type="button" > Editar </button></a>
+	<button type="button" onclick="toogle_eliminar()"> Eliminar </button>
+	<span id="span_eliminar" style="display:none">
+		<form action="/users/{{id}}/delete" method="post" >
+			<b>¿Seguro que desea eliminar al usuario?: </b>
+			<input type="submit" value="Si">
+			<input type="button" value="No"onclick="toogle_cancelarEliminacion()">
+		</form>
+	</span>
+	{{/isOwnerOrAdmin}}
+	<br>
+	<b>Email:</b> {{email}}<br>
+    <b>Teléfono móvil:</b> {{mobile}}<br>
+    <b>Teléfono fijo:</b> {{telephone}}<br>
+    <b>Dirección:</b> {{address}}, {{city}} <br>
+    <a href="{{id}}/posts">Ver posts</a> 
+    {{#isOwnerOrAdmin}}
+    	<a href="{{id}}/newPost">Agregar post</a><br>
+   	 	<a href="{{id}}/vehicles">Ver vehiculos</a>     
+    	<a href="{{id}}/newVehicle">Agregar vehículo</a>
+    {{/isOwnerOrAdmin}}
+{{/user}}
+
+<script>
+<!--
+function toogle_eliminar() {
+	document.getElementById("span_eliminar").style.display = "inline";
+}
+
+function toogle_cancelarEliminacion() {
+	document.getElementById("span_eliminar").style.display = "none";
+}
+
+-->
+</script>

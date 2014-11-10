@@ -1,0 +1,14 @@
+<a href="/"> Inicio </a><br>
+<h2> Posts de <a href="/users/{{id}}">{{userName}}</a></h2><br>
+
+{{#notEmpty}}
+	<table border="1">
+	<tr><th>        Título        </th></tr>
+	{{#userPosts}}
+		<tr><td><a href="posts/{{id}}">{{title}}</a></td></tr>
+	{{/userPosts}}
+	</table>
+{{/notEmpty}}
+{{^notEmpty}}
+	<b>El usuario no posee posts</b>
+{{/notEmpty}}

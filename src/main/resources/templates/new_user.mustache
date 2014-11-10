@@ -1,0 +1,18 @@
+<a href="/"> Inicio </a><br>
+<form action="/users" method="post">
+    <b>Nombre: </b><input type="text" name="firstName" size="20" required/><br>
+    <b>Apellido: </b><input type="text" name="lastName" size="20" required/><br>
+    <b>Email: </b><input type="email" name="email" size="20" required/><br>
+    <b>Contraseña: </b><input type="password" name="password" size="20" required/><br>
+    <b>Teléfono movil: </b><input type="text" name="movil" size="20"><br>
+    <b>Teléfono fijo: </b><input type="text" name="fijo" size="20"><br>
+    <b>Dirección: </b><input type="text" name="direccion" size="50"><br>
+	<b>Seleccione su ciudad: </b><select name="ciudad">
+	{{#cities}}
+		<option value="{{id}}">{{name}}</option>
+	{{/cities}}
+	</select><br>
+	<input type="submit" value="Enviar"><input type="reset" value="Borrar">
+</form>
+
+
